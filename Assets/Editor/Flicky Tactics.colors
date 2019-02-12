@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &1
+MonoBehaviour:
+  m_ObjectHideFlags: 52
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 1
+  m_Script: {fileID: 12323, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: Flicky Tactics
+  m_EditorClassIdentifier: 
+  m_Presets:
+  - m_Name: 
+    m_Color: {r: 0.7725491, g: 0.7725491, b: 0.7725491, a: 1}
+  - m_Name: 
+    m_Color: {r: 0.5471698, g: 0.5471698, b: 0.5471698, a: 1}
+  - m_Name: 
+    m_Color: {r: 0.8867924, g: 0.85156643, b: 0.74038804, a: 1}
+  - m_Name: 
+    m_Color: {r: 0.8207547, g: 0.70869094, b: 0.36004803, a: 1}
+  - m_Name: 
+    m_Color: {r: 0.5283019, g: 0.43555945, b: 0.14702742, a: 1}
+  - m_Name: 
+    m_Color: {r: 0.3962264, g: 0.36212993, b: 0.25605196, a: 1}
+  - m_Name: 
+    m_Color: {r: 0.5660378, g: 0.5355133, b: 0.44054827, a: 1}
+  - m_Name: 
+    m_Color: {r: 0.367791, g: 0.49489838, b: 0.5377358, a: 1}
+  - m_Name: 
+    m_Color: {r: 0.58753115, g: 0.71963096, b: 0.764151, a: 1}
+  - m_Name: 
+    m_Color: {r: 0.6981132, g: 0.5828587, b: 0.6963619, a: 1}
+  - m_Name: 
+    m_Color: {r: 0.6113259, g: 0.44544324, b: 0.6603774, a: 1}
+  - m_Name: 
+    m_Color: {r: 0.59184766, g: 0.7169812, b: 0.59464306, a: 1}
+  - m_Name: 
+    m_Color: {r: 0.4106992, g: 0.5377358, b: 0.38300994, a: 1}
+  - m_Name: 
+    m_Color: {r: 0.6603774, g: 0.5222902, b: 0.4516732, a: 1}
+  - m_Name: 
+    m_Color: {r: 0.6509434, g: 0.4022339, b: 0.41961136, a: 1}
+  - m_Name: 
+    m_Color: {r: 0.5629187, g: 0.5309719, b: 0.7169812, a: 1}
+  - m_Name: 
+    m_Color: {r: 0.6509434, g: 0.6479517, b: 0.59260416, a: 1}
+  - m_Name: 
+    m_Color: {r: 0.9622642, g: 0.9555141, b: 0.8306337, a: 1}
+  - m_Name: 
+    m_Color: {r: 0.72690463, g: 0.7356849, b: 0.9339623, a: 1}
+  - m_Name: 
+    m_Color: {r: 0.9339623, g: 0.82464004, b: 0.72690463, a: 1}
+  - m_Name: 
+    m_Color: {r: 0.9150943, g: 0.767978, b: 0.5050285, a: 1}
+  - m_Name: 
+    m_Color: {r: 0.6132076, g: 0.35660183, b: 0.08388218, a: 1}
+  - m_Name: 
+    m_Color: {r: 0.4339623, g: 0.33373612, b: 0.2272161, a: 1}
+  - m_Name: 
+    m_Color: {r: 0.41509432, g: 0.36099032, b: 0.30348876, a: 1}
+  - m_Name: 
+    m_Color: {r: 0.3679245, g: 0.3452086, b: 0.3210662, a: 1}
+  - m_Name: 
+    m_Color: {r: 0.5377358, g: 0.5045356, b: 0.4692506, a: 1}
+  - m_Name: 
+    m_Color: {r: 0.6415094, g: 0.5960344, b: 0.5477038, a: 1}
+  - m_Name: 
+    m_Color: {r: 0.6981132, g: 0.68374586, b: 0.66847634, a: 1}
+  - m_Name: 
+    m_Color: {r: 0.8941177, g: 0.7411765, b: 0.59607846, a: 1}

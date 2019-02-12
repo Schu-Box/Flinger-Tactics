@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 6d5d44524aedd4e60b6ba1dc35d495fd
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: NCAA Illinois Fighting Illini Outline
+  fontNames:
+  - NCAA Illinois Fighting Illini Outline
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
