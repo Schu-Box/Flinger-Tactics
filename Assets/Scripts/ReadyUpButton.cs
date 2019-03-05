@@ -9,7 +9,7 @@ public class ReadyUpButton : MonoBehaviour, IPointerClickHandler, IPointerEnterH
 
 	public bool belongsToHome;
 
-	private GameController gameController;
+	private MatchController matchController;
 
 	private Image backPlate;
 	private GameObject frontPlate;
@@ -25,7 +25,7 @@ public class ReadyUpButton : MonoBehaviour, IPointerClickHandler, IPointerEnterH
 	private bool myTurn = false;
 
 	void Awake() {
-		gameController = FindObjectOfType<GameController>();
+		matchController = FindObjectOfType<MatchController>();
 
 		backPlate = GetComponent<Image>();
 		frontPlate = transform.GetChild(1).gameObject;
@@ -39,8 +39,8 @@ public class ReadyUpButton : MonoBehaviour, IPointerClickHandler, IPointerEnterH
 
 	public void SetForTeam(Team team) {
 		gameObject.SetActive(true);
-		gameObject.transform.GetChild(0).GetComponent<Image>().color = team.color;
-		gameObject.transform.GetChild(1).GetComponent<Image>().color = team.color;
+		gameObject.transform.GetChild(0).GetComponent<Image>().color = team.primaryColor;
+		gameObject.transform.GetChild(1).GetComponent<Image>().color = team.primaryColor;
 	}
 
 	public void RaiseButton() {
@@ -63,7 +63,9 @@ public class ReadyUpButton : MonoBehaviour, IPointerClickHandler, IPointerEnterH
 	public void MyTurnNow(bool isMine) {
 		myTurn = isMine;
 
-		buttonText.text = "Ready Up";
+		if(buttonText.enabled) {
+			buttonText.text = "Ready Up";
+		}
 
 		if(myTurn) {
 			RaiseButton();
@@ -120,6 +122,8 @@ public class ReadyUpButton : MonoBehaviour, IPointerClickHandler, IPointerEnterH
 	}
 
 	public void EndMatch(int goalDifferential) {
+		gameObject.SetActive(true);
+		
 		LowerButton();
 
 		buttonText.color = Color.white;
@@ -138,7 +142,7 @@ public class ReadyUpButton : MonoBehaviour, IPointerClickHandler, IPointerEnterH
 		if(interactable) {
 			myTurn = false;
 
-			gameController.ReadyTeam(belongsToHome);
+			//matchController.ReadyTeam(belongsToHome);
 
 			buttonText.text = "Ready";
 

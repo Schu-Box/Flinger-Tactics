@@ -4,10 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
+//using DigitalRuby.Tween;
 
 public class TurnButton : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
 
-	private GameController gameController;
+	private MatchController matchController;
 
 	private Image border;
 	private Image background;
@@ -21,7 +22,7 @@ public class TurnButton : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
 	private float raisedY = 10f;
 
 	void Start() {
-		gameController = FindObjectOfType<GameController>();
+		matchController = FindObjectOfType<MatchController>();
 
 		border = GetComponent<Image>();
 		background = GetComponentInChildren<Image>();
@@ -127,13 +128,49 @@ public class TurnButton : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
 		}
 	}
 
+	public void TurnActive(Team team) {
+		LowerButton();
+		border.color = borderInactiveColor;
+	}
+
+	public void NextTurn(int turnNum) {
+		SetTurnCounter(turnNum);
+
+		StartCoroutine(NextTurnAnimation());
+	}
+
+	public IEnumerator NextTurnAnimation() {
+		WaitForFixedUpdate waiter = new WaitForFixedUpdate();
+
+		Vector3 startPos = transform.localPosition;
+		Vector3 endPos = Vector3.zero;
+		endPos.y += raisedY;
+
+		Color startColor = border.color;
+		Color endColor = matchController.GetTurnTeam().primaryColor;
+		
+		float timer = 0f;
+		float duration = 0.25f;
+		while(timer < duration) {
+			timer += Time.deltaTime;
+
+			transform.localPosition = Vector3.Lerp(startPos, endPos, timer/duration);
+			border.color = Color.Lerp(startColor, endColor, timer/duration);
+
+			yield return waiter;
+		}
+		
+		transform.localPosition = endPos;
+		border.color = endColor;
+	}
+
 	#region IPointerClickHandler implementation
 	public void OnPointerClick (PointerEventData eventData) {
 		if(interactable) {
-			if(!gameController.matchStarted) {
-				gameController.StartMatch();
-			} else if(gameController.matchOver) {
-				gameController.DisplayPostMatchPanel();
+			if(!matchController.GetMatchStarted()) {
+				matchController.StartMatch();
+			} else if(matchController.GetMatchEnded()) {
+				FindObjectOfType<CanvasManager>().DisplayPostMatchPanel();
 			}
 
 			LowerButton();

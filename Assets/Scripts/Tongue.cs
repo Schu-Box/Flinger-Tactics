@@ -15,7 +15,7 @@ public class Tongue : MonoBehaviour {
 
 	
 
-	void Start() {
+	public void SetTongue() {
 		athlete = transform.GetComponentInParent<AthleteController>();
 
 		spriteRenderer = GetComponent<SpriteRenderer>();
@@ -26,6 +26,9 @@ public class Tongue : MonoBehaviour {
 
 		HideTongue();
 		DisableTrigger();
+
+		//Disable the tongue
+		gameObject.SetActive(false);
 	}
 
 	private void OnTriggerEnter2D(Collider2D other) {

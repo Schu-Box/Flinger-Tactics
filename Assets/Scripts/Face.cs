@@ -6,9 +6,9 @@ public class Face : MonoBehaviour {
 
 	public bool faceChanges = true;
 
-	public Sprite face_Asleep;
-	public Sprite face_Clicked;
-	public Sprite face_Ready;
+	public Sprite face_Neutral;
+	public Sprite face_Hovered;
+	public Sprite face_Dragging;
 	public Sprite face_Going;
 	public Sprite face_Dizzy;
 	public Sprite face_Bumped;
@@ -18,37 +18,49 @@ public class Face : MonoBehaviour {
 	public Sprite face_Victory;
 	public Sprite face_Defeat;
 
-	private GameController gameController;
+	private MatchController matchController;
 	private AthleteController athleteController;
 
 	private SpriteRenderer spriteRenderer;
+	private SpriteRenderer faceBaseSpriteRenderer;
 
-	void Start() {
-		gameController = FindObjectOfType<GameController>();
+	private Coroutine expressionCoroutine;
+
+	public void SetFace() {
+		matchController = FindObjectOfType<MatchController>();
 		athleteController = GetComponentInParent<AthleteController>();
 		spriteRenderer = GetComponent<SpriteRenderer>();
 
-		/*
+		faceBaseSpriteRenderer = transform.parent.GetChild(0).GetComponent<SpriteRenderer>();
+
 		Vector3 randomFaceFlip = gameObject.transform.localEulerAngles;
 		randomFaceFlip.y = (Random.Range(0, 2) * 180f);
 		gameObject.transform.localEulerAngles = randomFaceFlip;
-		*/
 
-		SetFaceSprite("sleep");
+		SetFaceSprite("neutral");
+	}
+
+
+	public void SetFaceBase(Sprite sprite) {
+		faceBaseSpriteRenderer.sprite = sprite;
+	}
+
+	public void SetColor(Color color) {
+		faceBaseSpriteRenderer.color = color;
 	}
 
 	public void SetFaceSprite(string faceSprite) {
 		if(faceChanges) {
 
 			switch(faceSprite.ToLower()) {
-				case "sleep":
-					spriteRenderer.sprite = face_Asleep;
+				case "neutral":
+					spriteRenderer.sprite = face_Neutral;
 					break;
-				case "clicked":
-					spriteRenderer.sprite = face_Clicked;
+				case "hovered":
+					spriteRenderer.sprite = face_Hovered;
 					break;
-				case "ready":
-					spriteRenderer.sprite = face_Ready;
+				case "dragging":
+					spriteRenderer.sprite = face_Dragging;
 					break;
 				case "going":
 					spriteRenderer.sprite = face_Going;
@@ -75,19 +87,28 @@ public class Face : MonoBehaviour {
 					spriteRenderer.sprite = face_Defeat;
 					break;
 				default:
-					Debug.Log("Expression does not exist");
-					spriteRenderer.sprite = face_Asleep;
+					Debug.Log(faceSprite + " expression does not exist");
+					spriteRenderer.sprite = face_Neutral;
 					break;
 			}
 
 		}
 	}
-	
-	public void SetFaceColor(Color color) {
-		spriteRenderer.color = color;
+
+	public Sprite GetFaceSprite() {
+		return spriteRenderer.sprite;
 	}
 
-	public IEnumerator ChangeExpression(string expression, float duration) {
+	public void ChangeExpression(string expression, float duration) {
+
+		if(expressionCoroutine != null) { //Athlete is currently already expressing something
+			//expressionCoroutine = StartCoroutine(Express(expression, duration));
+		} else {
+			expressionCoroutine = StartCoroutine(Express(expression, duration));
+		}
+	}
+
+	public IEnumerator Express(string expression, float duration) {
 		
 		SetFaceSprite(expression);
 
@@ -100,25 +121,38 @@ public class Face : MonoBehaviour {
 		}
 
 		DetermineFaceState();
+
+		expressionCoroutine = null;
 	}	
 
+	public bool IsExpressing() {
+		if(expressionCoroutine != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public void DetermineFaceState() {
-		if(!gameController.matchOver) {
-			if(athleteController.GetDizzy()) {
+		if(athleteController.GetDizzy()) {
 				SetFaceSprite("dizzy");
 			} else {
 				if(athleteController.GetMoving()) {
 					SetFaceSprite("going");
 				} else {
+					/*
 					if(athleteController.GetReady()) { 
 						SetFaceSprite("ready");
 					} else {
-						SetFaceSprite("sleep");
+						SetFaceSprite("neutral");
 					}
+					*/
+					SetFaceSprite("neutral");
 				}
 			}
-		} else {
 
+
+		if(matchController != null && matchController.GetMatchEnded()) {
 			if(athleteController.GetAthlete().GetTeam().wonTheGame) {
 				SetFaceSprite("victory");
 			} else {

@@ -13,19 +13,19 @@ public class TeamSelectionPanel : MonoBehaviour {
 	public Image border;
 	private TextMeshProUGUI text;
 
-	private GameController gameController;
+	private PlayNowController playNowController;
 
 	void Awake() {
-		gameController = FindObjectOfType<GameController>();
+		playNowController = FindObjectOfType<PlayNowController>();
 
 		text = GetComponentInChildren<TextMeshProUGUI>();
 
-		leftArrow.onClick.AddListener(() => gameController.CycleTeamSelected(homeSide, true));
-		rightArrow.onClick.AddListener(() => gameController.CycleTeamSelected(homeSide, false));
+		leftArrow.onClick.AddListener(() => playNowController.CycleTeamSelected(homeSide, true));
+		rightArrow.onClick.AddListener(() => playNowController.CycleTeamSelected(homeSide, false));
 	}
 
 	public void SetTeam(Team t) {
 		text.text = t.name;
-		border.color = t.color;
+		border.color = t.primaryColor;
 	}
 }

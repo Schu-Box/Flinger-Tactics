@@ -28,7 +28,7 @@ public class TeamPostMatchPanel : MonoBehaviour {
 		}
 
 		teamNameText.text = team.name;
-		teamNameText.color = team.color;
+		teamNameText.color = team.primaryColor;
 
 		for(int i = statLabelHolder.transform.childCount - 1; i > -1; i--) {
 			Destroy(statLabelHolder.transform.GetChild(i).gameObject);
@@ -46,7 +46,7 @@ public class TeamPostMatchPanel : MonoBehaviour {
 			GameObject newHolder = Instantiate(athleteStatHolderPrefab, Vector3.zero, Quaternion.identity, athleteStatHolder.transform);
 			for(int j = 0; j < team.athletes[i].statList.Count; j++) {
 				GameObject newStatNum = Instantiate(statBoxPrefab, Vector3.zero, Quaternion.identity, newHolder.transform);
-				newStatNum.GetComponentInChildren<TextMeshProUGUI>().text = team.athletes[i].statList[j].GetValue().ToString();
+				newStatNum.GetComponentInChildren<TextMeshProUGUI>().text = team.athletes[i].statList[j].GetCount().ToString();
 			}
 		}
 

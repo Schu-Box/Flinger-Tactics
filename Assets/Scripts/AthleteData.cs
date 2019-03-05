@@ -8,4 +8,6 @@ public class AthleteData : ScriptableObject {
 	public List<string> nameList = new List<string>();
 
 	public List<Color> skinColorList = new List<Color>();
+
+	public List<AthleteType> athleteTypes = new List<AthleteType>();
 }

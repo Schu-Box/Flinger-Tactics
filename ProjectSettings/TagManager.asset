@@ -7,6 +7,8 @@ TagManager:
   - Ball
   - Athlete
   - Bumper
+  - Goal
+  - Tail
   layers:
   - Default
   - TransparentFX
@@ -16,8 +18,8 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
+  - Balls
+  - Goals
   - 
   - 
   - 
@@ -44,14 +46,17 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: UI
-    uniqueID: 2602950163
-    locked: 0
   - name: Blocker Walls
     uniqueID: 108344103
     locked: 0
   - name: Ball
     uniqueID: 427447743
+    locked: 0
+  - name: Goals
+    uniqueID: 77692565
+    locked: 0
+  - name: UI
+    uniqueID: 2602950163
     locked: 0
   - name: Athletes
     uniqueID: 3853730747

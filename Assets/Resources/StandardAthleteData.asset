@@ -15,23 +15,38 @@ MonoBehaviour:
   - Blippy
   - Chipper
   - Tripper
-  - Bogdiddy
+  - Boni
   - Monette
   - Lemmy
-  - Rexus
+  - Rex
   - Flampo
   - Yoyo
   - Momo
   - Bozo
   - Robly
   - Burpy
-  - Sandsum
+  - Su
   - Spheroid
   - Dipper
   - Dugdug
   - Auggy
   - Earny
   - Wombly
+  - Earnst
+  - Maxitrillion
+  - Neyo
+  - Fran
+  - Sammy
+  - Quill
+  - Boingo
+  - Rufus
+  - Sunny
+  - Lump
+  - Sasha
+  - Karen
+  - Arfur
+  - Cashly
+  - Hector
   skinColorList:
   - {r: 0.8773585, g: 0.87111425, b: 0.5421413, a: 1}
   - {r: 0.8490566, g: 0.8381593, b: 0.38047346, a: 1}
@@ -53,3 +68,43 @@ MonoBehaviour:
   - {r: 0.8973045, g: 0.9339623, b: 0.6564169, a: 1}
   - {r: 0.8225305, g: 0.9245283, b: 0.51023495, a: 1}
   - {r: 0.6831501, g: 0.7924528, b: 0.48220006, a: 1}
+  - {r: 0.8490566, g: 0.5616736, b: 0.22828408, a: 1}
+  - {r: 0.8584906, g: 0.5284536, b: 0.40899786, a: 1}
+  - {r: 0.47592562, g: 0.8540367, b: 0.8773585, a: 1}
+  athleteTypes:
+  - typeString: Circle
+    bumperModifier: 1
+    bodySprite: {fileID: 21300000, guid: 2be1292db46a243e2bc9c2add5baf04e, type: 3}
+    faceBaseSprite: {fileID: 21300000, guid: 2012a1f136be3499e8c6c369ad6a2411, type: 3}
+    frontLegSprite: {fileID: 21300000, guid: 30d7bf6a9d9a44169843d55695e01de3, type: 3}
+    backLegSprite: {fileID: 21300000, guid: 30d7bf6a9d9a44169843d55695e01de3, type: 3}
+    frontLegRest: 5.5
+    frontLegMin: 6.2
+    frontLegMax: 8
+    backLegRest: 5.5
+    backLegMin: 6.2
+    backLegMax: 8
+  - typeString: Triangle
+    bumperModifier: 1.5
+    bodySprite: {fileID: 21300000, guid: c33f9c2a34e514db59c2b1daa369d107, type: 3}
+    faceBaseSprite: {fileID: 21300000, guid: dd0c38f46d60043febdae4f8e69c6065, type: 3}
+    frontLegSprite: {fileID: 21300000, guid: 30d7bf6a9d9a44169843d55695e01de3, type: 3}
+    backLegSprite: {fileID: 21300000, guid: 30d7bf6a9d9a44169843d55695e01de3, type: 3}
+    frontLegRest: 4.5
+    frontLegMin: 5.2
+    frontLegMax: 7
+    backLegRest: 6
+    backLegMin: 6.7
+    backLegMax: 8.5
+  - typeString: Box
+    bumperModifier: 0
+    bodySprite: {fileID: 21300000, guid: 98f095a32c9cd4ee4b475ae15ac6784e, type: 3}
+    faceBaseSprite: {fileID: 21300000, guid: 7463fb747a1114966bd4d9f366f59d82, type: 3}
+    frontLegSprite: {fileID: 21300000, guid: 30d7bf6a9d9a44169843d55695e01de3, type: 3}
+    backLegSprite: {fileID: 21300000, guid: 30d7bf6a9d9a44169843d55695e01de3, type: 3}
+    frontLegRest: 6.5
+    frontLegMin: 7.2
+    frontLegMax: 9
+    backLegRest: 6.5
+    backLegMin: 7.2
+    backLegMax: 9

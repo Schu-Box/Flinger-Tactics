@@ -4,43 +4,84 @@ using UnityEngine;
 
 public class GoalController : MonoBehaviour {
 
-	public Team goalAttacker;
-
-	public BlockerController blocker;
-
-	private GameController gameController;
-	private Collider2D trigger;
-
-	private bool ballScoredHere;
+	private Team goalAttacker;
+	private Team teamOwner;
+	
+	private MatchController matchController;
+	private CameraController cameraController;
+	private SpriteRenderer spriteRenderer;
+	private Bumper bumper;
 
 	void Start() {
-		gameController = FindObjectOfType<GameController>();
-		trigger = GetComponent<Collider2D>();
+		matchController = FindObjectOfType<MatchController>();
+		cameraController = FindObjectOfType<CameraController>();
+		spriteRenderer = GetComponent<SpriteRenderer>();
+		bumper = GetComponent<Bumper>();
+
+		bumper.SetAsGoal(true);
 	}
 
-	private void OnTriggerEnter2D(Collider2D other) {
-		if(other.gameObject.CompareTag("Ball")) { //Ball entered goal zone
-			BallController ball = other.GetComponent<BallController>();
+	public void SetTeamRelations(Team owner, Team attacker) {
+		teamOwner = owner;
+		goalAttacker = attacker;
+	}
 
-			if(ball.GetScoredByTeam() == null) {
-				ballScoredHere = true;
-				gameController.ScoreGoal(goalAttacker, ball);
-			}
+	/*
+	public Team GetTeamOwner() {
+		return teamOwner;
+	}
 
-		} else if(other.gameObject.CompareTag("Athlete")) { //Athlete entered goal zone
+	public Team GetAttacker() {
+		return goalAttacker;
+	}
+	*/
+	
+	/*
+	private void OnCollisionEnter2D(Collision2D collie) {
+		if(collie.gameObject.CompareTag("Ball")) {
+			BallController ball = collie.gameObject.GetComponent<BallController>();
+			matchController.ScoreGoal(goalAttacker, ball);
 
+			StartCoroutine(GoalFlash());
 		}
 	}
+	*/
 
-	public bool GetBallEntered() {
-		return ballScoredHere;
+	public void BallEnteredTrigger(BallController ball) {
+		matchController.ScoreGoal(goalAttacker, ball, transform.position);
+
+		StartCoroutine(GoalFlash());
 	}
 
-	public void SetBallEntered(bool entered) {
-		ballScoredHere = entered;
-	}
+	public IEnumerator GoalFlash() {
 
-	public void SetTriggerState(bool active) {
-		trigger.enabled = active;
+		spriteRenderer.color = goalAttacker.primaryColor;
+
+		yield return new WaitForSeconds(0.4f);
+
+		float duration = 0.5f;
+		float timer = 0f;
+		WaitForFixedUpdate waiter = new WaitForFixedUpdate();
+		while(timer < duration) {
+			timer += Time.deltaTime;
+
+			spriteRenderer.color = Color.Lerp(goalAttacker.primaryColor, teamOwner.primaryColor, timer/duration);
+
+			yield return waiter;
+		}
+
+		/*
+		duration = 0.4f;
+		timer = 0f;
+		while(timer < duration) {
+			timer += Time.deltaTime;
+
+			spriteRenderer.color = Color.Lerp(teamOwner.GetLightTint(), teamOwner.primaryColor, timer/duration);
+
+			yield return waiter;
+		}
+		*/
+
+		spriteRenderer.color = teamOwner.primaryColor;
 	}
 }

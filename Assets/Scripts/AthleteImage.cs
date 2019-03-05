@@ -5,46 +5,35 @@ using UnityEngine.UI;
 using TMPro;
 
 public class AthleteImage : MonoBehaviour {
-	public TextMeshProUGUI text;
 	public Image body;
+	public Image faceBase;
 	public Image face;
-	public GameObject legHolder;
+	public List<Image> legList;
 	public Image tail;
+	public Image hat;
+	public TextMeshProUGUI numberText;
 
 	public void SetImages(Athlete athlete) {
-		text.text = athlete.name;
+		numberText.text = athlete.jerseyNumber.ToString();
 
-		body.sprite = athlete.GetBodyPartSprite("body");
-		body.color = athlete.GetTeam().color;
+		body.sprite = athlete.athleteType.bodySprite;
+		body.color = athlete.GetTeam().primaryColor;
 
-		face.sprite = athlete.GetBodyPartSprite("face");
-		face.color = athlete.skinColor;
+		faceBase.sprite = athlete.athleteType.faceBaseSprite;
+		faceBase.color = athlete.skinColor;
 
-		for(int i = legHolder.transform.childCount - 1; i > -1; i--) {
-			Destroy(legHolder.transform.GetChild(i).gameObject);
+		face.sprite = athlete.moodFace;
+
+		for(int i = 0; i < legList.Count; i++) {
+			legList[i].color = athlete.skinColor;
 		}
 
-		List<Sprite> legSpriteList = athlete.GetMultipleBodyPartSprites("legs");
-		for(int i = 0; i < legSpriteList.Count; i++) {
+		tail.color = athlete.GetTeam().primaryColor;
 
-			GameObject newLeg = Instantiate(new GameObject(), legHolder.transform.position, Quaternion.identity, legHolder.transform);
-			newLeg.AddComponent<Image>();
-			Image leg = newLeg.GetComponent<Image>();
+		hat.enabled = false;
+	}
 
-			//Should probably make this adaptable
-			newLeg.GetComponent<RectTransform>().sizeDelta = new Vector2(150, 150);
-
-			if(i % 2 == 1) { //If i is odd
-				newLeg.transform.localEulerAngles = new Vector3(0, 180, 0);
-			} else {
-				newLeg.transform.localEulerAngles = new Vector3(0, 0, 0);
-			}
-
-			leg.sprite = legSpriteList[i];
-			leg.color = athlete.skinColor;
-		}
-
-		tail.sprite = athlete.GetBodyPartSprite("tailTip");
-		tail.color = athlete.GetTeam().color;
+	public void SetMVP() {
+		hat.enabled = true;
 	}
 }

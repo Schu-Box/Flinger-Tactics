@@ -4,35 +4,42 @@ using UnityEngine;
 
 public class BallController : MonoBehaviour {
 
-	private GameController gameController;
+	private CameraController cameraController;
+	private AudioManager audioManager;
+
 	private Rigidbody2D rb;
+	private Collider2D collie;
 	private SpriteRenderer spriteRenderer;
 	private AudioSource audioSource;
 
-	private List<SpriteRenderer> scoreSlots = new List<SpriteRenderer>();
+	private SpriteRenderer lightSlot;
 
-	private List<Athlete> athleteTouchOrder = new List<Athlete>();
-	private Athlete lastTurnToucher;
+	private List<AthleteController> athleteTouchOrder = new List<AthleteController>();
+	private Bumper lastBumperTriggerEntered;
 
 	private Team scoredByTeam = null;
 
 	private Vector3 originalScale;
 
 	private bool moving = false;
+	private bool scoreAnimationInProgress = false;
 
 	private Vector2 lastVelocity = Vector2.zero;
 
-	private void Start() {
-		gameController = FindObjectOfType<GameController>();
+	private void Start() { 
+		cameraController = FindObjectOfType<CameraController>();
+		audioManager = FindObjectOfType<AudioManager>();
+
 		rb = GetComponent<Rigidbody2D>();
+		collie = GetComponent<Collider2D>();
 		spriteRenderer = GetComponent<SpriteRenderer>();
 		audioSource = GetComponent<AudioSource>();
 
-		for(int i = 0; i < transform.childCount; i++) {
-			scoreSlots.Add(transform.GetChild(i).GetComponent<SpriteRenderer>());
-		}
+		lightSlot = transform.GetChild(0).GetComponent<SpriteRenderer>();
 
 		originalScale = transform.localScale;
+
+		//audioSource.clip = audioManager.GetBallBumpClip();
 	}
 
 	private void FixedUpdate() {
@@ -56,84 +63,167 @@ public class BallController : MonoBehaviour {
 	}
 
 	private void OnCollisionEnter2D(Collision2D collision) {
+		audioManager.PlaySound("ballBump");
+
 		if(collision.gameObject.CompareTag("Athlete")) {
-			TouchedByAthlete(collision.gameObject.GetComponent<AthleteController>().GetAthlete());
+			TouchedByAthlete(collision.gameObject.GetComponent<AthleteController>());
+		} else if(collision.gameObject.CompareTag("Goal")) {
+			Debug.Log("Collided with goal!!");
 		}
 	}
 
-	private void TouchedByAthlete(Athlete athlete) {
-		for(int i = 0; i < scoreSlots.Count; i++) {
-			scoreSlots[i].color = athlete.GetTeam().color;
-		}
+	private void TouchedByAthlete(AthleteController athlete) {
+		lightSlot.color = athlete.GetAthlete().GetTeam().primaryColor;
 
 		athleteTouchOrder.Add(athlete);
 	}
 
-	public void ResetTouchOrder() {
+	public AthleteController GetLastToucher() {
 		if(athleteTouchOrder.Count > 0) {
-			lastTurnToucher = athleteTouchOrder[athleteTouchOrder.Count - 1];
+			return athleteTouchOrder[athleteTouchOrder.Count - 1];
 		} else {
-			lastTurnToucher = null;
+			return null;
 		}
-
-		athleteTouchOrder = new List<Athlete>();
 	}
 
-	public void ScoreBall(Team scoringTeam) {
+	public void ResetTouchOrder() {
+		athleteTouchOrder = new List<AthleteController>();
+	}
+
+	public void SetLastBumper(Bumper bumper) {
+		lastBumperTriggerEntered = bumper;
+	}
+
+	public Bumper GetLastBumper() {
+		return lastBumperTriggerEntered;
+	}
+
+	public void ScoreBall(Team scoringTeam, AthleteController initiater, Vector3 goalCenter) {
 		scoredByTeam = scoringTeam;
 
-		//This will lead to errors if no athlete has touched the ball this turn. Currently, this should not be possible
-		Athlete scorer = athleteTouchOrder[athleteTouchOrder.Count - 1];
-		if(scorer.GetTeam() == scoringTeam) {
-			scorer.IncreaseStat("goals");
+		audioManager.PlaySound("ballGoal");
 
-			Athlete assister;
-			if(athleteTouchOrder.Count > 1) {
-				assister = athleteTouchOrder[athleteTouchOrder.Count - 2];
-			} else {
-				assister = lastTurnToucher;
+		AthleteController mostRecentToucher = null;
+		if(athleteTouchOrder.Count > 0) {
+			mostRecentToucher = athleteTouchOrder[athleteTouchOrder.Count - 1];
+		}
+		bool ownGoal = false;
+		if(initiater.GetAthlete().GetTeam() != scoringTeam) { //If the initater is not on the scoring team
+			ownGoal = false;
+			for(int i = 0; i < athleteTouchOrder.Count; i++) { //Own goals only occur if no scoring teammate touched the ball during this turn
+				if(athleteTouchOrder[i].GetAthlete().GetTeam() == scoringTeam) {
+					ownGoal = false;
+					break;
+				} else {
+					ownGoal = true;
+				}
 			}
+		}
 
-			
-			if(assister != null && assister.GetTeam() == scoringTeam && assister != scorer) {
-				assister.IncreaseStat("assists");
-			}
-		} //else it's an own goal
+		if(mostRecentToucher != null && mostRecentToucher.GetAthlete().GetTeam() == scoringTeam) {
+			AwardGoal(mostRecentToucher, initiater);
+		} else if(!ownGoal) {
+			AwardGoal(initiater, initiater);
+		} else {
+			//It's an own goal
+			Debug.Log("Own goal!");
+		}
 
-		athleteTouchOrder = new List<Athlete>();
-		lastTurnToucher = null;
+		ResetTouchOrder();
+		lastBumperTriggerEntered = null;
 
-		//Can probably get rid of these
-		/*
-		scoreSlots[teamScores.Count].color = scoringTeam.color;
-		*/
-
-		StartCoroutine(ShrinkBall());
+		//StartCoroutine(ShrinkBall());
+		StartCoroutine(ScoreAnimation(scoringTeam.primaryColor, goalCenter));
 	}
 
-	public IEnumerator ShrinkBall() {
+	public void AwardGoal(AthleteController scorer, AthleteController initiater) {
+		scorer.IncreaseStat(StatType.Goals);
+
+		List<AthleteController> assisters = new List<AthleteController>();
+		for(int i = 0; i < athleteTouchOrder.Count; i++) {
+			AthleteController ath = athleteTouchOrder[i];
+			if(ath.GetAthlete().GetTeam() == scorer.GetAthlete().GetTeam() && ath != scorer) { //If a teammate also touched the ball then they're an assister
+				bool alreadyOnList = false;
+				for(int j = 0; j < assisters.Count; j++) {
+					if(ath == assisters[j]) {
+						alreadyOnList = true;
+						break;
+					}
+				}
+				if(!alreadyOnList) {
+					assisters.Add(ath);
+				}
+			}
+		}
+
+		for(int i = 0; i < assisters.Count; i++) {
+			if(assisters[i] != scorer) { //If this assister is not the scorer
+				assisters[i].IncreaseStat(StatType.Assists);
+			}
+		}
+
+		bool initiaterCredited = false; //Check to see if the initiater has been awarded an assist
+		for(int i = 0; i < assisters.Count; i++) {
+			if(assisters[i] == initiater) {
+				initiaterCredited = true;
+				break;
+			}
+		}
+		if(!initiaterCredited && initiater != scorer) { //If the initiater was not awarded an assist or a goal, give them an assist
+			initiater.IncreaseStat(StatType.Assists);
+		}
+	}
+
+	public IEnumerator ScoreAnimation(Color scorerColor, Vector3 goalCenter) {
+		scoreAnimationInProgress = true;
+
 		WaitForEndOfFrame waiter = new WaitForEndOfFrame();
 
-		float timer = 0f;
-		float duration = 0.2f;
-		while(timer < duration) {
-			timer += Time.deltaTime;
-			transform.localScale = Vector3.Lerp(originalScale, (originalScale * 1.4f), timer/duration);
+		Color originalColor = spriteRenderer.color;
+		Color originalLightColor = lightSlot.color;
 
-			yield return waiter;
-		}
+		StoppedMoving();
+		collie.enabled = false;
+		rb.simulated = false;
 		
-		timer = 0f;
-		duration = 0.2f;
+		lightSlot.color = originalLightColor;
+		spriteRenderer.color = scorerColor;
+		float timer = 0f;
+		float duration = 0.5f;
 		while(timer < duration) {
 			timer += Time.deltaTime;
 
-			transform.localScale = Vector3.Lerp(originalScale, Vector3.zero, timer/duration);
+			//transform.localScale = Vector3.Lerp(originalScale, (originalScale / 2), timer/duration);
 
 			yield return waiter;
 		}
+
+		Vector3 originalPosition = transform.position;
+		Vector3 absorbPosition = goalCenter;
+		absorbPosition.y = originalPosition.y;
+	
+		timer = 0f;
+		duration = 0.4f;
+		while(timer < duration) {
+			timer += Time.deltaTime;
+
+			transform.position = Vector3.Lerp(originalPosition, absorbPosition, timer/duration);
+
+			float step = Mathf.Sin((timer/duration) * Mathf.PI * 0.5f);
+			transform.localScale = Vector3.Lerp(originalScale, Vector3.zero, step);
+
+			yield return waiter;
+		}
+
+		spriteRenderer.color = originalColor;
+
+		scoreAnimationInProgress = false;
 
 		DisableBall();
+	}
+
+	public bool GetScoreAnimationInProgress() {
+		return scoreAnimationInProgress;
 	}
 
 	public void DisableBall() {
@@ -146,9 +236,13 @@ public class BallController : MonoBehaviour {
 
 	public void RespawnBall(Vector3 spawnPosition) {
 		Debug.Log("Respawning ball");
-		//spriteRenderer.color = Color.white;
 
-		transform.position = spawnPosition;
+		collie.enabled = true;
+		rb.simulated = true;
+		
+		lightSlot.color = Color.white;
+
+		transform.localPosition = spawnPosition;
 
 		StartCoroutine(GrowBall(originalScale));
 	}
@@ -177,8 +271,7 @@ public class BallController : MonoBehaviour {
 
 		rb.velocity = Vector2.zero;
 
-		//spriteRenderer.color = Color.white;
-		scoreSlots[0].color = Color.white;
+		lightSlot.color = Color.white;
 	}
 
 	public void SetScoredByTeam(Team team) {
