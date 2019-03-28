@@ -60,8 +60,10 @@
      <Compile Include="Assets\Scripts\BallController.cs" />
      <Compile Include="Assets\Scripts\Body.cs" />
      <Compile Include="Assets\Scripts\Bumper.cs" />
+     <Compile Include="Assets\Scripts\BumperTrigger.cs" />
      <Compile Include="Assets\Scripts\CameraController.cs" />
      <Compile Include="Assets\Scripts\CanvasManager.cs" />
+     <Compile Include="Assets\Scripts\CrowdController.cs" />
      <Compile Include="Assets\Scripts\Face.cs" />
      <Compile Include="Assets\Scripts\FootnoteManager.cs" />
      <Compile Include="Assets\Scripts\GoalController.cs" />
@@ -69,7 +71,7 @@
      <Compile Include="Assets\Scripts\MatchController.cs" />
      <Compile Include="Assets\Scripts\MatchData.cs" />
      <Compile Include="Assets\Scripts\PlayNowController.cs" />
-     <Compile Include="Assets\Scripts\ReadyUpButton.cs" />
+     <Compile Include="Assets\Scripts\RaisedButton.cs" />
      <Compile Include="Assets\Scripts\ShowcaseAthleteUI.cs" />
      <Compile Include="Assets\Scripts\Sound.cs" />
      <Compile Include="Assets\Scripts\SpawnBox.cs" />
@@ -116,6 +118,7 @@
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\WarpTextExample.cs" />
      <Compile Include="Assets\Tween\Demo\TweenDemo.cs" />
      <Compile Include="Assets\Tween\Tween.cs" />
+     <None Include="Assets\Resources\Shaders\WhiteShader.shader" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />
      <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
      <None Include="Assets\Tween\Readme.txt" />

@@ -13,13 +13,15 @@ public class Bumper : MonoBehaviour {
 	private SpriteRenderer spriteRenderer;
 	private Collider2D collie;
 
+	private BumperTrigger bumperTrigger;
+
 	private GoalController parentGoal;
 
 	private Coroutine currentCoroutine;
 
 	private Vector2 originalSize;
 
-	private float bumpForce = 1.5f;
+	private float bumpForce = 1f;
 
 	private Team teamOwner;
 
@@ -37,6 +39,8 @@ public class Bumper : MonoBehaviour {
 		audioSource = GetComponent<AudioSource>();
 		spriteRenderer = GetComponent<SpriteRenderer>();
 		collie = GetComponent<Collider2D>();
+
+		bumperTrigger = GetComponentInChildren<BumperTrigger>();
 
 		originalSize = transform.localScale;
 	}
@@ -80,14 +84,13 @@ public class Bumper : MonoBehaviour {
 		if(!indestructible && !immune) {
 			if(collision.gameObject.CompareTag("Ball")) {
 				BreakBlock();
+				
 				AthleteController lastToucher = collision.gameObject.GetComponent<BallController>().GetLastToucher();
-				if(lastToucher != null) {
-					if(lastToucher.GetAthlete().GetTeam() != teamOwner) {
-						lastToucher.IncreaseStat(StatType.Breaks);
-					} else { //If the last toucher isn't on the scoring team, then award the break to the initiater (if they're on the scoring team)
-						if(matchController.GetAthleteInitiater().GetAthlete().GetTeam() != teamOwner) {
-							matchController.GetAthleteInitiater().IncreaseStat(StatType.Breaks);
-						}
+				if(lastToucher != null && lastToucher.GetAthlete().GetTeam() != teamOwner) {
+					lastToucher.IncreaseStat(StatType.Breaks);
+				} else {
+					if(matchController.GetAthleteInitiater().GetAthlete().GetTeam() != teamOwner) {
+						matchController.GetAthleteInitiater().IncreaseStat(StatType.Breaks);
 					}
 				}
 			} else if(collision.gameObject.CompareTag("Athlete") && collision.gameObject.GetComponent<AthleteController>().GetAthlete().GetTeam() != teamOwner) {
@@ -102,17 +105,12 @@ public class Bumper : MonoBehaviour {
 
 		float modifier = 1f;
 		if(otherRB.gameObject.GetComponent<AthleteController>() != null) {
-			modifier = otherRB.gameObject.GetComponent<AthleteController>().GetAthlete().athleteType.bumperModifier;
+			modifier = otherRB.gameObject.GetComponent<AthleteController>().GetAthlete().athleteData.bumperModifier;
 		}
 	
 		otherRB.AddForce(bumpDirection * bumpForce * modifier, ForceMode2D.Impulse);
 	}
 
-	private void OnTriggerEnter2D(Collider2D other) {
-		if(other.gameObject.CompareTag("Ball")) { //Ball entered bumper zone
-			other.gameObject.GetComponent<BallController>().SetLastBumper(this);
-		}
-	}
 
 	public IEnumerator BumpAnimation() {
 		if(goal) {
@@ -122,8 +120,13 @@ public class Bumper : MonoBehaviour {
 		}
 
 		Vector2 shrinkSize = transform.localScale;
-		shrinkSize.x = transform.localScale.x * 1.3f;
-		shrinkSize.y = transform.localScale.y * 0.95f;
+		if(!goal) {
+			shrinkSize.x = transform.localScale.x * 1.3f;
+			shrinkSize.y = transform.localScale.y * 0.95f;
+		} else {
+			shrinkSize.x = transform.localScale.x * 1.15f;
+		}
+		
 
 		float timer = 0f;
 		float duration = 7f;
@@ -171,7 +174,7 @@ public class Bumper : MonoBehaviour {
 
 	public void Deactivate() {
 		spriteRenderer.enabled = false;
-		collie.isTrigger = true;
+		collie.enabled = false;
 	}
 
 	public void EndCoroutines() {
@@ -191,7 +194,7 @@ public class Bumper : MonoBehaviour {
 
 	public void Reactivate() {
 		spriteRenderer.enabled = true;
-		collie.isTrigger = false;
+		collie.enabled = true;
 	}
 
 	public IEnumerator RestoreAnimation() {

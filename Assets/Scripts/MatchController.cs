@@ -7,7 +7,7 @@ public class MatchController : MonoBehaviour {
 	public GameObject ballPrefab;
     public GameObject athleteStandardPrefab;
 
-    public int numAthletesPerTeam = 3;
+    public int numAthletesOnFieldPerTeam = 2;
     public int numBalls;
     public int turnCap;
 
@@ -24,17 +24,28 @@ public class MatchController : MonoBehaviour {
 
 	public Transform athleteHolder;
 	public Transform ballHolder;
+    public Transform substituteHolder;
 
     public SpawnBox ballSpawnBox;
     public SpawnBox homeSpawnBox;
     public SpawnBox awaySpawnBox;
 
+    private CrowdController crowdController;
+
 	private List<AthleteController> homeAthletesOnField = new List<AthleteController>();
     private List<AthleteController> awayAthletesOnField = new List<AthleteController>();
     private List<AthleteController> allAthletesOnField = new List<AthleteController>();
     private List<BallController> ballsOnField = new List<BallController>();
+    private List<AthleteController> inboundSubstitutes = new List<AthleteController>();
+    private List<AthleteController> inactiveHomeAthletes = new List<AthleteController>();
+    private List<AthleteController> inactiveAwayAthletes = new List<AthleteController>();
 
     private List<Bumper> bumperTriggersLastEntered = new List<Bumper>();
+
+    public GameObject substituteChair;
+
+    public Vector2 homeSpawnSpot;
+    public Vector2 awaySpawnSpot;
     
     //Ready stuff is now unused
     private bool homeReady = false;
@@ -48,10 +59,10 @@ public class MatchController : MonoBehaviour {
     private bool homeTurn = false;
     private bool athleteBeingDragged = false;
     private bool turnActive = false;
+    private bool substituteInbound = false;
 
     private AthleteController athleteInitiater;
 
-    public static bool blockersMoved = false;
 	public static bool simultaneousTurns = true;
 
     public static bool muted = false;
@@ -63,7 +74,25 @@ public class MatchController : MonoBehaviour {
     private MatchData matchData;
 
 	void Awake() {
-        Physics2D.IgnoreLayerCollision(8, 9, true); //Makes the balls ignore the goals
+        Physics2D.IgnoreLayerCollision(14, 10, true); //Makes the balls ignore the goals
+        Physics2D.IgnoreLayerCollision(14, 11, true);
+        Physics2D.IgnoreLayerCollision(15, 10, true);
+        Physics2D.IgnoreLayerCollision(15, 11, true);
+        Physics2D.IgnoreLayerCollision(9, 10, true); //Makes the crowd ignore the goals
+        Physics2D.IgnoreLayerCollision(9, 11, true);
+        Physics2D.IgnoreLayerCollision(12, 11, true); //Makes the home team athletes ignore away goals
+        Physics2D.IgnoreLayerCollision(13, 10, true); //Makes the away team athletes ignore home goals
+
+        Physics2D.IgnoreLayerCollision(8, 9, true); //Makes the substitutes ignore goals and bumpers and the crowd
+        Physics2D.IgnoreLayerCollision(8, 10, true);
+        Physics2D.IgnoreLayerCollision(8, 11, true);
+        Physics2D.IgnoreLayerCollision(8, 16, true);
+        Physics2D.IgnoreLayerCollision(8, 18, true); //Makes substitutes ignore substitute chairs
+        Physics2D.IgnoreLayerCollision(18, 9, true); //Makes the substitute chair ignore goals and bumpers and the crowd
+        Physics2D.IgnoreLayerCollision(18, 10, true);
+        Physics2D.IgnoreLayerCollision(18, 11, true);
+        Physics2D.IgnoreLayerCollision(18, 16, true);
+        
 
         simultaneousTurns = false;
         matchStarted = false;
@@ -73,6 +102,7 @@ public class MatchController : MonoBehaviour {
 		canvasManager = FindObjectOfType<CanvasManager>();
         cameraController = FindObjectOfType<CameraController>();
 		audioManager = FindObjectOfType<AudioManager>();
+        crowdController = FindObjectOfType<CrowdController>();
 	}
 
     void Update () {
@@ -86,9 +116,10 @@ public class MatchController : MonoBehaviour {
         RaycastHit2D[] hits = Physics2D.RaycastAll(ray.origin, ray.direction, Mathf.Infinity);
 
         for(int i = 0; i < hits.Length; i++) {
-            Debug.Log(hits[i].collider.gameObject.name);
-            if (hits[i].collider.gameObject.GetComponent<TailTip>() != null) { //If it's the tail being clicked
-                hits[i].collider.gameObject.GetComponentInParent<AthleteController>().Clicked();
+            //Debug.Log(hits[i].collider.gameObject.name);
+            if (hits[i].collider.gameObject.GetComponent<AthleteController>() != null) {
+                hits[i].collider.gameObject.GetComponentInParent<AthleteController>().MouseClick();
+                break;
             }
         }
     }
@@ -111,16 +142,16 @@ public class MatchController : MonoBehaviour {
 
         if(ac != null) {
             if(tailHovered) {
-                ac.MouseEnterTail();
+                ac.MouseEnter();
             } else {
-                ac.MouseEnterBody();
+                ac.MouseEnter();
             }
         }
     }
 
 	public void SetupCourt() {
-		homeSpawnBox.SetSpawnBox(numAthletesPerTeam);
-        awaySpawnBox.SetSpawnBox(numAthletesPerTeam);
+		homeSpawnBox.SetSpawnBox(numAthletesOnFieldPerTeam);
+        awaySpawnBox.SetSpawnBox(numAthletesOnFieldPerTeam);
 	}
 
 	public Team GetTeam(bool home) {
@@ -159,7 +190,14 @@ public class MatchController : MonoBehaviour {
             }
             homeAthletesOnField = new List<AthleteController>();
 
+            for(int i = 0; i < inactiveHomeAthletes.Count; i++) {
+                Destroy(inactiveHomeAthletes[i].gameObject);
+            }
+            inactiveHomeAthletes = new List<AthleteController>();
 
+            if(crowdController != null) {
+                crowdController.SetStadiumSeats(homeTeam);
+            }
         } else {
             awayTeam = teamSelected;
 
@@ -174,6 +212,11 @@ public class MatchController : MonoBehaviour {
                 Destroy(awayAthletesOnField[i].gameObject);
             }
             awayAthletesOnField = new List<AthleteController>();
+
+            for(int i = 0; i < inactiveAwayAthletes.Count; i++) {
+                Destroy(inactiveAwayAthletes[i].gameObject);
+            }
+            inactiveAwayAthletes = new List<AthleteController>();
         }
 
         SpawnAthletes(homeSide);
@@ -184,21 +227,28 @@ public class MatchController : MonoBehaviour {
 
 	public void SpawnAthletes(bool homeSide) {
 
-        for(int i = 0; i < numAthletesPerTeam; i++) {
+        int totalAthletesToSpawn = homeTeam.athletes.Count;
+
+        for(int i = 0; i < totalAthletesToSpawn; i++) {
             Athlete athlete;
-            
-            Vector3 spawnSpot;
-            Vector3 spawnAngle;
+
+            Vector3 spawnSpot = Vector3.zero;
+            Vector3 spawnAngle = Vector3.zero;
+        
             if(homeSide) {
                 athlete = homeTeam.athletes[i];
 
-                spawnSpot = new Vector3(homeSpawnBox.transform.localPosition.x, homeSpawnBox.GetSpawnHeights()[i], 0);
-                spawnAngle = new Vector3(0, 0, 90);
+                if(i < numAthletesOnFieldPerTeam) {
+                    spawnSpot = new Vector3(homeSpawnBox.transform.localPosition.x, homeSpawnBox.GetSpawnHeights()[i], 0);
+                    spawnAngle = new Vector3(0, 0, 90);
+                }
             } else {
                 athlete = awayTeam.athletes[i];
 
-                spawnSpot = new Vector3(awaySpawnBox.transform.localPosition.x, awaySpawnBox.GetSpawnHeights()[i], 0);
-                spawnAngle = new Vector3(0, 0, 270);
+                if(i < numAthletesOnFieldPerTeam) {
+                    spawnSpot = new Vector3(awaySpawnBox.transform.localPosition.x, awaySpawnBox.GetSpawnHeights()[i], 0);
+                    spawnAngle = new Vector3(0, 0, 270);
+                }
             }
 
             GameObject prefabToSpawn = athleteStandardPrefab;
@@ -209,9 +259,23 @@ public class MatchController : MonoBehaviour {
             ac.SetAthlete(athlete);
 
             if(homeSide) {
-                homeAthletesOnField.Add(ac);
+                ac.gameObject.layer = 12;
+                
+                if(i < numAthletesOnFieldPerTeam) {
+                    homeAthletesOnField.Add(ac);
+                } else {
+                    inactiveHomeAthletes.Add(ac);
+                    ac.gameObject.SetActive(false);
+                }
             }  else {
-                awayAthletesOnField.Add(ac);
+                ac.gameObject.layer = 13;
+
+                if(i < numAthletesOnFieldPerTeam) {
+                    awayAthletesOnField.Add(ac);
+                } else {
+                    inactiveAwayAthletes.Add(ac);
+                    ac.gameObject.SetActive(false);
+                }
             }
 
             if(!simultaneousTurns) {
@@ -234,7 +298,7 @@ public class MatchController : MonoBehaviour {
 
     public void AthleteUnhovered(Athlete athlete) {
         if(canvasManager != null && !athleteBeingDragged) {
-            canvasManager.HideFootnotePanel(athlete);
+            canvasManager.HideFootnotePanel();
         }
     }
 
@@ -263,12 +327,7 @@ public class MatchController : MonoBehaviour {
         	canvasManager.DisplayStartMatch();
 		}
 
-        allAthletesOnField = new List<AthleteController>();
-        for(int i = 0; i < homeAthletesOnField.Count; i++) { //Assumes home and away team always have the same number
-            allAthletesOnField.Add(homeAthletesOnField[i]);
-            allAthletesOnField.Add(awayAthletesOnField[i]);
-        }
-
+        SetAthletesOnField();
 
         //Field Mechanics
         ballSpawnBox.SetSpawnBox(numBalls);
@@ -293,10 +352,22 @@ public class MatchController : MonoBehaviour {
             awayBumpers[i].SetTeam(awayTeam);
         }
 
+        if(crowdController != null) {
+            crowdController.SetCrowd();
+        }
+
         //Kind of stupid but this essentially subtracts a turn
         homeTurn = !homeTurn; 
         turnNumber--;
         StartNextTurn();
+    }
+
+    public void SetAthletesOnField() {
+        allAthletesOnField = new List<AthleteController>();
+        for(int i = 0; i < homeAthletesOnField.Count; i++) { //Assumes home and away team always have the same number
+            allAthletesOnField.Add(homeAthletesOnField[i]);
+            allAthletesOnField.Add(awayAthletesOnField[i]);
+        }
     }
 
     public MatchData GetMatchData() {
@@ -311,6 +382,14 @@ public class MatchController : MonoBehaviour {
         return matchEnded;
     }
 
+    public List<BallController> GetBallsOnField() {
+        return ballsOnField;
+    }
+
+    public List<AthleteController> GetAllAthletesOnField() {
+        return allAthletesOnField;
+    }
+
 	public void StartNextTurn() {
         turnActive = false;
         
@@ -319,7 +398,12 @@ public class MatchController : MonoBehaviour {
 
         athleteInitiater = null;
 
-		if(canvasManager != null) {
+        if(timeoutRequested) {
+            timeoutAcceptable = true;
+            timeoutRequested = false;
+        }
+
+        if(canvasManager != null) {
         	canvasManager.DisplayNextTurn(turnNumber);
 		}
 
@@ -338,6 +422,7 @@ public class MatchController : MonoBehaviour {
                 for(int i = 0; i < homeAthletesOnField.Count; i++) {
                     homeAthletesOnField[i].EnableInteraction();
                     homeAthletesOnField[i].IgnoreRaycasts(false);
+                    homeAthletesOnField[i].RestoreAthleteColor();
                     homeAthletesOnField[i].DisableBody();
                 }
                 for(int i = 0; i < awayAthletesOnField.Count; i++) {
@@ -356,12 +441,51 @@ public class MatchController : MonoBehaviour {
                 for(int i = 0; i < awayAthletesOnField.Count; i++) {
                     awayAthletesOnField[i].EnableInteraction();
                     awayAthletesOnField[i].IgnoreRaycasts(false);
+                    awayAthletesOnField[i].RestoreAthleteColor();
                     awayAthletesOnField[i].DisableBody();
                 }
             }
 		}
 
         PretendMouseJustAppeared();
+
+        if(crowdController != null) {
+            crowdController.SetFocus();
+        }
+    }
+
+    private bool timeoutRequested = false;
+    private bool timeoutAcceptable = false;
+
+
+    public bool IsTimeoutAcceptable() {
+        return timeoutAcceptable;
+    }
+
+    public void RequestTimeout() {
+        timeoutRequested = true;
+
+        StartCoroutine(EndTurn());
+    }
+
+    public void UseTimeout() {
+        Debug.Log("Timeout used");
+
+        /*
+        Team team = GetTurnTeam();
+        if(team == homeTeam) {
+            matchData.homeTeamData.LoseTimeout();
+        } else {
+            matchData.awayTeamData.LoseTimeout();
+        }
+        */
+
+        SetSide(true, homeTeam);
+        SetSide(false, awayTeam);
+
+        SetAthletesOnField();
+
+        StartCoroutine(EndTurn());
     }
 
     public Team GetTurnTeam() {
@@ -423,6 +547,10 @@ public class MatchController : MonoBehaviour {
         turnActive = true;
 
         StartCoroutine(WaitForTurnEnd());
+
+        if(crowdController != null) {
+            crowdController.StartWatching();
+        }
     }
 
     public bool IsTurnActive() {
@@ -442,58 +570,60 @@ public class MatchController : MonoBehaviour {
         yield return new WaitForSeconds(1f);
 
         WaitForFixedUpdate waiter = new WaitForFixedUpdate();
-        bool turnComplete = false;
-        bool allAthletesStopped = false;
-        bool allBallsStopped = false;
-        while(!turnComplete) {
-
-            bool athleteStillMoving = false;
-            for(int i = 0; i < allAthletesOnField.Count; i++) {
-                if(allAthletesOnField[i].GetMoving()) {
-                    athleteStillMoving = true;
-                    break;
-                }
-            }
-            if(!athleteStillMoving) {
-                allAthletesStopped = true;
-            }
-
-            bool ballStillMoving = false;
-            for(int i = 0; i < ballsOnField.Count; i++) {
-                if(ballsOnField[i].gameObject.activeSelf) {
-                    if(ballsOnField[i].GetMoving() || ballsOnField[i].GetScoreAnimationInProgress()) {
-                        ballStillMoving = true;
-                        break;
-                    }
-                }
-            }
-            if(!ballStillMoving) {
-                allBallsStopped = true;
-            }
-
-            turnComplete = (allAthletesStopped && allBallsStopped);
-
+       
+        while(CheckForMovement() || substituteInbound) {
             yield return waiter;
         }
 
-        EndTurn();
+        Debug.Log("Ending turn");
+
+        StartCoroutine(EndTurn());
     }
 
-     public void EndTurn() {
-        blockersMoved = false;
+    public bool CheckForMovement() {
+        bool athleteStillMoving = false;
+        for(int i = 0; i < allAthletesOnField.Count; i++) {
+            if(allAthletesOnField[i].GetMoving()) {
+                athleteStillMoving = true;
+                break;
+            }
+        }
+
+        bool ballStillMoving = false;
+        for(int i = 0; i < ballsOnField.Count; i++) {
+            if(ballsOnField[i].gameObject.activeSelf) {
+                if(ballsOnField[i].GetMoving() || ballsOnField[i].GetScoreAnimationInProgress()) {
+                    ballStillMoving = true;
+                    break;
+                }
+            }
+        }
+
+        if(athleteStillMoving || ballStillMoving) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public IEnumerator EndTurn() {
+        timeoutAcceptable = false;
 
         ResetBumpers();
 
+        yield return new WaitForSeconds(0.7f); //Wait for bumpers to return
+
+        WaitForFixedUpdate waiter = new WaitForFixedUpdate();
+        while(CheckForMovement()) {
+            yield return waiter;
+        }
+
+        Debug.Log("Next turn reached");
+
         if(turnNumber >= turnCap) {
             EndMatch();
-        }
-        
-        if(!matchEnded) {
-            if(blockersMoved) {
-                StartCoroutine(WaitForTurnEnd());
-            } else {
-                StartNextTurn();
-            }
+        } else {
+            StartNextTurn();
         }
     }
 
@@ -514,8 +644,22 @@ public class MatchController : MonoBehaviour {
 		teamThatScored.score++;
 
 		if(canvasManager != null) {
-        	StartCoroutine(canvasManager.DisplayScore(teamThatScored));
+        	canvasManager.StartCoroutine(canvasManager.DisplayScore(teamThatScored));
 		}
+
+        if(crowdController != null) {
+            bool homeScored;
+            if(teamThatScored == homeTeam) {
+                homeScored = true;
+            } else {
+                homeScored = false;
+            }
+
+            crowdController.ExpressEmotion("happy", homeScored);
+            crowdController.ExpressEmotion("sad", !homeScored);
+            
+            crowdController.StartCoroutine(crowdController.FlashSteps(teamThatScored.primaryColor));
+        }
     }
 
     public void RespawnBalls() {
@@ -534,7 +678,7 @@ public class MatchController : MonoBehaviour {
                     Vector3 chosenSpawn = Vector3.zero;
                     for(int b = 0; b < ballsOnField.Count; b++) {
                         chosenSpawn = new Vector3(0, spawnHeights[j], 0);
-                        if(ballsOnField[b].transform.position == chosenSpawn) {
+                        if(ballsOnField[b].transform.localPosition == chosenSpawn) {
                             openSpace = false;
                         }
                     }
@@ -646,6 +790,128 @@ public class MatchController : MonoBehaviour {
     public void UpdateStats(StatType type, Athlete athlete) {
         if(canvasManager != null) {
             canvasManager.UpdateFootnotePanel(type, athlete);
+        }
+    }
+
+    public void SubstituteAthleteOut(AthleteController ac, Vector3 goalCenter) {
+        cameraController.AddTrauma(0.8f);
+
+        allAthletesOnField.Remove(ac);
+        if(ac.GetAthlete().GetTeam() == homeTeam) {
+            SubstituteAthleteIn(true);
+
+            homeAthletesOnField.Remove(ac);
+            inactiveHomeAthletes.Add(ac);
+        } else {
+            SubstituteAthleteIn(false);
+
+            awayAthletesOnField.Remove(ac);
+            inactiveAwayAthletes.Add(ac);
+        }
+
+        StartCoroutine(ac.RemoveAthleteFromField(goalCenter));
+    }
+
+    public void SubstituteAthleteIn(bool home) {
+        Debug.Log("Subbing athlete in");
+
+        substituteInbound = true;
+
+        Vector2 spawnSpot = Vector2.zero;
+        //Vector2 launchSpot = Vector2.zero;
+        Vector3 spawnAngle;
+
+        Vector2 chairSpawn;
+
+        AthleteController athleteSubbingIn;
+
+        Team team;
+        
+        if(home) { //This is bad. I should just store the launch xs as a float and then check if home -> make negative
+            spawnSpot = homeSpawnSpot;
+            //launchSpot = aSpawnSpot;
+            spawnAngle = new Vector3(0, 0, 90);
+
+            athleteSubbingIn = inactiveHomeAthletes[inactiveHomeAthletes.Count - 1];
+            inactiveHomeAthletes.Remove(athleteSubbingIn);
+
+            chairSpawn = homeGoal.transform.position;
+
+            team = homeTeam;
+        } else {
+            spawnSpot = awaySpawnSpot;
+            //launchSpot = awaySpawnSpot;
+            spawnAngle = new Vector3(0, 0, 270);
+
+            athleteSubbingIn = inactiveAwayAthletes[inactiveAwayAthletes.Count - 1];
+            inactiveAwayAthletes.Remove(athleteSubbingIn);
+
+            chairSpawn = awayGoal.transform.position;
+
+            team = awayTeam;
+        }
+
+        inboundSubstitutes.Add(athleteSubbingIn);
+
+        GameObject subChair = Instantiate(substituteChair, chairSpawn, Quaternion.Euler(spawnAngle), substituteHolder);
+        subChair.GetComponent<SpriteRenderer>().color = team.primaryColor;
+
+        athleteSubbingIn.SubstituteAthleteOnField(spawnSpot, spawnAngle, subChair.transform);
+    }
+
+    public IEnumerator MoveChairOntoField(Transform chair) {
+        Vector2 chairStart = chair.localPosition;
+        Vector2 chairEnd = chair.localPosition;
+        if(chair.localPosition.x < 0) {
+            chairEnd.x = -6;
+        } else {
+            chairEnd.x = 6;
+        }
+
+        WaitForFixedUpdate waiter = new WaitForFixedUpdate();
+        float duration = 1f;
+        float timer = 0f;
+        while(timer < duration) {
+            timer += Time.deltaTime;
+
+            chair.localPosition = Vector2.Lerp(chairStart, chairEnd, timer/duration);
+
+            yield return waiter;
+        }
+
+        Transform substitute = chair.GetChild(0);
+        substitute.SetParent(athleteHolder);
+
+        duration = 2.5f;
+        timer = 0f;
+        while(timer < duration) {
+            timer += Time.deltaTime;
+
+            chair.localPosition = Vector2.Lerp(chairEnd, chairStart, timer/duration);
+
+            yield return waiter;
+        }
+
+        AddAthleteToField(substitute.GetComponent<AthleteController>());
+
+        Destroy(chair.gameObject);
+    }
+
+    public void AddAthleteToField(AthleteController ac) {
+        inboundSubstitutes.Remove(ac);
+
+        if(inboundSubstitutes.Count == 0) {
+            substituteInbound = false;
+        } else {
+        }
+
+        allAthletesOnField.Add(ac);
+        if(ac.GetAthlete().GetTeam() == homeTeam) {
+            homeAthletesOnField.Add(ac);
+            ac.gameObject.layer = 12;
+        } else {
+            awayAthletesOnField.Add(ac);
+            ac.gameObject.layer = 13;
         }
     }
 }

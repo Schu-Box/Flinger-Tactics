@@ -8,111 +8,45 @@ public class FootnoteManager : MonoBehaviour {
 
 	private MatchController matchController;
 
-	[Header("Home")]
-	public GameObject footnote_home;
-	public Image namePanel_home;
-	public TextMeshProUGUI number_home;
-	public TextMeshProUGUI name_home;
-	public GameObject statTextHolder_home;
-	private List<GameObject> statTextList_home = new List<GameObject>();
-	
-
-	[Header("Away")]
-	public GameObject footnote_away;
-	public Image namePanel_away;
-	public TextMeshProUGUI number_away;
-	public TextMeshProUGUI name_away;
-	public GameObject statTextHolder_away;
-	private List<GameObject> statTextList_away = new List<GameObject>();
-	
+	public GameObject footnotePanel;
+	public TextMeshProUGUI nameText;
+	public GameObject statTextHolder;
+	private List<GameObject> statTextList = new List<GameObject>();
 
 	private float originalFontSize;
 	private float largeFontSize;
 
 	private Color restStatTextColor;
 	
-	private Athlete footnoteAthlete_home;
-	private Athlete footnoteAthlete_away;
+	private Athlete footnoteAthlete;
 
 	void Start() {
 		matchController = FindObjectOfType<MatchController>();
 
-		for(int i = 0; i < statTextHolder_home.transform.childCount; i++) {
-			statTextList_home.Add(statTextHolder_home.transform.GetChild(i).gameObject);
-		}
-		for(int i = 0; i < statTextHolder_away.transform.childCount; i++) {
-			statTextList_away.Add(statTextHolder_away.transform.GetChild(i).gameObject);
+		for(int i = 0; i < statTextHolder.transform.childCount; i++) {
+			statTextList.Add(statTextHolder.transform.GetChild(i).gameObject);
 		}
 
-		originalFontSize = statTextList_home[0].transform.GetChild(0).GetComponent<TextMeshProUGUI>().fontSize;
+		originalFontSize = statTextList[0].transform.GetChild(0).GetComponent<TextMeshProUGUI>().fontSize;
 		largeFontSize = originalFontSize * 1.3f;
 
-		footnote_home.SetActive(false);
-		footnote_away.SetActive(false);
+		footnotePanel.SetActive(false);
 	}
 
 	public void Display(Athlete athlete) {
 		Team team = athlete.GetTeam();
 
-		List<GameObject> textList = null;
+		footnoteAthlete = athlete;
 
-		Athlete a;
-		if(matchController.GetAthleteInitiater() != null) {
-			a = matchController.GetAthleteInitiater().GetAthlete();
-		} else {
-			a = null;
-		}
+		footnotePanel.SetActive(true);
 
-		if(team == matchController.GetTeam(true)) {
-			if(footnoteAthlete_home == null) { //If the home slot is available
-				footnoteAthlete_home = athlete;
-				textList = statTextList_home;
-
-				footnote_home.SetActive(true);
-
-				namePanel_home.GetComponent<Image>().color = team.primaryColor;
-				number_home.text = athlete.jerseyNumber.ToString();
-				name_home.text = athlete.name;
-			} else {
-				if(footnoteAthlete_home != athlete) {
-					footnoteAthlete_away = athlete;
-					textList = statTextList_away;
-
-					footnote_away.SetActive(true);
-
-					namePanel_away.GetComponent<Image>().color = team.primaryColor;
-					number_away.text = athlete.jerseyNumber.ToString();
-					name_away.text = athlete.name;
-				}
-			}
-		} else {
-			if(footnoteAthlete_away == null) { //If the away slot is available
-				footnoteAthlete_away = athlete;
-				textList = statTextList_away;
-
-				footnote_away.SetActive(true);
-
-				namePanel_away.GetComponent<Image>().color = team.primaryColor;
-				number_away.text = athlete.jerseyNumber.ToString();
-				name_away.text = athlete.name;
-			} else {
-				if(footnoteAthlete_away != athlete) {
-					footnoteAthlete_home = athlete;
-					textList = statTextList_home;
-
-					footnote_home.SetActive(true);
-
-					namePanel_home.GetComponent<Image>().color = team.primaryColor;
-					number_home.text = athlete.jerseyNumber.ToString();
-					name_home.text = athlete.name;
-				}
-			}
-		}
+		footnotePanel.GetComponent<Image>().color = team.primaryColor;
+		nameText.text = athlete.name;
 
 		restStatTextColor = Color.white;
 
-		if(textList != null) {
-			for(int i = 0; i < textList.Count; i++) {
+		if(statTextList != null) {
+			for(int i = 0; i < statTextList.Count; i++) {
 				Stat chosenStat;
 				if(matchController.GetMatchStarted()) {
 					chosenStat = team.GetCurrentMatchData().GetTeamMatchData(team).GetAthleteMatchData(athlete).statList[i];
@@ -120,10 +54,10 @@ public class FootnoteManager : MonoBehaviour {
 					chosenStat = athlete.statList[i];
 				}
 
-				TextMeshProUGUI topText = textList[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+				TextMeshProUGUI topText = statTextList[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>();
 				topText.text = chosenStat.GetCount().ToString();
 
-				TextMeshProUGUI bottomText = textList[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+				TextMeshProUGUI bottomText = statTextList[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>();
 				bottomText.text = chosenStat.GetStatName();
 
 				if(chosenStat.GetCount() > 0) {
@@ -135,63 +69,25 @@ public class FootnoteManager : MonoBehaviour {
 		}
 	}
 
-	public void HideBoth() {
-		if(footnoteAthlete_home != null) {
-			Hide(footnoteAthlete_home);
-		}
-		if(footnoteAthlete_away != null) {
-			Hide(footnoteAthlete_away);
-		}
-	}
+	public void Hide() {
+		footnoteAthlete = null;
 
-	public void Hide(Athlete athlete) {
-		Athlete a;
-		if(matchController.GetAthleteInitiater() != null) {
-			a = matchController.GetAthleteInitiater().GetAthlete();
-		} else {
-			a = null;
-		}
-
-		if(athlete == footnoteAthlete_home) {
-			if(a != athlete) { //If this athlete is not the initator, hide it
-				footnote_home.SetActive(false);
-				footnoteAthlete_home = null;
-			}
-		} else {
-			if(a != athlete) {
-				footnote_away.SetActive(false);
-				footnoteAthlete_away = null;
-			}
-		}
+		footnotePanel.SetActive(false);
 	}
 
     public void UpdateIncreasedStat(StatType statIncreased, Athlete athlete) {
         //Display(footnoteAthlete);
 		Team team = athlete.GetTeam();
 
-		if(athlete == footnoteAthlete_home) {
-			for(int i = 0; i < statTextList_home.Count; i++) {
-				Stat stat = team.GetCurrentMatchData().GetTeamMatchData(team).GetAthleteMatchData(athlete).statList[i];
-				if(stat.GetStatType() == statIncreased) {
-					statTextList_home[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = stat.GetCount().ToString();
-					statTextList_home[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = stat.GetStatName();
-					
-					StartCoroutine(AnimateStatIncrease(statTextList_home[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>(), footnoteAthlete_home.GetTeam().primaryColor));
+		for(int i = 0; i < statTextList.Count; i++) {
+			Stat stat = team.GetCurrentMatchData().GetTeamMatchData(team).GetAthleteMatchData(athlete).statList[i];
+			if(stat.GetStatType() == statIncreased) {
+				statTextList[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = stat.GetCount().ToString();
+				statTextList[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = stat.GetStatName();
+				
+				StartCoroutine(AnimateStatIncrease(statTextList[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>(), athlete.GetTeam().primaryColor));
 
-					break;
-				}
-			}
-		} else { //Assumes it's the away athlete
-			for(int i = 0; i < statTextList_away.Count; i++) {
-				Stat stat = team.GetCurrentMatchData().GetTeamMatchData(team).GetAthleteMatchData(athlete).statList[i];
-				if(stat.GetStatType() == statIncreased) {
-					statTextList_away[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = stat.GetCount().ToString();
-					statTextList_away[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = stat.GetStatName();
-					
-					StartCoroutine(AnimateStatIncrease(statTextList_away[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>(), footnoteAthlete_away.GetTeam().primaryColor));
-
-					break;
-				}
+				break;
 			}
 		}
 	}

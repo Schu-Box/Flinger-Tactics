@@ -53,29 +53,33 @@ public class ShowcaseAthleteUI : MonoBehaviour, IPointerEnterHandler, IPointerEx
 			stat2Text.text = "";
 		}
 
-		highlightStartPos = highlightsPanel.transform.localPosition;
-		statStartPos = statPanel.transform.localPosition;
+		if(highlightsPanel.activeSelf) {
+			highlightStartPos = highlightsPanel.transform.localPosition;
+			statStartPos = statPanel.transform.localPosition;
 
-		highlightEndPos = highlightStartPos;
-		highlightEndPos.y = 295;
+			highlightEndPos = highlightStartPos;
+			highlightEndPos.y = 295;
 
-		statEndPos = statStartPos;
-		statEndPos.y = -53;
+			statEndPos = statStartPos;
+			statEndPos.y = -53;
 
-		AthleteMatchData athleteMatchData = team.GetCurrentMatchData().GetTeamMatchData(team).GetAthleteMatchData(athlete);
-		for(int i = 0; i < athleteMatchData.statList.Count; i++) {
-			statPanel.transform.GetChild(i).GetComponent<TextMeshProUGUI>().text = athleteMatchData.statList[i].GetCount().ToString() 
-			+ " " + athleteMatchData.statList[i].GetStatName();
-		}
+			AthleteMatchData athleteMatchData = team.GetCurrentMatchData().GetTeamMatchData(team).GetAthleteMatchData(athlete);
+			for(int i = 0; i < athleteMatchData.statList.Count; i++) {
+				statPanel.transform.GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = athleteMatchData.statList[i].GetCount().ToString();
+				statPanel.transform.GetChild(i).GetChild(1).GetComponent<TextMeshProUGUI>().text = athleteMatchData.statList[i].GetStatName();
+			}
+		} //else the panel is fake
 	}
 
 	public void OnPointerEnter(PointerEventData eventData) {
+		/*
 		Debug.Log("Entered " + showcasedAthlete.name);
         ScrollUp();
+		*/
     }
 
 	public void OnPointerExit(PointerEventData eventData) {
-        ScrollDown();
+        //ScrollDown();
     }
 
 	public void SetStatStrings(string stat1, string stat2) {

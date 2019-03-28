@@ -16,38 +16,43 @@ public class Body : MonoBehaviour {
 		spriteRenderer = GetComponent<SpriteRenderer>();
 	}
 
-	private void OnMouseEnter() {
-		athleteController.MouseEnterBody();
+	public void OnMouseEnter() {
+		athleteController.MouseEnter();
 	}
 
-	private void OnMouseExit() {
-		athleteController.MouseExitBody();
+	public void OnMouseExit() {
+		athleteController.MouseExit();
+	}
+
+	private void OnMouseDrag() {
+		athleteController.MouseDrag();
+	}
+
+	private void OnMouseUp() {
+		athleteController.Unclicked();
 	}
 
 	private void OnCollisionEnter2D(Collision2D collision) {
 		athleteController.Collided(collision);
 	}
 
-	private void OnMouseDown() {
-
-	}
 
 	public void SetColor(Color color) {
 		spriteRenderer.color = color;
+	}
+
+	public void SetMaterial(Shader material) {
+		spriteRenderer.material.shader = material;
 	}
 	
 	public void SetSprite(Sprite sprite) {
 		spriteRenderer.sprite = sprite;
 
-		if(collie == null) {
-			if(athleteController.GetAthlete().athleteType.typeString.ToLower() == "circle") {
-				collie = GetComponent<CircleCollider2D>();
-			} else {
-				Destroy(gameObject.GetComponent<CircleCollider2D>());
-				collie = gameObject.AddComponent<PolygonCollider2D>();
-			}
+		if(athleteController.GetAthlete().athleteData.typeString.ToLower() == "circle") {
+			collie = GetComponent<CircleCollider2D>();
 		} else {
-			Debug.Log("This collider should be null. Why it ain't tho?");
+			Destroy(gameObject.GetComponent<CircleCollider2D>());
+			collie = gameObject.AddComponent<PolygonCollider2D>();
 		}
 	}
 
@@ -70,11 +75,11 @@ public class Body : MonoBehaviour {
 
 	public void DisableBody() {
 		//rb.bodyType = RigidbodyType2D.Static;
-		//collie.enabled = false;
+		collie.isTrigger = true;
 	}
 
 	public void EnableBody() {
 		//rb.bodyType = RigidbodyType2D.Dynamic;
-		//collie.enabled = true;
+		collie.isTrigger = false;
 	}
 }

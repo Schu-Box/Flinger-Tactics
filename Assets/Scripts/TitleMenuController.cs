@@ -10,8 +10,6 @@ public class TitleMenuController : MonoBehaviour {
 	public GameObject titleScreen;
 	public GameObject careerScreen;
 
-	public int numPracticeTeamAthletes = 1;
-
 	public Team practiceTeam_Home;
 	public Team practiceTeam_Away;
 
@@ -25,8 +23,8 @@ public class TitleMenuController : MonoBehaviour {
 
 		matchController.SetupCourt();
 
-		practiceTeam_Home.SetNewRoster(numPracticeTeamAthletes);
-		practiceTeam_Away.SetNewRoster(numPracticeTeamAthletes);
+		practiceTeam_Home.SetNewRoster();
+		practiceTeam_Away.SetNewRoster();
 
 		matchController.SetUnbounded(true);
 

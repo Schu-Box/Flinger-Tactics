@@ -49,6 +49,11 @@ public class Face : MonoBehaviour {
 		faceBaseSpriteRenderer.color = color;
 	}
 
+	public void SetMaterial(Shader material) {
+		faceBaseSpriteRenderer.material.shader = material;
+		//spriteRenderer
+	}
+
 	public void SetFaceSprite(string faceSprite) {
 		if(faceChanges) {
 
@@ -57,12 +62,14 @@ public class Face : MonoBehaviour {
 					spriteRenderer.sprite = face_Neutral;
 					break;
 				case "hovered":
+				case "watching":
 					spriteRenderer.sprite = face_Hovered;
 					break;
 				case "dragging":
 					spriteRenderer.sprite = face_Dragging;
 					break;
 				case "going":
+				case "happy":
 					spriteRenderer.sprite = face_Going;
 					break;
 				case "dizzy":
@@ -78,6 +85,7 @@ public class Face : MonoBehaviour {
 					spriteRenderer.sprite = face_BumpedTeammate;
 					break;
 				case "stopped":
+				case "sad":
 					spriteRenderer.sprite = face_Stopped;
 					break;
 				case "victory":
@@ -134,29 +142,33 @@ public class Face : MonoBehaviour {
 	}
 
 	public void DetermineFaceState() {
-		if(athleteController.GetDizzy()) {
-				SetFaceSprite("dizzy");
-			} else {
-				if(athleteController.GetMoving()) {
-					SetFaceSprite("going");
+		if(athleteController.crowdAthlete) {
+			SetFaceSprite("watching");
+		} else {
+			if(athleteController.GetDizzy()) {
+					SetFaceSprite("dizzy");
 				} else {
-					/*
-					if(athleteController.GetReady()) { 
-						SetFaceSprite("ready");
+					if(athleteController.GetMoving()) {
+						SetFaceSprite("going");
 					} else {
+						/*
+						if(athleteController.GetReady()) { 
+							SetFaceSprite("ready");
+						} else {
+							SetFaceSprite("neutral");
+						}
+						*/
 						SetFaceSprite("neutral");
 					}
-					*/
-					SetFaceSprite("neutral");
 				}
-			}
 
 
-		if(matchController != null && matchController.GetMatchEnded()) {
-			if(athleteController.GetAthlete().GetTeam().wonTheGame) {
-				SetFaceSprite("victory");
-			} else {
-				SetFaceSprite("defeat");
+			if(matchController != null && matchController.GetMatchEnded()) {
+				if(athleteController.GetAthlete().GetTeam().wonTheGame) {
+					SetFaceSprite("victory");
+				} else {
+					SetFaceSprite("defeat");
+				}
 			}
 		}
 	}

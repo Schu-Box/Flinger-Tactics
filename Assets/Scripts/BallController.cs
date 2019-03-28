@@ -13,6 +13,7 @@ public class BallController : MonoBehaviour {
 	private AudioSource audioSource;
 
 	private SpriteRenderer lightSlot;
+	private List<SpriteRenderer> outerLightSlots = new List<SpriteRenderer>();
 
 	private List<AthleteController> athleteTouchOrder = new List<AthleteController>();
 	private Bumper lastBumperTriggerEntered;
@@ -26,6 +27,8 @@ public class BallController : MonoBehaviour {
 
 	private Vector2 lastVelocity = Vector2.zero;
 
+	private Color inactiveColor = Color.white;
+
 	private void Start() { 
 		cameraController = FindObjectOfType<CameraController>();
 		audioManager = FindObjectOfType<AudioManager>();
@@ -36,6 +39,9 @@ public class BallController : MonoBehaviour {
 		audioSource = GetComponent<AudioSource>();
 
 		lightSlot = transform.GetChild(0).GetComponent<SpriteRenderer>();
+		for(int i = 1; i < transform.childCount; i++) {
+			outerLightSlots.Add(transform.GetChild(i).GetComponent<SpriteRenderer>());
+		}
 
 		originalScale = transform.localScale;
 
@@ -67,15 +73,33 @@ public class BallController : MonoBehaviour {
 
 		if(collision.gameObject.CompareTag("Athlete")) {
 			TouchedByAthlete(collision.gameObject.GetComponent<AthleteController>());
-		} else if(collision.gameObject.CompareTag("Goal")) {
-			Debug.Log("Collided with goal!!");
+		} else if(collision.gameObject.CompareTag("Ball")) { //If the ball hits another ball act as if it was touched by that athlete
+			AthleteController lasty = collision.gameObject.GetComponent<BallController>().GetLastToucher();
+
+			if(!moving && lasty != null) { //But only if it isn't already moving
+				FlashColor(lasty.GetAthlete().GetTeam().primaryColor);
+			}
+		} else if(collision.gameObject.CompareTag("Bumper")) {
+			if(GetLastToucher() != null) {
+				//FlashOuterColor(GetLastToucher().GetAthlete().GetTeam().primaryColor);
+			}
 		}
 	}
 
 	private void TouchedByAthlete(AthleteController athlete) {
-		lightSlot.color = athlete.GetAthlete().GetTeam().primaryColor;
+		FlashColor(athlete.GetAthlete().GetTeam().primaryColor);
 
 		athleteTouchOrder.Add(athlete);
+	}
+
+	private void FlashColor(Color newColor) {
+		lightSlot.color = newColor;
+
+		for(int i = 0; i < outerLightSlots.Count; i++) {
+			outerLightSlots[i].color = Color.Lerp(newColor, Color.white, 0.2f);
+			
+			StartCoroutine(FadeSprite(outerLightSlots[i]));
+		}
 	}
 
 	public AthleteController GetLastToucher() {
@@ -179,21 +203,23 @@ public class BallController : MonoBehaviour {
 
 		WaitForEndOfFrame waiter = new WaitForEndOfFrame();
 
-		Color originalColor = spriteRenderer.color;
-		Color originalLightColor = lightSlot.color;
-
 		StoppedMoving();
 		collie.enabled = false;
 		rb.simulated = false;
+
+		for(int i = 0; i < outerLightSlots.Count; i++) {
+			outerLightSlots[i].color = Color.Lerp(scorerColor, Color.white, 0.1f);
+			
+			StartCoroutine(FadeSprite(outerLightSlots[i]));
+		}
 		
-		lightSlot.color = originalLightColor;
-		spriteRenderer.color = scorerColor;
+		//spriteRenderer.color = scorerColor;
 		float timer = 0f;
 		float duration = 0.5f;
 		while(timer < duration) {
 			timer += Time.deltaTime;
 
-			//transform.localScale = Vector3.Lerp(originalScale, (originalScale / 2), timer/duration);
+			transform.localScale = Vector3.Lerp(originalScale, (originalScale * 1.2f), timer/duration);
 
 			yield return waiter;
 		}
@@ -215,7 +241,7 @@ public class BallController : MonoBehaviour {
 			yield return waiter;
 		}
 
-		spriteRenderer.color = originalColor;
+		//spriteRenderer.color = inactiveColor;
 
 		scoreAnimationInProgress = false;
 
@@ -240,7 +266,10 @@ public class BallController : MonoBehaviour {
 		collie.enabled = true;
 		rb.simulated = true;
 		
-		lightSlot.color = Color.white;
+		lightSlot.color = inactiveColor;
+		for(int i = 0; i < outerLightSlots.Count; i++) {
+			outerLightSlots[i].color = inactiveColor;
+		}
 
 		transform.localPosition = spawnPosition;
 
@@ -268,10 +297,9 @@ public class BallController : MonoBehaviour {
 
 	private void StoppedMoving() {
 		moving = false;
-
 		rb.velocity = Vector2.zero;
 
-		lightSlot.color = Color.white;
+		StartCoroutine(FadeSprite(lightSlot));
 	}
 
 	public void SetScoredByTeam(Team team) {
@@ -284,5 +312,23 @@ public class BallController : MonoBehaviour {
 
 	public bool GetMoving() {
 		return moving;
+	}
+
+	public IEnumerator FadeSprite(SpriteRenderer sr) {
+		Color startColor = sr.color;
+		Color fadedColor = Color.white;
+
+		WaitForFixedUpdate waiter = new WaitForFixedUpdate();
+		float timer = 0f;
+		float duration = 2f;
+		while(timer < duration) {
+			timer += Time.deltaTime;
+			
+			sr.color = Color.Lerp(startColor, fadedColor, timer/duration);
+
+			yield return waiter;
+		}
+
+		sr.color = fadedColor;
 	}
 }

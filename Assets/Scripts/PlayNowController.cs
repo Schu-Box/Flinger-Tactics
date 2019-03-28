@@ -76,7 +76,7 @@ public class PlayNowController : MonoBehaviour {
 
     public void SetNewRosters() {
         for(int i = 0; i < teamList.Count; i++) {
-            teamList[i].SetNewRoster(matchController.numAthletesPerTeam);
+            teamList[i].SetNewRoster();
         }
     }
 

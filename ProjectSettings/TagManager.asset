@@ -18,17 +18,17 @@ TagManager:
   - UI
   - 
   - 
-  - Balls
-  - Goals
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Substitutes
+  - Crowd
+  - Home Goals
+  - Away Goals
+  - Home Athletes
+  - Away Athletes
+  - Home Balls
+  - Away Balls
+  - Bumpers
+  - Bumper Triggers
+  - Substitute Chair
   - 
   - 
   - 
@@ -46,18 +46,27 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Blocker Walls
-    uniqueID: 108344103
+  - name: Floor
+    uniqueID: 3829262311
     locked: 0
   - name: Ball
     uniqueID: 427447743
     locked: 0
-  - name: Goals
-    uniqueID: 77692565
+  - name: Seating
+    uniqueID: 798997413
     locked: 0
   - name: UI
     uniqueID: 2602950163
     locked: 0
   - name: Athletes
     uniqueID: 3853730747
+    locked: 0
+  - name: Bumpers
+    uniqueID: 108344103
+    locked: 0
+  - name: Goals
+    uniqueID: 77692565
+    locked: 0
+  - name: Focal Athlete
+    uniqueID: 4203939923
     locked: 0

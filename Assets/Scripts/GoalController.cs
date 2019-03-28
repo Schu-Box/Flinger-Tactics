@@ -26,6 +26,10 @@ public class GoalController : MonoBehaviour {
 		goalAttacker = attacker;
 	}
 
+	public Team GetGoalAttacker() {
+		return goalAttacker;
+	}
+
 	/*
 	public Team GetTeamOwner() {
 		return teamOwner;
@@ -51,6 +55,11 @@ public class GoalController : MonoBehaviour {
 		matchController.ScoreGoal(goalAttacker, ball, transform.position);
 
 		StartCoroutine(GoalFlash());
+	}
+
+	
+	public void AthleteEnteredTrigger(AthleteController ac) {
+		matchController.SubstituteAthleteOut(ac, transform.position);
 	}
 
 	public IEnumerator GoalFlash() {

@@ -22,6 +22,19 @@ public class MatchData {
 		}
 	}
 
+	public Athlete GetBestAthlete(List<AthleteMatchData> athleteDataList) {
+		Athlete bestAthlete = null;
+		int highestTotal = -1;
+		for(int a = 0; a < athleteDataList.Count; a++) {
+			if(athleteDataList[a].GetTotalStatSum() > highestTotal) {
+				bestAthlete = athleteDataList[a].GetAthlete();
+				highestTotal = athleteDataList[a].GetTotalStatSum();
+			}
+		}
+
+		return bestAthlete;
+	}
+
 	public Athlete GetMVP() {
 		List<AthleteMatchData> allAthletes = new List<AthleteMatchData>();
 		for(int i = 0; i < homeTeamData.athleteMatchData.Count; i++) {
@@ -31,17 +44,15 @@ public class MatchData {
 			allAthletes.Add(awayTeamData.athleteMatchData[i]);
 		}
 
+		return GetBestAthlete(allAthletes);
+	}
 
-		Athlete bestAthlete = null;
-		int highestTotal = -1;
-		for(int a = 0; a < allAthletes.Count; a++) {
-			if(allAthletes[a].GetTotalStatSum() > highestTotal) {
-				bestAthlete = allAthletes[a].GetAthlete();
-				highestTotal = allAthletes[a].GetTotalStatSum();
-			}
-		}
-		
-		return bestAthlete;
+	public Athlete GetHomeMVP() {
+		return GetBestAthlete(homeTeamData.athleteMatchData);
+	}
+
+	public Athlete GetAwayMVP() {
+		return GetBestAthlete(awayTeamData.athleteMatchData);
 	}
 }
 
@@ -49,6 +60,8 @@ public class TeamMatchData {
 	public Team team;
 
 	public List<AthleteMatchData> athleteMatchData = new List<AthleteMatchData>();
+
+	private int numTimeouts = 1;
 
 	public TeamMatchData(Team t) {
 		team = t;
@@ -67,18 +80,34 @@ public class TeamMatchData {
 		return amd;
 	}
 
-	public Athlete GetBestPerformerForStat(StatType stat) {
-		Athlete bestAthlete = null;
-		int currentHighest = -1;
+	public List<Stat> GetTeamTotalStatList() {
+		List<Stat> teamTotalStatList = new List<Stat>();
 
-		for(int a = 0; a < athleteMatchData.Count; a++) { //for each athlete
-			if(athleteMatchData[a].GetStatCount(stat) > currentHighest) {
-				bestAthlete = athleteMatchData[a].GetAthlete();
-				currentHighest = athleteMatchData[a].GetStatCount(stat);
+		Athlete ath = team.athletes[0];
+		for(int i = 0; i < ath.statList.Count; i++) {
+			teamTotalStatList.Add(new Stat(ath.statList[i].GetStatType(), ath.statList[i].GetPointValueInteger()));
+			for(int a = 0; a < athleteMatchData.Count; a++) {
+				teamTotalStatList[i].IncreaseByNum(athleteMatchData[a].statList[i].GetCount());
 			}
 		}
 
-		return bestAthlete;
+		return teamTotalStatList;
+	}
+
+	public bool HasTimeout() {
+		if(numTimeouts > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public void LoseTimeout() {
+		numTimeouts--;
+
+		if(numTimeouts < 0) {
+			Debug.Log("You used an extra timeout. You can't do that. There's literally less than zero.");
+		}
 	}
 }
 

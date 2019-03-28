@@ -11,6 +11,8 @@ public class Team {
 	private Color lightTint;
 	private Color darkTint;
 
+	private int numAthletesOnRoster = 3;
+
 	private List<MatchData> matchData = new List<MatchData>();
 
     public List<Athlete> athletes = new List<Athlete>();
@@ -19,8 +21,8 @@ public class Team {
     public int score = 0;
     public bool wonTheGame = false;
 
-	public void SetNewRoster(int num) {
-		for(int i = 0; i < num; i++) {
+	public void SetNewRoster() {
+		for(int i = 0; i < numAthletesOnRoster; i++) {
 			athletes.Add(new Athlete());
 			athletes[i].SetTeam(this);
 		}
@@ -46,33 +48,13 @@ public class Team {
 	}
 }
 
-[System.Serializable]
-public class AthleteType {
-	public string typeString;
-
-	public float bumperModifier = 1f;
-
-	public Sprite bodySprite;
-	public Sprite faceBaseSprite;
-	public Sprite frontLegSprite;
-	public Sprite backLegSprite;
-
-	public float frontLegRest = 10f;
-	public float frontLegMin = 10.5f;
-	public float frontLegMax = 12.5f;
-
-	public float backLegRest = 10f;
-	public float backLegMin = 10.5f;
-	public float backLegMax = 12.5f;
-}
-
 public class Athlete {
 
-	public AthleteData standardAthleteData;
+	public AthleteData athleteData;
 
 	public string name;
-	public AthleteType athleteType;
 	public Color skinColor;
+	public Color bodySkinColor;
 	public Color tongueColor;
 
 	public int jerseyNumber;
@@ -89,27 +71,28 @@ public class Athlete {
 	public Sprite moodFace;
 
 	public Athlete() {
-
-		standardAthleteData = Resources.Load<AthleteData>("StandardAthleteData");
-
-		List<string> nameList = standardAthleteData.nameList;
-		name = nameList[Random.Range(0, nameList.Count)];
-
-		List<Color> colorList = standardAthleteData.skinColorList;
-		skinColor = colorList[Random.Range(0, colorList.Count)];
-
-		tongueColor = colorList[Random.Range(0, colorList.Count)];
-
-		List<AthleteType> athleteTypes = standardAthleteData.athleteTypes;
+		AthleteData standardAthleteData = Resources.Load<AthleteData>("StandardAthleteData");
 
 		float rando = Random.value;
 		if(rando > 0.5f) {
-			athleteType = athleteTypes[0];
+			athleteData = Resources.Load<AthleteData>("CircleAthleteData");
 		} else if(rando > 0.25) {
-			athleteType = athleteTypes[1];
+			athleteData = Resources.Load<AthleteData>("TriangleAthleteData");
 		} else {
-			athleteType = athleteTypes[2];
-		}
+			athleteData = Resources.Load<AthleteData>("BoxAthleteData");
+		} 
+		athleteData.AddSkinColors(standardAthleteData.skinColorList);
+
+		List<string> nameList = athleteData.nameList;
+		name = nameList[Random.Range(0, nameList.Count)];
+
+		List<Color> colorList = athleteData.skinColorList;
+		skinColor = colorList[Random.Range(0, colorList.Count)];
+		
+		float randito = (Random.value / 4) + 0.2f; //Between 0.2 and 0.45
+		bodySkinColor = Color.Lerp(skinColor, Color.black, randito);
+
+		tongueColor = colorList[Random.Range(0, colorList.Count)];
 
 		rando = Random.value;
 		if(rando > 0.6) {
@@ -228,6 +211,10 @@ public class Stat {
 
 	public void IncreaseCount() {
 		count++;
+	}
+	
+	public void IncreaseByNum(int num) {
+		count += num;
 	}
 
 	public void ResetCount() { //Should only be used for copying MatchData

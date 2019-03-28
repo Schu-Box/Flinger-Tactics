@@ -11,8 +11,6 @@ public class CanvasManager : MonoBehaviour {
     public TeamSelectionPanel awaySelectionPanel;
 
     [Header("UI")]
-    public ReadyUpButton homeReadyButton;
-    public ReadyUpButton awayReadyButton;
     public TextMeshProUGUI turnLabelText;
     public TurnButton turnButton;
     public TextMeshProUGUI turnCapText;
@@ -22,6 +20,8 @@ public class CanvasManager : MonoBehaviour {
 
     private FootnoteManager footnoteManager;
 
+    public RaisedButton timeoutButton;
+
 
     [Header("Post Match UI")]
     public GameObject postMatchPanel;
@@ -29,11 +29,18 @@ public class CanvasManager : MonoBehaviour {
     public TextMeshProUGUI awayFinalScore;
     public GameObject homeNamePlate;
     public GameObject awayNamePlate;
-    public List<ShowcaseAthleteUI> showcaseHomeAthleteUIList = new List<ShowcaseAthleteUI>();
-    public List<ShowcaseAthleteUI> showcaseAwayAthleteUIList = new List<ShowcaseAthleteUI>();
+    public ShowcaseAthleteUI showcaseAthlete_home;
+    public ShowcaseAthleteUI showcaseAthlete_away;
+    public Button arrowButton_home;
+    public Button arrowButton_away;
+    public GameObject statTable;
 
+    [Header("Team Post Match Panel")]
     public TeamPostMatchPanel teamPostMatchPanel;
+    
 
+
+    [Header("Field UI")]
 	public TextMeshProUGUI homeFieldText;
     public TextMeshProUGUI awayFieldText;
 
@@ -52,12 +59,11 @@ public class CanvasManager : MonoBehaviour {
         footnoteManager = FindObjectOfType<FootnoteManager>();
 
 		postMatchPanel.SetActive(false);
+
+        timeoutButton.gameObject.SetActive(false);
 	}
 
 	public void DisplayTeamSelection() {
-		homeReadyButton.gameObject.SetActive(false);
-        awayReadyButton.gameObject.SetActive(false);
-
         turnLabelText.text = "";
         turnCapText.text = "";
         homeScoreText.text = "";
@@ -93,14 +99,6 @@ public class CanvasManager : MonoBehaviour {
 
         homeSelectionPanel.gameObject.SetActive(false);
         awaySelectionPanel.gameObject.SetActive(false);
-
-		homeReadyButton.SetForTeam(home);
-        awayReadyButton.SetForTeam(away);
-
-		if(!MatchController.simultaneousTurns) {
-			homeReadyButton.gameObject.SetActive(false);
-			awayReadyButton.gameObject.SetActive(false);
-		}
 	}
 
 	public IEnumerator DisplayScore(Team teamThatScored) {
@@ -113,7 +111,7 @@ public class CanvasManager : MonoBehaviour {
 
 		textAltered.text = teamThatScored.score.ToString();
         textAltered.color = Color.white;
-        float endSize = scoreFontSize * 1.6f;
+        float endSize = scoreFontSize * 1.2f;
 
         WaitForFixedUpdate waiter = new WaitForFixedUpdate();
         float duration = 20f;
@@ -142,16 +140,42 @@ public class CanvasManager : MonoBehaviour {
 	public void DisplayNextTurn(int turnNum) {
 		turnButton.NextTurn(turnNum);
 
-		if(MatchController.simultaneousTurns) {
-			homeReadyButton.MyTurnNow(matchController.IsHomeTurn());
-			awayReadyButton.MyTurnNow(!matchController.IsHomeTurn());
-		}
+        footnoteManager.Hide();
 
-        footnoteManager.HideBoth();
+        TeamMatchData teamData;
+        if(matchController.GetTurnTeam() == matchController.GetTeam(true)) {
+            teamData = matchController.GetMatchData().homeTeamData;
+        } else {
+            teamData = matchController.GetMatchData().awayTeamData;
+        }
+
+        if(teamData.HasTimeout()) {
+            timeoutButton.gameObject.SetActive(true);
+            timeoutButton.SetForTeam(matchController.GetTurnTeam());
+
+            timeoutButton.RaiseButton();
+
+            if(matchController.IsTimeoutAcceptable()) {
+                timeoutButton.SetText("Accept Timeout");
+                timeoutButton.StartFlash();
+            } else {
+                timeoutButton.SetText("Request Timeout");
+            }
+        }
 	}
+
+    public void TimeoutButtonClicked() {
+        if(matchController.IsTimeoutAcceptable()) {
+            matchController.UseTimeout();
+        } else {
+            matchController.RequestTimeout();
+        }
+    }
 
     public void DisplayTurnActive(Team initiatingTeam) {
         turnButton.TurnActive(initiatingTeam);
+
+        timeoutButton.gameObject.SetActive(false);
     }
 
     public void DisplayFootnotePanel(Athlete athlete) {
@@ -164,30 +188,17 @@ public class CanvasManager : MonoBehaviour {
         footnoteManager.UpdateIncreasedStat(type, athlete);
     }
 
-    public void HideFootnotePanel(Athlete athlete) {
+    public void HideFootnotePanel() {
         if(!matchController.IsTurnActive()) {
-            footnoteManager.Hide(athlete);
+            footnoteManager.Hide();
         }
     }
-
-	public void DisplayTeamReadyUp(bool home) {
-		if(home) {
-			awayReadyButton.MyTurnNow(true);
-			homeReadyButton.MyTurnNow(false);
-		} else {
-			awayReadyButton.MyTurnNow(false);
-            homeReadyButton.MyTurnNow(true);
-		}
-	}
 
 	public void DisplayEndMatch() {
 		turnLabelText.text = "";
         turnCapText.text = "";
 
         turnButton.PostMatch();
-
-        homeReadyButton.EndMatch(home.score - away.score);
-        awayReadyButton.EndMatch(away.score - home.score);
 	}
 
 	public void DisplayPostMatchPanel() {
@@ -202,39 +213,46 @@ public class CanvasManager : MonoBehaviour {
         homeNamePlate.GetComponentInChildren<TextMeshProUGUI>().text = home.name;
         awayNamePlate.GetComponentInChildren<TextMeshProUGUI>().text = away.name;
 
+        arrowButton_home.GetComponent<Image>().color = home.primaryColor;
+        arrowButton_away.GetComponent<Image>().color = away.primaryColor;
+        arrowButton_home.onClick.AddListener(() => DisplayTeamPanelPostMatch(true));
+        arrowButton_away.onClick.AddListener(() => DisplayTeamPanelPostMatch(false));
+
         SetShowcaseAthletes();
+        SetStatTable();
 
         StartCoroutine(MoveObjectToPosition(Camera.main.gameObject, cameraController.upPosition));
     }
 
     public void SetShowcaseAthletes() {
-        /*
-        MatchData matchData = matchController.GetTeam(true).GetCurrentMatchData();
-        Athlete mostGoals = matchData.GetBestPerformerForStat(StatType.Goals);
-        */
 
         Athlete mvp = matchController.GetMatchData().GetMVP();
-        
-        List<Athlete> showcaseAthletes = matchController.GetAthletesOnField(true);
-        for(int i = 0; i < showcaseHomeAthleteUIList.Count; i++) {
-            Athlete selectedAthlete = showcaseAthletes[i];
-            
-            showcaseHomeAthleteUIList[i].SetAthlete(selectedAthlete);
-            
-            if(selectedAthlete == mvp) {
-                showcaseHomeAthleteUIList[i].GetComponent<AthleteImage>().SetMVP();
-            }
+
+        Athlete homeMVP = matchController.GetMatchData().GetHomeMVP();
+        showcaseAthlete_home.SetAthlete(homeMVP);
+        if(homeMVP == mvp) {
+            showcaseAthlete_home.GetComponent<AthleteImage>().SetMVP();
         }
 
-        showcaseAthletes = matchController.GetAthletesOnField(false);
-        for(int i = 0; i < showcaseAwayAthleteUIList.Count; i++) {
-            Athlete selectedAthlete = showcaseAthletes[i];
-            
-            showcaseAwayAthleteUIList[i].SetAthlete(selectedAthlete);
+        Athlete awayMVP = matchController.GetMatchData().GetAwayMVP();
+        showcaseAthlete_away.SetAthlete(awayMVP);
+        if(awayMVP == mvp) {
+            showcaseAthlete_away.GetComponent<AthleteImage>().SetMVP();
+        }
+    }
 
-            if(selectedAthlete == mvp) {
-                showcaseAwayAthleteUIList[i].GetComponent<AthleteImage>().SetMVP();
-            }
+    public void SetStatTable() {
+        MatchData matchData = matchController.GetMatchData();
+        List<Stat> homeStats = matchData.homeTeamData.GetTeamTotalStatList();
+        List<Stat> awayStats = matchData.awayTeamData.GetTeamTotalStatList();
+        for(int i = 0; i < homeStats.Count; i++) {
+            Transform statBox = statTable.transform.GetChild(i);
+            statBox.GetChild(0).GetComponent<Image>().color = home.primaryColor;
+            statBox.GetChild(0).GetComponentInChildren<TextMeshProUGUI>().text = homeStats[i].GetCount().ToString();
+            statBox.GetChild(1).GetComponent<TextMeshProUGUI>().text = homeStats[i].GetStatName();
+            statBox.GetChild(2).GetComponent<Image>().color = away.primaryColor;
+            statBox.GetChild(2).GetComponentInChildren<TextMeshProUGUI>().text = awayStats[i].GetCount().ToString();
+
         }
     }
 

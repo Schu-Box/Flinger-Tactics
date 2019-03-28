@@ -8,6 +8,7 @@ public class TailTip : MonoBehaviour {
 	private SpriteMask spriteMask;
 	private SpriteRenderer spriteRenderer;
 
+	private float spriteMaskStartY;
 	private float restPoint = 0f;
 	private float maxStretchPoint = 0f;
 
@@ -17,6 +18,7 @@ public class TailTip : MonoBehaviour {
 		athleteController = GetComponentInParent<AthleteController>();
 
 		spriteMask = transform.parent.GetComponentInChildren<SpriteMask>();
+		spriteMaskStartY = spriteMask.transform.localScale.y;
 
 		spriteRenderer = GetComponent<SpriteRenderer>();
 
@@ -24,21 +26,19 @@ public class TailTip : MonoBehaviour {
 	}
 
 	public void OnMouseEnter() {
-		athleteController.MouseEnterTail();
+		athleteController.MouseEnter();
 	}
 
 	public void OnMouseExit() {
-		athleteController.MouseExitTail();
+		athleteController.MouseExit();
 	}
 
-	/*
 	private void OnMouseDown() {
-		athleteController.Clicked();
+		athleteController.MouseClick();
 	}
-	*/
 
 	private void OnMouseDrag() {
-		athleteController.TailAdjusted();
+		athleteController.MouseDrag();
 	}
 
 	private void OnMouseUp() {
@@ -47,6 +47,10 @@ public class TailTip : MonoBehaviour {
 
 	public void SetColor(Color color) {
 		spriteRenderer.color = color;
+	}
+
+	public void SetMaterial(Shader material) {
+		spriteRenderer.material.shader = material;
 	}
 
 	public void AdjustTailPosition(float dirMag) {
@@ -59,8 +63,8 @@ public class TailTip : MonoBehaviour {
 		newPosition.y = Mathf.Lerp(restPoint, maxStretchPoint, step);
 		transform.localPosition = newPosition;
 
-		Vector3 newScale = new Vector3(1, 3, 1);
-		newScale.y = Mathf.Lerp(3, maxStretchPoint + (athlete.minPull * stretch), step);
+		Vector3 newScale = new Vector3(1, spriteMaskStartY, 1);
+		newScale.y = Mathf.Lerp(spriteMaskStartY, maxStretchPoint + (athlete.minPull * stretch), step);
 		spriteMask.transform.localScale = newScale;
 	}
 }
