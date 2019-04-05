@@ -5,13 +5,13 @@ using UnityEditor;
 
 [System.Serializable]
 public class Team {
+
+	public bool computerControlled; //Needs to be private
     public string name;
 	public string fieldString;
     public Color primaryColor;
 	private Color lightTint;
 	private Color darkTint;
-
-	private int numAthletesOnRoster = 3;
 
 	private List<MatchData> matchData = new List<MatchData>();
 
@@ -21,8 +21,8 @@ public class Team {
     public int score = 0;
     public bool wonTheGame = false;
 
-	public void SetNewRoster() {
-		for(int i = 0; i < numAthletesOnRoster; i++) {
+	public void SetNewRoster(int numAthletes) {
+		for(int i = 0; i < numAthletes; i++) {
 			athletes.Add(new Athlete());
 			athletes[i].SetTeam(this);
 		}

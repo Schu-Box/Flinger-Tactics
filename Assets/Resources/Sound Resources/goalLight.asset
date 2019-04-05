@@ -12,6 +12,12 @@ MonoBehaviour:
   m_Name: goalLight
   m_EditorClassIdentifier: 
   clips:
-  - {fileID: 8300000, guid: d05c490050aed4308a3582cd550e367d, type: 3}
-  volume: 0.2
-  pitchRange: {x: 0.9, y: 1.1}
+  - {fileID: 8300000, guid: f203dcd1c4e9e4efc8ae52c967914e4c, type: 3}
+  - {fileID: 8300000, guid: 6a04e851df69f4fddbbba0f70061d8c4, type: 3}
+  - {fileID: 8300000, guid: ebecc2dacdb204757813c95ea587a1d0, type: 3}
+  - {fileID: 8300000, guid: 9233e6042c923420dad7d529d8436834, type: 3}
+  - {fileID: 8300000, guid: b002a8f2b4b654d15be53827a0490460, type: 3}
+  - {fileID: 8300000, guid: 64b969bb3bbb846ee91696bbcf4df72e, type: 3}
+  - {fileID: 8300000, guid: 2fa6b70b3c9434ffbb9344f9b146c0dd, type: 3}
+  volume: 0.8
+  pitchRange: {x: 0.8, y: 1.2}

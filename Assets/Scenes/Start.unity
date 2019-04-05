@@ -2055,7 +2055,7 @@ Prefab:
       objectReference: {fileID: 1483199963}
     - target: {fileID: 1784685792407092, guid: 456e31f225a8449269250ce05d817725, type: 2}
       propertyPath: m_Name
-      value: Career Mode Button
+      value: Gauntlet Mode Button
       objectReference: {fileID: 0}
     - target: {fileID: 114117341401820122, guid: 456e31f225a8449269250ce05d817725,
         type: 2}
@@ -2070,17 +2070,57 @@ Prefab:
     - target: {fileID: 114287406281657978, guid: 456e31f225a8449269250ce05d817725,
         type: 2}
       propertyPath: m_Interactable
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114117341401820122, guid: 456e31f225a8449269250ce05d817725,
         type: 2}
       propertyPath: m_text
-      value: Career Mode
+      value: The Gauntlet
       objectReference: {fileID: 0}
     - target: {fileID: 114117341401820122, guid: 456e31f225a8449269250ce05d817725,
         type: 2}
       propertyPath: m_textInfo.characterCount
-      value: 11
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 114287406281657978, guid: 456e31f225a8449269250ce05d817725,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SelectGauntletMode
+      objectReference: {fileID: 0}
+    - target: {fileID: 114117341401820122, guid: 456e31f225a8449269250ce05d817725,
+        type: 2}
+      propertyPath: m_textInfo.spaceCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114117341401820122, guid: 456e31f225a8449269250ce05d817725,
+        type: 2}
+      propertyPath: m_textInfo.wordCount
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114117341401820122, guid: 456e31f225a8449269250ce05d817725,
+        type: 2}
+      propertyPath: m_firstOverflowCharacterIndex
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114117341401820122, guid: 456e31f225a8449269250ce05d817725,
+        type: 2}
+      propertyPath: m_textInfo.lineCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114117341401820122, guid: 456e31f225a8449269250ce05d817725,
+        type: 2}
+      propertyPath: m_enableAutoSizing
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114117341401820122, guid: 456e31f225a8449269250ce05d817725,
+        type: 2}
+      propertyPath: m_fontSize
+      value: 160
+      objectReference: {fileID: 0}
+    - target: {fileID: 114117341401820122, guid: 456e31f225a8449269250ce05d817725,
+        type: 2}
+      propertyPath: m_fontSizeBase
+      value: 160
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 456e31f225a8449269250ce05d817725, type: 2}
@@ -3827,14 +3867,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   titleScreen: {fileID: 349751049}
   careerScreen: {fileID: 1813358553}
-  numPracticeTeamAthletes: 1
   practiceTeam_Home:
+    computerControlled: 0
     name: Village Villagers
     fieldString: 
     primaryColor: {r: 0.10980393, g: 0.4039216, b: 0.7294118, a: 1}
     score: 0
     wonTheGame: 0
   practiceTeam_Away:
+    computerControlled: 0
     name: Garrision Guard
     fieldString: 
     primaryColor: {r: 0.7294118, g: 0.13333334, b: 0.13725491, a: 1}
@@ -4349,7 +4390,6 @@ MonoBehaviour:
   ballPrefab: {fileID: 1458861821244726, guid: aad5e0b38b21640508e5ce423e21d6cf, type: 2}
   athleteStandardPrefab: {fileID: 1890608623415672, guid: 210b291f1068b4ec68c311ca52de4039,
     type: 2}
-  numAthletesPerTeam: 1
   numBalls: 3
   turnCap: 999
   homeSideColor: {fileID: 104043552}
@@ -4364,9 +4404,13 @@ MonoBehaviour:
   - {fileID: 907473685}
   athleteHolder: {fileID: 739766845}
   ballHolder: {fileID: 522643819}
+  substituteHolder: {fileID: 0}
   ballSpawnBox: {fileID: 1331492721}
   homeSpawnBox: {fileID: 1238110968}
   awaySpawnBox: {fileID: 733691341}
+  substituteChair: {fileID: 0}
+  homeSpawnSpot: {x: 0, y: 0}
+  awaySpawnSpot: {x: 0, y: 0}
 --- !u!1 &1553168719
 GameObject:
   m_ObjectHideFlags: 0

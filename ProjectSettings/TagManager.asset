@@ -55,6 +55,9 @@ TagManager:
   - name: Seating
     uniqueID: 798997413
     locked: 0
+  - name: Crowd Athlete
+    uniqueID: 2908818261
+    locked: 0
   - name: UI
     uniqueID: 2602950163
     locked: 0

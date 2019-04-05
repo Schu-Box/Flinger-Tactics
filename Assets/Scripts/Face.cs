@@ -56,50 +56,55 @@ public class Face : MonoBehaviour {
 
 	public void SetFaceSprite(string faceSprite) {
 		if(faceChanges) {
-
+			Sprite newFace;
 			switch(faceSprite.ToLower()) {
 				case "neutral":
-					spriteRenderer.sprite = face_Neutral;
+					newFace = face_Neutral;
 					break;
 				case "hovered":
 				case "watching":
-					spriteRenderer.sprite = face_Hovered;
+					newFace = face_Hovered;
 					break;
 				case "dragging":
-					spriteRenderer.sprite = face_Dragging;
+					newFace = face_Dragging;
 					break;
 				case "going":
 				case "happy":
-					spriteRenderer.sprite = face_Going;
+					newFace = face_Going;
 					break;
 				case "dizzy":
-					spriteRenderer.sprite = face_Dizzy;
+					newFace = face_Dizzy;
 					break;
 				case "bumped":
-					spriteRenderer.sprite = face_Bumped;
+					newFace = face_Bumped;
 					break;
 				case "bumpedenemy":
-					spriteRenderer.sprite = face_BumpedEnemy;
+					newFace = face_BumpedEnemy;
 					break;
 				case "bumpedteam":
-					spriteRenderer.sprite = face_BumpedTeammate;
+					newFace = face_BumpedTeammate;
 					break;
 				case "stopped":
 				case "sad":
-					spriteRenderer.sprite = face_Stopped;
+					newFace = face_Stopped;
 					break;
 				case "victory":
-					spriteRenderer.sprite = face_Victory;
+					newFace = face_Victory;
 					break;
 				case "defeat":
-					spriteRenderer.sprite = face_Defeat;
+					newFace = face_Defeat;
 					break;
 				default:
 					Debug.Log(faceSprite + " expression does not exist");
-					spriteRenderer.sprite = face_Neutral;
+					newFace = face_Neutral;
 					break;
 			}
 
+			spriteRenderer.sprite = newFace;
+
+			if(athleteController.GetAthlete() != null) {
+				athleteController.GetAthlete().moodFace = newFace;
+			}
 		}
 	}
 

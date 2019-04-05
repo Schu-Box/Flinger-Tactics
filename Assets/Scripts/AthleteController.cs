@@ -96,6 +96,7 @@ public class AthleteController : MonoBehaviour{
 
 		body.SetSprite(athlete.athleteData.bodySprite);
 		face.SetFaceBase(athlete.athleteData.faceBaseSprite);
+		face.SetFaceSprite("neutral");
 		
 		if(jersey != null) {
 			jersey.GetComponent<SpriteRenderer>().sprite = athlete.athleteData.athleteJersey;
@@ -373,6 +374,38 @@ public class AthleteController : MonoBehaviour{
 		}
 	}
 
+	public void AdjustTailAndFling(Vector3 target, float percentFlingForce) {
+		matchController.SetAthleteBeingDragged(true);
+
+		ExtendLegs();
+		Vector2 direction = target - transform.position;
+
+		if(direction.magnitude > athlete.minPull) {
+			if(direction.magnitude >= athlete.maxPull) {
+				direction = Vector3.ClampMagnitude(direction, athlete.maxPull);
+			}
+
+			Vector3 normalizedDirection = direction.normalized;	//Rotate the athlete to face opposite of the mouse
+			float targetRotation = (Mathf.Atan2(normalizedDirection.y, normalizedDirection.x) * Mathf.Rad2Deg + 90);
+			//float startRotation = transform.rotation.eulerAngles.z;
+			transform.rotation = Quaternion.Euler(0, 0, targetRotation);
+
+			tailTip.AdjustTailPosition(direction.magnitude);
+
+			if(tongue.GetTongueOut()) {
+				tongue.HideTongue();
+			}
+
+			face.SetFaceSprite("dragging");
+		} else {
+			Debug.Log("Why are you even calling this function then with that weak ass tail force?");
+		}
+
+		directionDragged = direction;
+
+		StartAction();
+	}
+
 	public void ResetTail() {
 		tailTip.AdjustTailPosition(0f);
 	}
@@ -385,7 +418,6 @@ public class AthleteController : MonoBehaviour{
 
 			if(directionDragged != Vector3.zero) { //Athlete will move
 				if(instantInteraction) {
-					matchController.Fling(this);
 					StartAction();
 				} else {
 					ReadyUp();
@@ -436,6 +468,8 @@ public class AthleteController : MonoBehaviour{
 
 	public void StartAction() {
 		Unready();
+
+		matchController.Fling(this);
 
 		if(directionDragged != Vector3.zero) {
 			FlingAthlete();
@@ -642,8 +676,6 @@ public class AthleteController : MonoBehaviour{
 		} else {
 			face.SetFaceSprite("defeat");
 		}
-
-		athlete.moodFace = face.GetFaceSprite();
 	}
 
 	public Face GetFace() {
@@ -658,7 +690,7 @@ public class AthleteController : MonoBehaviour{
 			StopCoroutine(focusCoroutine);
 		}
 
-		StartCoroutine(ChangeFocus(obj));
+		focusCoroutine = StartCoroutine(ChangeFocus(obj));
 	}
 
 	public IEnumerator ChangeFocus(GameObject newFocus) {

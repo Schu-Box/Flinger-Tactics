@@ -33,10 +33,16 @@ public class CanvasManager : MonoBehaviour {
     public ShowcaseAthleteUI showcaseAthlete_away;
     public Button arrowButton_home;
     public Button arrowButton_away;
+    public Button continueButton;
     public GameObject statTable;
 
     [Header("Team Post Match Panel")]
     public TeamPostMatchPanel teamPostMatchPanel;
+
+    [Header("Gauntlet Panel")]
+    public GameObject gauntletPanel;
+    public TextMeshProUGUI gauntletTitleText;
+    public Transform ruleChangeHolder;
     
 
 
@@ -44,13 +50,15 @@ public class CanvasManager : MonoBehaviour {
 	public TextMeshProUGUI homeFieldText;
     public TextMeshProUGUI awayFieldText;
 
+    private ModeController modeController;
 	private MatchController matchController;
 	private CameraController cameraController;
 
 	private Team home;
 	private Team away;
 
-	void Start() {
+	void Awake() {
+        modeController = FindObjectOfType<ModeController>();
 		matchController = FindObjectOfType<MatchController>();
 		cameraController = FindObjectOfType<CameraController>();
 
@@ -63,7 +71,9 @@ public class CanvasManager : MonoBehaviour {
         timeoutButton.gameObject.SetActive(false);
 	}
 
-	public void DisplayTeamSelection() {
+	public void DisplayPreMatch() {
+        StartCoroutine(MoveObjectToPosition(Camera.main.gameObject, cameraController.startPosition));
+        
         turnLabelText.text = "";
         turnCapText.text = "";
         homeScoreText.text = "";
@@ -218,6 +228,15 @@ public class CanvasManager : MonoBehaviour {
         arrowButton_home.onClick.AddListener(() => DisplayTeamPanelPostMatch(true));
         arrowButton_away.onClick.AddListener(() => DisplayTeamPanelPostMatch(false));
 
+        continueButton.onClick.RemoveAllListeners();
+        if(PlayerPrefs.GetString("mode") == "playNow") {
+            continueButton.GetComponentInChildren<TextMeshProUGUI>().text = "Replay";
+            continueButton.onClick.AddListener(() => modeController.Rematch());
+        } else {
+            continueButton.GetComponentInChildren<TextMeshProUGUI>().text = "Continue";
+            continueButton.onClick.AddListener(() => modeController.EndGauntletMatch());
+        }
+
         SetShowcaseAthletes();
         SetStatTable();
 
@@ -272,10 +291,15 @@ public class CanvasManager : MonoBehaviour {
         StartCoroutine(MoveObjectToPosition(Camera.main.gameObject, cameraController.upPosition));
     }
 
-    public void LeaveMatch() {
-        Debug.Log("Leaving Match");
-        
+    public void DisplayGauntletAdvancement() {
         StartCoroutine(MoveObjectToPosition(Camera.main.gameObject, cameraController.downPosition));
+    }
+
+    public void UpdateRuleChangeButton(Rule newRule, int num) {
+        GameObject ruleButton = ruleChangeHolder.GetChild(num).gameObject;
+        ruleButton.GetComponentInChildren<TextMeshProUGUI>().text = newRule.description;
+        ruleButton.GetComponent<Button>().onClick.RemoveAllListeners();
+        ruleButton.GetComponent<Button>().onClick.AddListener(() => modeController.SelectNewGauntletRule(newRule));
     }
 
 	public IEnumerator MoveObjectToPosition(GameObject obj, Vector3 endPos) {

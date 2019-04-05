@@ -70,8 +70,9 @@
      <Compile Include="Assets\Scripts\GoalTrigger.cs" />
      <Compile Include="Assets\Scripts\MatchController.cs" />
      <Compile Include="Assets\Scripts\MatchData.cs" />
-     <Compile Include="Assets\Scripts\PlayNowController.cs" />
+     <Compile Include="Assets\Scripts\ModeController.cs" />
      <Compile Include="Assets\Scripts\RaisedButton.cs" />
+     <Compile Include="Assets\Scripts\RuleSet.cs" />
      <Compile Include="Assets\Scripts\ShowcaseAthleteUI.cs" />
      <Compile Include="Assets\Scripts\Sound.cs" />
      <Compile Include="Assets\Scripts\SpawnBox.cs" />

@@ -9,6 +9,7 @@ using TMPro;
 public class TurnButton : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
 
 	private MatchController matchController;
+	private CanvasManager canvasManager;
 
 	private Image border;
 	private Image background;
@@ -23,6 +24,7 @@ public class TurnButton : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
 
 	void Start() {
 		matchController = FindObjectOfType<MatchController>();
+		canvasManager = FindObjectOfType<CanvasManager>();
 
 		border = GetComponent<Image>();
 		background = GetComponentInChildren<Image>();
@@ -170,7 +172,7 @@ public class TurnButton : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
 			if(!matchController.GetMatchStarted()) {
 				matchController.StartMatch();
 			} else if(matchController.GetMatchEnded()) {
-				FindObjectOfType<CanvasManager>().DisplayPostMatchPanel();
+				canvasManager.DisplayPostMatchPanel();
 			}
 
 			LowerButton();

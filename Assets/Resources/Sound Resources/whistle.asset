@@ -11,17 +11,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 759aa101c65de49159533f40c5afd66c, type: 3}
   m_Name: whistle
   m_EditorClassIdentifier: 
-  clips:
-  - {fileID: 8300000, guid: fec315fa29efb4c7a9f2cb48e4da4b07, type: 3}
-  - {fileID: 8300000, guid: e3c52ab5e246d404b8d84a5c9376eadd, type: 3}
-  - {fileID: 8300000, guid: 54992dc35d9654349b12d034c44d0de5, type: 3}
-  - {fileID: 8300000, guid: 9d301047882d8496f86de00d66b07359, type: 3}
-  - {fileID: 8300000, guid: 0906728b2fcdc484681121195193be02, type: 3}
-  - {fileID: 8300000, guid: 6dc64ead72da4454b8f45baeb7a094c7, type: 3}
-  - {fileID: 8300000, guid: cb518e0cf7180460c8874c65e93eeeef, type: 3}
-  - {fileID: 8300000, guid: 63e1fdf8b9b934eac9c4d54216522b4d, type: 3}
-  - {fileID: 8300000, guid: ee9da677f7ba24ea68c7d7cc144a9baa, type: 3}
-  - {fileID: 8300000, guid: a9ca5bb255202445689b0f3fc91e0000, type: 3}
-  - {fileID: 8300000, guid: d786a90fad0a3411f9c76eff4b99d334, type: 3}
-  volume: 0.6
-  pitchRange: {x: 0.8, y: 1}
+  clips: []
+  volume: 0.5
+  pitchRange: {x: 1, y: 1}

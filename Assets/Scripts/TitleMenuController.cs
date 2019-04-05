@@ -14,17 +14,20 @@ public class TitleMenuController : MonoBehaviour {
 	public Team practiceTeam_Away;
 
 	private MatchController matchController;
+	private RuleSet ruleSet = new RuleSet();
 
 	private void Start() {
+		PlayerPrefs.SetString("mode", "");
+
 		matchController = FindObjectOfType<MatchController>();
 
 		titleScreen.SetActive(true);
 		careerScreen.SetActive(false);
 
-		matchController.SetupCourt();
+		matchController.SetupCourt(ruleSet);
 
-		practiceTeam_Home.SetNewRoster();
-		practiceTeam_Away.SetNewRoster();
+		practiceTeam_Home.SetNewRoster(ruleSet.GetRule("athleteOnRosterCount").value);
+		practiceTeam_Away.SetNewRoster(ruleSet.GetRule("athleteOnRosterCount").value);
 
 		matchController.SetUnbounded(true);
 
@@ -54,11 +57,17 @@ public class TitleMenuController : MonoBehaviour {
 	}
 
 	public void SelectPlayNowMode() {
+		PlayerPrefs.SetString("mode", "playNow");
+		StartNewGame();
+	}
+
+	public void SelectGauntletMode() {
+		PlayerPrefs.SetString("mode", "gauntlet");
 		StartNewGame();
 	}
 
 	public void StartNewGame() {
-		Debug.Log("Entering Play Now");
+		Debug.Log("Entering Play Scene");
 		SceneManager.LoadScene(1);
 	}
 

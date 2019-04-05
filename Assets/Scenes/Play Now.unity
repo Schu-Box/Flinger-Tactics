@@ -777,8 +777,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_audioClip: {fileID: 8300000, guid: 498f455aa0385428fb9049edf93e4e84, type: 3}
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -928,6 +928,11 @@ Prefab:
     - target: {fileID: 1066861467329680, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_Name
       value: Crowd Athlete (10)
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -1118,6 +1123,11 @@ Prefab:
       propertyPath: m_Name
       value: Crowd Athlete (27)
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -1268,6 +1278,11 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -1415,6 +1430,11 @@ Prefab:
     - target: {fileID: 4769474919909100, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -2617,6 +2637,11 @@ Prefab:
       propertyPath: m_Name
       value: Crowd Athlete (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -2715,8 +2740,8 @@ RectTransform:
   m_Father: {fileID: 1936664447}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.2, y: 0.05}
-  m_AnchorMax: {x: 0.8, y: 0.8}
+  m_AnchorMin: {x: 0.1, y: 0.05}
+  m_AnchorMax: {x: 0.9, y: 0.8}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2736,8 +2761,8 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 0
-  m_Spacing: 50
+  m_ChildAlignment: 4
+  m_Spacing: 40
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 1
@@ -3362,9 +3387,7 @@ MonoBehaviour:
   ballPrefab: {fileID: 1458861821244726, guid: aad5e0b38b21640508e5ce423e21d6cf, type: 2}
   athleteStandardPrefab: {fileID: 1890608623415672, guid: 210b291f1068b4ec68c311ca52de4039,
     type: 2}
-  numAthletesPerTeam: 3
-  numBalls: 2
-  turnCap: 36
+  turnCap: 2
   homeSideColor: {fileID: 468150357}
   awaySideColor: {fileID: 812475442}
   homeGoal: {fileID: 1024572928}
@@ -3436,6 +3459,161 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &166971347
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 166971348}
+  - component: {fileID: 166971350}
+  - component: {fileID: 166971349}
+  m_Layer: 5
+  m_Name: Instructional Text
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &166971348
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 166971347}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 909846941}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0.6}
+  m_AnchorMax: {x: 1, y: 0.75}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &166971349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 166971347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_text: Select a new rule to implement.
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 0161d805a3764c089bef00bfe00793f5, type: 2}
+  m_sharedMaterial: {fileID: 2147374, guid: 0161d805a3764c089bef00bfe00793f5, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_outlineColor:
+    serializedVersion: 2
+    rgba: 4278190080
+  m_fontSize: 60
+  m_fontSizeBase: 60
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_textAlignment: 514
+  m_isAlignmentEnumConverted: 1
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_enableWordWrapping: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_firstOverflowCharacterIndex: -1
+  m_linkedTextComponent: {fileID: 0}
+  m_isLinkedTextComponent: 0
+  m_isTextTruncated: 0
+  m_enableKerning: 1
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_ignoreRectMaskCulling: 0
+  m_ignoreCulling: 1
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_firstVisibleCharacter: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_textInfo:
+    textComponent: {fileID: 166971349}
+    characterCount: 31
+    spriteCount: 0
+    spaceCount: 5
+    wordCount: 6
+    linkCount: 0
+    lineCount: 1
+    pageCount: 1
+    materialCount: 1
+  m_havePropertiesChanged: 0
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_spriteAnimator: {fileID: 0}
+  m_isInputParsingRequired: 0
+  m_inputSource: 0
+  m_hasFontAssetChanged: 0
+  m_subTextObjects:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &166971350
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 166971347}
 --- !u!1001 &168224694
 Prefab:
   m_ObjectHideFlags: 0
@@ -4745,6 +4923,11 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -4813,6 +4996,11 @@ Prefab:
     - target: {fileID: 1066861467329680, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_Name
       value: Crowd Athlete (11)
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -5305,6 +5493,11 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -5670,6 +5863,11 @@ Prefab:
     - target: {fileID: 4769474919909100, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -6200,6 +6398,11 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -6427,6 +6630,11 @@ Prefab:
     - target: {fileID: 1066861467329680, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_Name
       value: Crowd Athlete (16)
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -6657,6 +6865,11 @@ Prefab:
       propertyPath: m_Name
       value: Crowd Athlete (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -6735,6 +6948,11 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -6803,6 +7021,11 @@ Prefab:
     - target: {fileID: 1066861467329680, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_Name
       value: Crowd Athlete (15)
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -6966,6 +7189,11 @@ Prefab:
     - target: {fileID: 4769474919909100, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -7370,6 +7598,11 @@ Prefab:
     - target: {fileID: 1066861467329680, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_Name
       value: Crowd Athlete (22)
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -7955,6 +8188,11 @@ Prefab:
     - target: {fileID: 4769474919909100, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 270
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -9237,6 +9475,11 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -9604,6 +9847,11 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 270
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -9867,6 +10115,11 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -10114,6 +10367,130 @@ Transform:
   m_PrefabParentObject: {fileID: 4416913316736476, guid: 242db571553c142f090824fc8b8cabd6,
     type: 2}
   m_PrefabInternal: {fileID: 479042093}
+--- !u!1001 &480728323
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 2083431937}
+    m_Modifications:
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1920411462745594, guid: 4714ec578f23b4ee6a4c34e131fe9fce, type: 2}
+      propertyPath: m_Name
+      value: Rule Change Button (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114725501707196632, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_havePropertiesChanged
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114725501707196632, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_isInputParsingRequired
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 4714ec578f23b4ee6a4c34e131fe9fce, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1001 &483078542
 Prefab:
   m_ObjectHideFlags: 0
@@ -10179,6 +10556,11 @@ Prefab:
     - target: {fileID: 1066861467329680, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_Name
       value: Crowd Athlete (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -10257,6 +10639,11 @@ Prefab:
     - target: {fileID: 4769474919909100, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 270
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -10962,6 +11349,11 @@ Prefab:
     - target: {fileID: 1066861467329680, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_Name
       value: Crowd Athlete (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -11995,6 +12387,11 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 270
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -12413,6 +12810,11 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -12545,6 +12947,11 @@ Prefab:
       propertyPath: m_Name
       value: Crowd Athlete (20)
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -12618,6 +13025,11 @@ Prefab:
     - target: {fileID: 1066861467329680, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_Name
       value: Crowd Athlete (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -12867,6 +13279,11 @@ Prefab:
       propertyPath: m_Name
       value: Crowd Athlete (17)
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -13006,6 +13423,11 @@ Prefab:
     - target: {fileID: 4769474919909100, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 270
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -13347,7 +13769,7 @@ Prefab:
     - target: {fileID: 114287406281657978, guid: 456e31f225a8449269250ce05d817725,
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224493656441313478, guid: 456e31f225a8449269250ce05d817725,
         type: 2}
@@ -13516,7 +13938,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1784685792407092, guid: 456e31f225a8449269250ce05d817725, type: 2}
       propertyPath: m_Name
-      value: Rematch Button
+      value: Continue Button
       objectReference: {fileID: 0}
     - target: {fileID: 224493656441313478, guid: 456e31f225a8449269250ce05d817725,
         type: 2}
@@ -13547,6 +13969,12 @@ RectTransform:
   m_PrefabParentObject: {fileID: 224493656441313478, guid: 456e31f225a8449269250ce05d817725,
     type: 2}
   m_PrefabInternal: {fileID: 624033242}
+--- !u!114 &624033244 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114287406281657978, guid: 456e31f225a8449269250ce05d817725,
+    type: 2}
+  m_PrefabInternal: {fileID: 624033242}
+  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 --- !u!1001 &631317887
 Prefab:
   m_ObjectHideFlags: 0
@@ -13803,6 +14231,11 @@ Prefab:
     - target: {fileID: 1066861467329680, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_Name
       value: Crowd Athlete (28)
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -14543,6 +14976,11 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -14831,6 +15269,116 @@ CanvasRenderer:
     type: 2}
   m_PrefabInternal: {fileID: 110121132}
   m_GameObject: {fileID: 676496314}
+--- !u!1001 &682329364
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 2083431937}
+    m_Modifications:
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114725501707196632, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_havePropertiesChanged
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114725501707196632, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_isInputParsingRequired
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 4714ec578f23b4ee6a4c34e131fe9fce, type: 2}
+  m_IsPrefabParent: 0
 --- !u!4 &683558973 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4769474919909100, guid: 2141e07591b2c4a25b8910a7f12b4a19,
@@ -15387,6 +15935,11 @@ Prefab:
       propertyPath: m_Name
       value: Crowd Athlete (19)
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -15465,6 +16018,11 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 270
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -15537,6 +16095,11 @@ Prefab:
     - target: {fileID: 4769474919909100, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -17053,6 +17616,11 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!224 &760046247 stripped
+RectTransform:
+  m_PrefabParentObject: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+    type: 2}
+  m_PrefabInternal: {fileID: 682329364}
 --- !u!1 &762977401
 GameObject:
   m_ObjectHideFlags: 0
@@ -17421,6 +17989,11 @@ Prefab:
     - target: {fileID: 1066861467329680, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_Name
       value: Crowd Athlete (12)
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -18614,6 +19187,11 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -18857,6 +19435,11 @@ Prefab:
       propertyPath: m_Name
       value: Crowd Athlete (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -19008,6 +19591,11 @@ Prefab:
     - target: {fileID: 4769474919909100, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 270
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -19201,6 +19789,11 @@ Prefab:
     - target: {fileID: 4769474919909100, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 270
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -19436,6 +20029,11 @@ Prefab:
     - target: {fileID: 4769474919909100, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -20327,7 +20925,7 @@ GameObject:
   - component: {fileID: 909846943}
   - component: {fileID: 909846942}
   m_Layer: 5
-  m_Name: IDK Panel
+  m_Name: Gauntlet Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20344,6 +20942,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1007348514}
+  - {fileID: 166971348}
+  - {fileID: 2083431937}
   m_Father: {fileID: 1357678244}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -20595,6 +21195,11 @@ CanvasRenderer:
     type: 2}
   m_PrefabInternal: {fileID: 1417802252}
   m_GameObject: {fileID: 932330644}
+--- !u!224 &932730369 stripped
+RectTransform:
+  m_PrefabParentObject: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+    type: 2}
+  m_PrefabInternal: {fileID: 1764096572}
 --- !u!1 &933762158
 GameObject:
   m_ObjectHideFlags: 0
@@ -21261,6 +21866,11 @@ Prefab:
       propertyPath: m_Name
       value: Crowd Athlete (25)
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -21412,6 +22022,11 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -21547,6 +22162,11 @@ Prefab:
     - target: {fileID: 4769474919909100, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -21780,7 +22400,7 @@ GameObject:
   - component: {fileID: 987930656}
   - component: {fileID: 987930655}
   m_Layer: 0
-  m_Name: Play Now Controller
+  m_Name: Mode Controller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21798,42 +22418,50 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teamList:
-  - name: Hometown Defenders
+  - computerControlled: 0
+    name: Hometown Defenders
     fieldString: Hometown
     primaryColor: {r: 0.14509805, g: 0.454902, b: 0.7490196, a: 1}
     score: 0
     wonTheGame: 0
-  - name: Outland Invaders
+  - computerControlled: 0
+    name: Outland Invaders
     fieldString: Outlanders
     primaryColor: {r: 0.60784316, g: 0.17254902, b: 0.14509805, a: 1}
     score: 0
     wonTheGame: 0
-  - name: Tuttleton Turtles
+  - computerControlled: 0
+    name: Tuttleton Turtles
     fieldString: Turtle Up
     primaryColor: {r: 0.2753649, g: 0.6415094, b: 0.28679565, a: 1}
     score: 0
     wonTheGame: 0
-  - name: The Fourth Bridage
+  - computerControlled: 0
+    name: The Fourth Bridage
     fieldString: The Fourth
     primaryColor: {r: 0.5796279, g: 0.23335704, b: 0.8679245, a: 1}
     score: 0
     wonTheGame: 0
-  - name: Gold Bay Packagers
+  - computerControlled: 0
+    name: Gold Bay Packagers
     fieldString: Gold Pack
     primaryColor: {r: 0.9150943, g: 0.87591857, b: 0.26330543, a: 1}
     score: 0
     wonTheGame: 0
-  - name: Windy City SC
+  - computerControlled: 0
+    name: Windy City SC
     fieldString: WIndy City
     primaryColor: {r: 0.8867924, g: 0.30535775, b: 0.7867785, a: 1}
     score: 0
     wonTheGame: 0
-  - name: Brimstone Ballers
+  - computerControlled: 0
+    name: Brimstone Ballers
     fieldString: Ballers Only
     primaryColor: {r: 0.43173727, g: 0.51218873, b: 0.6226415, a: 1}
     score: 0
     wonTheGame: 0
-  - name: Midlund Monsters
+  - computerControlled: 0
+    name: Midlund Monsters
     fieldString: Midlund
     primaryColor: {r: 0.8962264, g: 0.5763983, b: 0.13950695, a: 1}
     score: 0
@@ -22088,6 +22716,11 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -22228,7 +22861,7 @@ GameObject:
   - component: {fileID: 1007348516}
   - component: {fileID: 1007348515}
   m_Layer: 5
-  m_Name: Final Score
+  m_Name: Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22247,7 +22880,7 @@ RectTransform:
   m_Father: {fileID: 909846941}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.3}
+  m_AnchorMin: {x: 0, y: 0.75}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
@@ -22271,7 +22904,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: idk
+  m_text: Gauntlet Round X
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 86259fd0c8aea432fa365d5c592fa0f1, type: 2}
   m_sharedMaterial: {fileID: 21614945242328888, guid: 86259fd0c8aea432fa365d5c592fa0f1,
@@ -22300,8 +22933,8 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 260
-  m_fontSizeBase: 260
+  m_fontSize: 160
+  m_fontSizeBase: 160
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -22341,10 +22974,10 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 1007348515}
-    characterCount: 3
+    characterCount: 16
     spriteCount: 0
-    spaceCount: 0
-    wordCount: 1
+    spaceCount: 2
+    wordCount: 3
     linkCount: 0
     lineCount: 1
     pageCount: 1
@@ -22438,6 +23071,11 @@ Prefab:
     - target: {fileID: 1066861467329680, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_Name
       value: Crowd Athlete (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -22731,6 +23369,11 @@ Prefab:
         type: 2}
       propertyPath: m_isInputParsingRequired
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -23281,6 +23924,11 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 270
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -23353,6 +24001,11 @@ Prefab:
     - target: {fileID: 4769474919909100, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 270
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -23814,6 +24467,11 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 270
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -24176,6 +24834,11 @@ Prefab:
     - target: {fileID: 1066861467329680, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_Name
       value: Crowd Athlete (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -25828,6 +26491,11 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 270
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -25905,6 +26573,11 @@ Prefab:
     - target: {fileID: 4769474919909100, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -27594,7 +28267,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 108344103
-  m_SortingLayer: 3
+  m_SortingLayer: 7
   m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: 243b596555edf46e695fe7fcfb2eda62, type: 3}
   m_Color: {r: 0.8962264, g: 0.6854613, b: 0.6721698, a: 1}
@@ -28754,6 +29427,11 @@ Prefab:
       propertyPath: m_Name
       value: Crowd Athlete (26)
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -28894,6 +29572,11 @@ Prefab:
     - target: {fileID: 4769474919909100, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -29042,6 +29725,11 @@ Prefab:
     - target: {fileID: 4769474919909100, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -30542,8 +31230,12 @@ MonoBehaviour:
   showcaseAthlete_away: {fileID: 571640688}
   arrowButton_home: {fileID: 854739201}
   arrowButton_away: {fileID: 595848955}
+  continueButton: {fileID: 624033244}
   statTable: {fileID: 611965948}
   teamPostMatchPanel: {fileID: 1936664450}
+  gauntletPanel: {fileID: 909846940}
+  gauntletTitleText: {fileID: 1007348515}
+  ruleChangeHolder: {fileID: 2083431937}
   homeFieldText: {fileID: 746815338}
   awayFieldText: {fileID: 2058077348}
 --- !u!1 &1359303836
@@ -33358,6 +34050,11 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -33566,6 +34263,11 @@ Prefab:
     - target: {fileID: 4769474919909100, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -34685,6 +35387,11 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 71.642006
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -34760,7 +35467,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 798997413
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 9d97eb567f08240c9a12f0a4cd50b8e9, type: 3}
   m_Color: {r: 0.4156863, g: 0.4156863, b: 0.4156863, a: 1}
@@ -34851,6 +35558,11 @@ Prefab:
     - target: {fileID: 1066861467329680, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_Name
       value: Crowd Athlete (14)
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -38942,6 +39654,11 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -39014,6 +39731,11 @@ Prefab:
     - target: {fileID: 4769474919909100, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -39817,7 +40539,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 108344103
-  m_SortingLayer: 3
+  m_SortingLayer: 7
   m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: 243b596555edf46e695fe7fcfb2eda62, type: 3}
   m_Color: {r: 0.6774653, g: 0.76026714, b: 0.8301887, a: 1}
@@ -40044,6 +40766,11 @@ Prefab:
       propertyPath: m_Name
       value: Crowd Athlete (13)
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -40117,6 +40844,11 @@ Prefab:
     - target: {fileID: 1066861467329680, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_Name
       value: Crowd Athlete (21)
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -40241,6 +40973,130 @@ Prefab:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e47518cc363d44f7e8f521493fe4641d, type: 2}
+  m_IsPrefabParent: 0
+--- !u!1001 &1764096572
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 2083431937}
+    m_Modifications:
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1920411462745594, guid: 4714ec578f23b4ee6a4c34e131fe9fce, type: 2}
+      propertyPath: m_Name
+      value: Rule Change Button (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114725501707196632, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_havePropertiesChanged
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114725501707196632, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+        type: 2}
+      propertyPath: m_isInputParsingRequired
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 4714ec578f23b4ee6a4c34e131fe9fce, type: 2}
   m_IsPrefabParent: 0
 --- !u!1 &1776971490
 GameObject:
@@ -40823,6 +41679,11 @@ Prefab:
     - target: {fileID: 4769474919909100, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 270
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -42332,6 +43193,11 @@ Prefab:
       propertyPath: m_Name
       value: Crowd Athlete (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -42430,6 +43296,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc292cbf02b3b433ca0b058f5fa6025e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showcaseAthleteUI: {fileID: 1824494477366076, guid: d9ba244ede22a4ece96f353eb5173fc7,
+    type: 2}
+  showcaseHolder: {fileID: 145266237}
   teamNameText: {fileID: 1044728947}
   homePosition: {x: -1600, y: 1040, z: 90}
   awayPosition: {x: 1600, y: 1040, z: 90}
@@ -42567,6 +43436,11 @@ Prefab:
     - target: {fileID: 4769474919909100, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 270
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -42937,6 +43811,11 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -43058,6 +43937,11 @@ Prefab:
     - target: {fileID: 1066861467329680, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_Name
       value: Crowd Athlete (18)
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -44095,6 +44979,11 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -44695,6 +45584,11 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 270
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -44768,6 +45662,11 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -44840,6 +45739,11 @@ Prefab:
     - target: {fileID: 4769474919909100, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -45231,6 +46135,11 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 270
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -45299,6 +46208,11 @@ Prefab:
     - target: {fileID: 1066861467329680, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_Name
       value: Crowd Athlete (23)
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
@@ -45381,6 +46295,65 @@ CanvasRenderer:
     type: 2}
   m_PrefabInternal: {fileID: 936616360}
   m_GameObject: {fileID: 2082114005}
+--- !u!1 &2083431936
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 2083431937}
+  - component: {fileID: 2083431938}
+  m_Layer: 5
+  m_Name: Rule Change Selections
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2083431937
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2083431936}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 760046247}
+  - {fileID: 932730369}
+  - {fileID: 2121197865}
+  m_Father: {fileID: 909846941}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.05, y: 0.05}
+  m_AnchorMax: {x: 0.95, y: 0.6}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2083431938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2083431936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1297475563, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_Spacing: 10
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 1
 --- !u!1001 &2091837169
 Prefab:
   m_ObjectHideFlags: 0
@@ -46154,6 +47127,11 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_IsPrefabParent: 0
+--- !u!224 &2121197865 stripped
+RectTransform:
+  m_PrefabParentObject: {fileID: 224504119695610852, guid: 4714ec578f23b4ee6a4c34e131fe9fce,
+    type: 2}
+  m_PrefabInternal: {fileID: 480728323}
 --- !u!1001 &2132537177
 Prefab:
   m_ObjectHideFlags: 0
@@ -46340,6 +47318,11 @@ Prefab:
       propertyPath: m_Name
       value: Crowd Athlete (24)
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -46418,6 +47401,11 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
   m_IsPrefabParent: 0
@@ -46490,6 +47478,11 @@ Prefab:
     - target: {fileID: 4769474919909100, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 210258509047925406, guid: 2141e07591b2c4a25b8910a7f12b4a19,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2141e07591b2c4a25b8910a7f12b4a19, type: 2}

@@ -43,6 +43,10 @@ public class CrowdController : MonoBehaviour {
 			for(int j = 0; j < transform.GetChild(i).childCount; j++) {
 				GameObject seatObj = transform.GetChild(i).GetChild(j).gameObject;
 
+				if(seatObj.transform.childCount > 0) {
+					Destroy(seatObj.transform.GetChild(0).gameObject);
+				}
+
 				float rando = Random.value;
 				if(rando > 0.7) {
 					//Leave the seat empty
@@ -105,29 +109,23 @@ public class CrowdController : MonoBehaviour {
 		}
 	}
 
-	public IEnumerator FlashSteps(Color flashColor) {
+	public IEnumerator FlashSteps(Color flashColor, Sound sound, int repeats, float delayBetween) {
 		WaitForFixedUpdate waiter = new WaitForFixedUpdate();
 
 		for(int i = 0; i < stepFills.Count; i++) {
 			stepFills[i].color = flashColor;
 		}
 
-		for(int r = 0; r < 3; r++) {
+		for(int r = 0; r < repeats; r++) {
 			if(audioManager != null) {
-				audioManager.PlaySound("goalLight");
+				audioManager.PlaySound(sound, 1f);
 			}
-
-			float duration = 0.11f;
-			//float startDuration = 0.25f;
-			//float interval = startDuration / stepFills.Count;
 
 			for(int i = 0; i < stepFills.Count; i++) {
 				stepFills[i].color = flashColor;
 
-				//float duration = baseDuration + ((stepFills.Count - 1 - i) * interval);
-
 				float timer = 0f;
-				while(timer < duration) {
+				while(timer < delayBetween) {
 					timer += Time.deltaTime;
 
 					yield return waiter;

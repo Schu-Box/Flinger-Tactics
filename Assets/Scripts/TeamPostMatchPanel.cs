@@ -6,6 +6,8 @@ using TMPro;
 
 public class TeamPostMatchPanel : MonoBehaviour {
 
+	public GameObject showcaseAthleteUI;
+	public Transform showcaseHolder;
 	public TextMeshProUGUI teamNameText;
 
 	public Vector3 homePosition;
@@ -35,10 +37,20 @@ public class TeamPostMatchPanel : MonoBehaviour {
 		Athlete mvp = team.GetCurrentMatchData().GetMVP();
 
 		for(int i = 0; i < showcaseAthleteList.Count; i++) {
-			showcaseAthleteList[i].SetAthlete(team.athletes[i]);
+			Destroy(showcaseAthleteList[i].gameObject);
+
+			
+		}
+
+		showcaseAthleteList = new List<ShowcaseAthleteUI>();
+		for(int i = 0; i < team.athletes.Count; i++) {
+			ShowcaseAthleteUI show = Instantiate(showcaseAthleteUI, Vector3.zero, Quaternion.identity, showcaseHolder).GetComponent<ShowcaseAthleteUI>();
+			show.SetAthlete(team.athletes[i]);
 			if(team.athletes[i] == mvp) {
-				showcaseAthleteList[i].GetComponent<AthleteImage>().SetMVP();
+				show.GetComponent<AthleteImage>().SetMVP();
 			}
+
+			showcaseAthleteList.Add(show);
 		}
 
 		/*
