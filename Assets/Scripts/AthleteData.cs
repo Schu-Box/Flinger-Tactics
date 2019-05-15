@@ -17,6 +17,7 @@ public class AthleteData : ScriptableObject {
 	public Sprite faceBaseSprite;
 	public Sprite legSprite;
 	public Sprite athleteJersey;
+	public Sprite athleteJerseyStripes;
 
 	public float frontLegRest = 0.8f;
 	public float frontLegMin = 0.9f;

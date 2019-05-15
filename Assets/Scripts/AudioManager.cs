@@ -1,122 +1,140 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour {
 	
-	public GameObject soundHolderPrefab;
+	//[SerializeField] AudioMixerGroup fallbackAudioMixerGroup;
+	[SerializeField] AudioMixerGroup audioMixerGroup;
+	[SerializeField] int minimumAudioPool = 20; // number of preloaded AudioSources for the pool
+	private List<AudioSource> audioPool = new List<AudioSource>();
+	private List<AudioSource> availablePool = new List<AudioSource>();
 
-	private Sound ballSpawnSound;
-	private Sound ballBumpSound;
-	private Sound athleteBumpSound;
-	private Sound bumperBumpSound;
-	private Sound bumperBreakSound;
-	private Sound ballGoalSound;
-	private Sound goalSound;
-	private Sound goalLightSound;
-	private Sound goalHornSound;
-	private Sound whistleSound;
-	private Sound substituteOutSound;
-	private Sound substituteInSound;
-	private Sound matchOverLightSound;
-	private Sound matchOverSound;
-	private Sound lastTurnSound;
 
-	void Start() {
-		ballSpawnSound = Resources.Load<Sound>("Sound Resources/ballSpawn");
-		ballBumpSound = Resources.Load<Sound>("Sound Resources/ballBump");
-		athleteBumpSound = Resources.Load<Sound>("Sound Resources/athleteBump");
-		bumperBumpSound = Resources.Load<Sound>("Sound Resources/bumperBump");
-		bumperBreakSound = Resources.Load<Sound>("Sound Resources/bumperBreak");
-		ballGoalSound = Resources.Load<Sound>("Sound Resources/ballGoal");
-		goalSound = Resources.Load<Sound>("Sound Resources/goal");
-		goalLightSound = Resources.Load<Sound>("Sound Resources/goalLight");
-		goalHornSound = Resources.Load<Sound>("Sound Resources/goalHorn");
-		whistleSound = Resources.Load<Sound>("Sound Resources/whistle");
-		substituteOutSound = Resources.Load<Sound>("Sound Resources/subOut");
-		substituteInSound = Resources.Load<Sound>("Sound Resources/subIn");
-		matchOverLightSound = Resources.Load<Sound>("Sound Resources/matchOverLight");
-		matchOverSound = Resources.Load<Sound>("Sound Resources/matchOver");
-		lastTurnSound = Resources.Load<Sound>("Sound Resources/lastTurn");
+
+	private Sound[] sounds; // all audio setups, loaded from Resources
+	private SoundSettings[] settings; // all runtime instances of the setups + ambience GameObjects
+
+    private static AudioManager instance;
+    public static AudioManager Instance {
+        get { return instance ?? (instance = new GameObject("AudioManager").AddComponent<AudioManager>()); }
+    }
+	
+	
+	// channel-through call functions
+	public void Play(string key){ /* Debug.Log(key); */ GetSoundSettings(key).Play(); }
+	public void Play(string key, int id){ GetSoundSettings(key).Play(id); }
+
+	public void AmbientPlay(string key){ GetSoundSettings(key).AmbientPlay(); }
+	public void AmbientStop(string key){ GetSoundSettings(key).AmbientStop(); }
+	public void PentatonicCounterReset(string key){ GetSoundSettings(key).PentatonicCounterReset(); }
+
+	void Awake() {
+		Debug.Log("Woken");
+		instance = this;
+		// load audio resources
+		sounds = LoadAudioResources();
+
+		// create all AudioSettings for the AudioSetups
+		settings = CreateSettings(sounds);
+
+		// preload a number of audioPools from the start
+		PreloadAudioPool(minimumAudioPool);
 	}
 
-	public void PlaySound(string id) {
-		PlaySound(GetSound(id), 1f);
-	}
-
-	public void PlaySound(string id, float modifier) {
-		PlaySound(GetSound(id), modifier);
-	}
-
-	public void PlaySound(Sound sound, float pitchModifier) {
-		GameObject obj = Instantiate(soundHolderPrefab, Vector3.zero, Quaternion.identity);
-		AudioSource source = obj.GetComponent<AudioSource>();
-
-		source.clip = sound.GetClip();
-		source.volume = sound.volume;
-		source.pitch = sound.GetPitch();
-		source.pitch *= pitchModifier;
-
-		source.Play();
-	}
-
-	public Sound GetSound(string id) {
-		Sound sound = null;
-
-		switch(id) {
-			case "ballSpawn":
-				sound = ballSpawnSound;
-				break;
-			case "ballBump":
-				sound = ballBumpSound;
-				break;
-			case "athleteBump":
-				sound = athleteBumpSound;
-				break;
-			case "bumperBump":
-				sound = bumperBumpSound;
-				break;
-			case "bumperBreak":
-				sound = bumperBreakSound;
-				break;
-			case "ballGoal":
-				sound = ballGoalSound;
-				break;
-			case "goal":
-				sound = goalSound;
-				break;
-			case "goalLight":
-				sound = goalLightSound;
-				break;
-			case "goalHorn":
-				sound = goalHornSound;
-				break;
-			case "subOut":
-				sound = substituteOutSound;
-				break;
-			case "subIn":
-				sound = substituteInSound;
-				break;
-			case "matchOverLight":
-				sound = matchOverLightSound;
-				break;
-			case "matchOver":
-				sound = matchOverSound;
-				break;
-			case "lastTurn":
-				sound = lastTurnSound;
-				break;
-
-			//Unused
-			case "whistle":
-				sound = whistleSound;
-				break;
-
-			default:
-				Debug.Log("That clip doesn't exist");
-				break;
+	void Update() {
+		// update ambience volumes
+		for (int i = 0; i < settings.Length; i++){
+			settings[i].UpdateAmbience();
 		}
 
-		return sound;
+		for (int i = 0; i < audioPool.Count; i++) {
+			if (!audioPool[i].isPlaying){
+				availablePool.Add(audioPool[i]);
+				audioPool.RemoveAt(i);
+			}
+		}
+
+		for (int i = 0; i < availablePool.Count; i++) {
+			if (availablePool[i].isPlaying){
+				audioPool.Add(availablePool[i]);
+				availablePool.RemoveAt(i);
+			}
+		}
+	}
+
+	private static Sound[] LoadAudioResources(){
+		Sound[] soundSetups = Resources.LoadAll<Sound>("Sounds");
+		Debug.Log("[SoundManager] loaded " + soundSetups.Length + " sounds!");
+		return soundSetups;
+	}
+
+	/// Create the SoundSettings array from 
+	private static SoundSettings[] CreateSettings(Sound[] soundSetups){
+		SoundSettings[] soundSettings = new SoundSettings[soundSetups.Length];
+		for (int i = 0; i < soundSetups.Length; i++){
+			soundSettings[i] = new SoundSettings(soundSetups[i]);
+		}
+		return soundSettings;
+	}
+
+	private Sound GetSound(string key){
+		for (int i = 0; i < sounds.Length; i++){
+			if (sounds[i].name == key){
+				return sounds[i];
+			}
+		}
+
+		Debug.Log("[SoundManager] No SoundSetup for this key found.");
+		return null;
+	}
+
+	public SoundSettings GetSoundSettings(string key){
+		for (int i = 0; i < sounds.Length; i++){
+			if (sounds[i].name == key){
+				return settings[i];
+			}
+		}
+
+		Debug.Log("[SoundManager] No SoundSettings for this key found.");
+		return null;
+	}
+
+
+
+	// audio pool management
+	private void PreloadAudioPool(int count){
+		for (int i = 0; i < count; i++){
+			availablePool.Add(this.gameObject.AddComponent<AudioSource>());
+		}
+	}	
+
+	public void PlayInPool(float volume, AudioClip audioClip){
+		float pitch = 1f;
+		PlayInPool(pitch, volume, audioClip, audioMixerGroup);
+	}
+
+	public void PlayInPool(float pitch, float volume, AudioClip audioClip, AudioMixerGroup channel){
+		if (availablePool.Count > 0){
+			SetupAudioSource(availablePool[0], pitch, volume, audioClip, channel);
+			audioPool.Add(availablePool[0]);
+			availablePool.RemoveAt(0);
+		} else {
+			AudioSource newAudioSource = this.gameObject.AddComponent<AudioSource>();
+			SetupAudioSource(newAudioSource, pitch, volume, audioClip, channel);
+			audioPool.Add(newAudioSource);
+		}
+	}
+
+	private static void SetupAudioSource(AudioSource newAudioSource, float pitch, float volume, AudioClip audioClip, AudioMixerGroup channel){
+		newAudioSource.playOnAwake = false;
+		newAudioSource.pitch = pitch;
+		newAudioSource.volume = volume;
+		newAudioSource.outputAudioMixerGroup = channel;
+		newAudioSource.clip = audioClip;
+		newAudioSource.loop = false;
+
+		newAudioSource.Play();
 	}
 }

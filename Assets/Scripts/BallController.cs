@@ -11,6 +11,7 @@ public class BallController : MonoBehaviour {
 	private Collider2D collie;
 	private SpriteRenderer spriteRenderer;
 	private AudioSource audioSource;
+	private FocalObject focalObject;
 
 	private SpriteRenderer lightSlot;
 	private List<SpriteRenderer> outerLightSlots = new List<SpriteRenderer>();
@@ -37,6 +38,7 @@ public class BallController : MonoBehaviour {
 		collie = GetComponent<Collider2D>();
 		spriteRenderer = GetComponent<SpriteRenderer>();
 		audioSource = GetComponent<AudioSource>();
+		focalObject = GetComponent<FocalObject>();
 
 		lightSlot = transform.GetChild(0).GetComponent<SpriteRenderer>();
 		for(int i = 1; i < transform.childCount; i++) {
@@ -69,7 +71,7 @@ public class BallController : MonoBehaviour {
 	}
 
 	private void OnCollisionEnter2D(Collision2D collision) {
-		audioManager.PlaySound("ballBump");
+		audioManager.Play("ballBump");
 
 		if(collision.gameObject.CompareTag("Athlete")) {
 			TouchedByAthlete(collision.gameObject.GetComponent<AthleteController>());
@@ -125,7 +127,7 @@ public class BallController : MonoBehaviour {
 	public void ScoreBall(Team scoringTeam, AthleteController initiater, Vector3 goalCenter) {
 		scoredByTeam = scoringTeam;
 
-		audioManager.PlaySound("ballGoal");
+		audioManager.Play("ballGoal");
 
 		AthleteController mostRecentToucher = null;
 		if(athleteTouchOrder.Count > 0) {
@@ -253,6 +255,7 @@ public class BallController : MonoBehaviour {
 	}
 
 	public void DisableBall() {
+		focalObject.RemoveAllWatchers();
 		//transform.localScale = originalScale;
 		moving = false;
 		rb.velocity = Vector2.zero;
@@ -293,6 +296,8 @@ public class BallController : MonoBehaviour {
 
 	private void StartedMoving() {
 		moving = true;
+
+		focalObject.TriggerWatchers();
 	}
 
 	private void StoppedMoving() {
@@ -300,6 +305,8 @@ public class BallController : MonoBehaviour {
 		rb.velocity = Vector2.zero;
 
 		StartCoroutine(FadeSprite(lightSlot));
+
+		focalObject.StopWatchers();
 	}
 
 	public void SetScoredByTeam(Team team) {

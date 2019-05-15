@@ -19,6 +19,7 @@ public class AthleteController : MonoBehaviour{
 	//Body Parts
 	public List<SpriteRenderer> legList;
 	public SpriteRenderer jersey;
+	public SpriteRenderer jerseyStripes;
 
 	private Body body;
 	private TailBody tailBody;
@@ -31,6 +32,7 @@ public class AthleteController : MonoBehaviour{
 	private CameraController cameraController;
 	private AudioManager audioManager;
 	private AudioSource audioSource;
+	private FocalObject focalObject;
 
 	private Vector3 directionDragged = Vector3.zero;
 
@@ -56,6 +58,7 @@ public class AthleteController : MonoBehaviour{
 		cameraController = FindObjectOfType<CameraController>();
 		audioManager = FindObjectOfType<AudioManager>();
 		audioSource = GetComponent<AudioSource>();
+		focalObject = GetComponent<FocalObject>();
 
 		body = GetComponent<Body>();
 		tailBody = GetComponentInChildren<TailBody>();
@@ -63,17 +66,17 @@ public class AthleteController : MonoBehaviour{
 		face = GetComponentInChildren<Face>();
 		tongue = GetComponentInChildren<Tongue>();
 
-		body.SetBody();
-		tailBody.SetTailBody();
-		tailTip.SetTailTip();
-		face.SetFace();
-		tongue.SetTongue();
-
 		jerseyText = GetComponentInChildren<TextMeshPro>();
 
 		SetInstantInteraction(true);
 
 		originalScale = transform.localScale;
+
+		body.SetBody();
+		tailBody.SetTailBody();
+		tailTip.SetTailTip();
+		face.SetFace();
+		tongue.SetTongue();
 	}
 
 	public void SetAthlete(Athlete a) {
@@ -99,7 +102,12 @@ public class AthleteController : MonoBehaviour{
 		face.SetFaceSprite("neutral");
 		
 		if(jersey != null) {
-			jersey.GetComponent<SpriteRenderer>().sprite = athlete.athleteData.athleteJersey;
+			jersey.sprite = athlete.athleteData.athleteJersey;
+
+			if(jerseyStripes != null) {
+				jerseyStripes.sprite = athlete.athleteData.athleteJerseyStripes;
+				//jerseyStripes.color = a.GetTeam().secondaryColor;
+			}
 		}
 
         for(int l = 0; l < legList.Count; l++) {
@@ -179,7 +187,8 @@ public class AthleteController : MonoBehaviour{
 	}
 
 	public void Collided(Collision2D collision) {
-		audioManager.PlaySound("athleteBump");
+		audioManager.Play("athleteBump");
+		audioManager.Play("athleteSqueak");
 
 		IncreaseStat(StatType.Bumps);
 		
@@ -255,8 +264,12 @@ public class AthleteController : MonoBehaviour{
 		tongue.SetTongueColor(Color.Lerp(athlete.tongueColor, targetColor, lerpValue));
 
 		if(jersey != null) {
-			jersey.GetComponent<SpriteRenderer>().color = Color.Lerp(teamColor, targetColor, lerpValue);
+			jersey.color = Color.Lerp(teamColor, targetColor, lerpValue);
 			jerseyText.color = Color.Lerp(Color.white, targetColor, lerpValue);
+
+			if(jerseyStripes != null) {
+				jerseyStripes.color = Color.Lerp(athlete.GetTeam().secondaryColor, targetColor, lerpValue);
+			}
 		}
 	}
 
@@ -285,6 +298,10 @@ public class AthleteController : MonoBehaviour{
 			jersey.color = teamColor;
 
 			jerseyText.color = Color.white;
+
+			if(jerseyStripes != null) {
+				jerseyStripes.color = athlete.GetTeam().secondaryColor;
+			}
 		}
 	}
 
@@ -317,13 +334,18 @@ public class AthleteController : MonoBehaviour{
 	}
 
 	public void MouseDrag() {
-		TailAdjusted();
+		if(!disabledInteraction && !athlete.GetTeam().computerControlled) {
+			Vector3 flatDirection = transform.position;
+			flatDirection.z = 0f;
+			Vector3 direction = (flatDirection - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -Camera.main.transform.position.z)));
+			TailAdjusted(direction);
+		}
 	}
 
 	public void MouseClick() {
 		//face.SetFaceSprite("dragging");
 		if(!crowdAthlete) {
-			if(!disabledInteraction) {
+			if(!disabledInteraction && !athlete.GetTeam().computerControlled) {
 				GetComponent<SortingGroup>().sortingLayerName = "Focal Athlete";
 
 				matchController.SetAthleteBeingDragged(true);
@@ -335,45 +357,32 @@ public class AthleteController : MonoBehaviour{
 		}
 	}
 
-	public void TailAdjusted() {
-		if(!disabledInteraction && !crowdAthlete) {
-			Vector3 flatDirection = transform.position;
-			flatDirection.z = 0f;
-			Vector3 direction = (flatDirection - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -Camera.main.transform.position.z)));
-
-			if(direction.magnitude > athlete.minPull) {
-				if(direction.magnitude >= athlete.maxPull) {
-					direction = Vector3.ClampMagnitude(direction, athlete.maxPull);
-				}
-
-				Vector3 normalizedDirection = direction.normalized;	//Rotate the athlete to face opposite of the mouse
-				float targetRotation = (Mathf.Atan2(normalizedDirection.y, normalizedDirection.x) * Mathf.Rad2Deg + 90);
-				//float startRotation = transform.rotation.eulerAngles.z;
-				transform.rotation = Quaternion.Euler(0, 0, targetRotation);
-
-				tailTip.AdjustTailPosition(direction.magnitude);
-
-				if(tongue.GetTongueOut()) {
-					tongue.HideTongue();
-				}
-
-				face.SetFaceSprite("dragging");
-			} else {
-				direction = Vector3.zero;
-
-				ResetTail();
-
-				if(!tongue.GetTongueOut()) {
-					tongue.RevealTongue();
-				}
-
-				face.SetFaceSprite("hovered");
+	public void TailAdjusted(Vector3 direction) {
+		if(direction.magnitude > athlete.minPull) {
+			if(direction.magnitude >= athlete.maxPull) {
+				direction = Vector3.ClampMagnitude(direction, athlete.maxPull);
 			}
 
-			directionDragged = direction;
+			Vector3 normalizedDirection = direction.normalized;	//Rotate the athlete to face opposite of the mouse
+			float targetRotation = (Mathf.Atan2(normalizedDirection.y, normalizedDirection.x) * Mathf.Rad2Deg + 90);
+			//float startRotation = transform.rotation.eulerAngles.z;
+			transform.rotation = Quaternion.Euler(0, 0, targetRotation);
+
+			tailTip.AdjustTailPosition(direction.magnitude);
+
+			face.SetFaceSprite("dragging");
+		} else {
+			direction = Vector3.zero;
+
+			ResetTail();
+
+			face.SetFaceSprite("hovered");
 		}
+
+		directionDragged = direction;
 	}
 
+	/*
 	public void AdjustTailAndFling(Vector3 target, float percentFlingForce) {
 		matchController.SetAthleteBeingDragged(true);
 
@@ -405,6 +414,7 @@ public class AthleteController : MonoBehaviour{
 
 		StartAction();
 	}
+	*/
 
 	public void ResetTail() {
 		tailTip.AdjustTailPosition(0f);
@@ -417,11 +427,14 @@ public class AthleteController : MonoBehaviour{
 			GetComponent<SortingGroup>().sortingLayerName = "Athletes";
 
 			if(directionDragged != Vector3.zero) { //Athlete will move
+				StartAction();
+				/*
 				if(instantInteraction) {
-					StartAction();
+					
 				} else {
 					ReadyUp();
 				}
+				*/
 			} else {
 				face.SetFaceSprite("neutral");
 				RetractLegs();
@@ -481,6 +494,8 @@ public class AthleteController : MonoBehaviour{
 	}
 
 	public void FlingAthlete() {
+		audioManager.Play("athleteYipee");
+
 		matchController.SetAthleteInitiater(this);
 		IncreaseStat(StatType.Flings);
 
@@ -564,6 +579,8 @@ public class AthleteController : MonoBehaviour{
 		}
 
 		ExtendLegs();
+
+		focalObject.TriggerWatchers();
 	}
 	public void StoppedMoving() {
 		moving = false;
@@ -577,6 +594,8 @@ public class AthleteController : MonoBehaviour{
 		RetractLegs();
 
 		body.StopMovement();
+
+		focalObject.StopWatchers();
 	}
 
 	public bool GetMoving() {
@@ -671,7 +690,7 @@ public class AthleteController : MonoBehaviour{
 	public void FinishMatch() {
 		//if(GetTeam().
 		//If team won, victory face, else defeat face
-		if(athlete.GetTeam().wonTheGame) {
+		if(athlete.GetTeam().GetCurrentMatchData().GetTeamMatchData(athlete.GetTeam()).DidTeamWin()) {
 			face.SetFaceSprite("victory");
 		} else {
 			face.SetFaceSprite("defeat");
@@ -682,87 +701,13 @@ public class AthleteController : MonoBehaviour{
 		return face;
 	}
 
-	//Crowd Settings
-	private GameObject focalObject;
-	private Coroutine focusCoroutine;
-	public void SetFocus(GameObject obj) {
-		if(focusCoroutine != null) {
-			StopCoroutine(focusCoroutine);
-		}
-
-		focusCoroutine = StartCoroutine(ChangeFocus(obj));
-	}
-
-	public IEnumerator ChangeFocus(GameObject newFocus) {
-		
-		Quaternion startQuaternion;
-		if(focalObject != null) {
-			startQuaternion = GetFocalQuaternion();
-		} else {
-			startQuaternion = Quaternion.identity;
-		}
-
-		focalObject = newFocus;
-		Quaternion endQuaternion = GetFocalQuaternion();
-
-		WaitForFixedUpdate waiter = new WaitForFixedUpdate();
-		float timer = 0f;
-		float duration = 0.5f + (Random.value * 2);
-		while(timer < duration) {
-			timer += Time.deltaTime;
-			
-			transform.rotation = Quaternion.Lerp(startQuaternion, endQuaternion, timer/duration);
-
-			yield return waiter;
-		}
-	}
-
-	public void StartWatching() {
-		if(focusCoroutine != null) {
-			StopCoroutine(focusCoroutine);
-		}
-
-		focusCoroutine = StartCoroutine(AdjustFocus());
-	}
-
-	public void StopWatching() {
-		if(focusCoroutine != null) {
-			StopCoroutine(focusCoroutine);
-			focusCoroutine = null;
-		}
-	}
-	
-	public IEnumerator AdjustFocus() {
-		WaitForFixedUpdate waiter = new WaitForFixedUpdate();
-
-		int frameInterval = 2;
-		while(true) {
-
-			if(Time.frameCount % frameInterval == 0) {
-				if(focalObject == null) {
-					StopWatching();
-				} else {
-					transform.rotation = GetFocalQuaternion();
-				}
-			}
-
-			yield return waiter;
-		}
-	}
-
-	public Quaternion GetFocalQuaternion() {
-		Vector3 offset = transform.position - focalObject.transform.position;
-		Quaternion newRotation = Quaternion.LookRotation(Vector3.forward, offset);
-		//newRotation.eulerAngles = new Vector3(newRotation.x, newRotation.y, Mathf.Clamp(newRotation.eulerAngles.z, -30, 30));
-
-		return newRotation;
-	}
-
 	public IEnumerator RemoveAthleteFromField(Vector3 goalCenter) {
         //Fade the athlete out first - similar to pokeball effect
 
 		StoppedMoving();
-		body.DisableBody();
+		//body.DisableBody();
+
+		focalObject.RemoveAllWatchers();
 
 		Vector3 originalPosition = transform.position;
 		Vector3 absorbPosition = goalCenter;
@@ -809,10 +754,11 @@ public class AthleteController : MonoBehaviour{
 	}
 
 	public void SubstituteAthleteOnField(Vector2 spawnPosition, Vector3 spawnAngle, Transform chair) {
-		gameObject.SetActive(true);
 		transform.localPosition = spawnPosition;
 		transform.eulerAngles = spawnAngle;
 		transform.localScale = originalScale;
+		
+		gameObject.SetActive(true);
 
 		substitute = true;
 		gameObject.layer = 8;
@@ -822,11 +768,10 @@ public class AthleteController : MonoBehaviour{
 		//RestoreAthleteColor();
 
 		DisableInteraction();
-
-		//StartCoroutine(LaunchAthleteToSubstituteChair(0.43f, chair));
 		AttachToChair(chair);
 	}
 
+	/*
 	public IEnumerator LaunchAthleteToSubstituteChair(float percentForce, Transform chair) {
 		directionDragged = Vector3.zero - transform.position;
 		if(directionDragged.magnitude >= athlete.maxPull) {
@@ -856,12 +801,11 @@ public class AthleteController : MonoBehaviour{
 
 		AttachToChair(chair);
 	}
+	*/
 
 	public void AttachToChair(Transform chair) {
 		transform.SetParent(chair);
 		transform.localPosition = Vector2.zero;
-
-		matchController.StartCoroutine(matchController.MoveChairOntoField(chair));
 	}
 
 	public void EnteredBumper(Bumper bumper) {

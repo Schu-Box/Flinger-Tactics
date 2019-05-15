@@ -68,6 +68,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4789066293047350}
   - component: {fileID: 114613669244287394}
+  - component: {fileID: 114528449702330370}
   - component: {fileID: 212647100478889900}
   - component: {fileID: 58321699908460896}
   - component: {fileID: 50633692803726092}
@@ -182,7 +183,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1458861821244726}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -9.21, y: -1.54, z: 0}
+  m_LocalPosition: {x: -9.31, y: -4.56, z: 0}
   m_LocalScale: {x: 0.7, y: 0.7, z: 1}
   m_Children:
   - {fileID: 4390636057890310}
@@ -205,7 +206,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 0.8
-  m_LinearDrag: 0.8
+  m_LinearDrag: 1
   m_AngularDrag: 0.8
   m_GravityScale: 0
   m_Material: {fileID: 6200000, guid: cc6216fe19f3a45aba11876a2973921c, type: 2}
@@ -228,6 +229,18 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.6
+--- !u!114 &114528449702330370
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1458861821244726}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b7f47154731e42c7928faf0c159494e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  watchers: []
 --- !u!114 &114613669244287394
 MonoBehaviour:
   m_ObjectHideFlags: 1

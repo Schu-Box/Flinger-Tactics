@@ -43,7 +43,13 @@ public class CanvasManager : MonoBehaviour {
     public GameObject gauntletPanel;
     public TextMeshProUGUI gauntletTitleText;
     public Transform ruleChangeHolder;
-    
+    public Sprite ruleCircle;
+    public Sprite ruleRing;
+
+    [Header("Custom Rules")]
+    public GameObject customRulesButon;
+    public GameObject customRulesPanel;
+    public Transform customRulesHolder;
 
 
     [Header("Field UI")]
@@ -69,6 +75,9 @@ public class CanvasManager : MonoBehaviour {
 		postMatchPanel.SetActive(false);
 
         timeoutButton.gameObject.SetActive(false);
+        customRulesButon.gameObject.SetActive(false);
+        customRulesPanel.SetActive(false);
+        gauntletPanel.SetActive(false);
 	}
 
 	public void DisplayPreMatch() {
@@ -86,11 +95,13 @@ public class CanvasManager : MonoBehaviour {
 		if(homeSide) {
 			homeSelectionPanel.SetTeam(team);
 			homeFieldText.text = team.fieldString;
+            homeFieldText.color = team.secondaryColor;
 
 			home = team;
 		} else {
 			awaySelectionPanel.SetTeam(team);
 			awayFieldText.text = team.fieldString;
+            awayFieldText.color = team.secondaryColor;
 
 			away = team;
 		}
@@ -101,14 +112,15 @@ public class CanvasManager : MonoBehaviour {
         turnButton.DuringMatch();
         turnCapText.text = "of " + matchController.turnCap.ToString();
 
-        homeScoreText.text = home.score.ToString();
-        awayScoreText.text = away.score.ToString();
+        homeScoreText.text = home.GetCurrentMatchData().GetTeamMatchData(home).GetScore().ToString();
+        awayScoreText.text = away.GetCurrentMatchData().GetTeamMatchData(away).GetScore().ToString();
 
         homeScoreText.color = home.primaryColor;
         awayScoreText.color = away.primaryColor;
 
         homeSelectionPanel.gameObject.SetActive(false);
         awaySelectionPanel.gameObject.SetActive(false);
+        customRulesButon.gameObject.SetActive(false);
 	}
 
 	public IEnumerator DisplayScore(Team teamThatScored) {
@@ -119,7 +131,7 @@ public class CanvasManager : MonoBehaviour {
             textAltered = awayScoreText;
         }
 
-		textAltered.text = teamThatScored.score.ToString();
+		textAltered.text = teamThatScored.GetCurrentMatchData().GetTeamMatchData(teamThatScored).GetScore().ToString();
         textAltered.color = Color.white;
         float endSize = scoreFontSize * 1.2f;
 
@@ -159,6 +171,7 @@ public class CanvasManager : MonoBehaviour {
             teamData = matchController.GetMatchData().awayTeamData;
         }
 
+        /*
         if(teamData.HasTimeout()) {
             timeoutButton.gameObject.SetActive(true);
             timeoutButton.SetForTeam(matchController.GetTurnTeam());
@@ -172,6 +185,7 @@ public class CanvasManager : MonoBehaviour {
                 timeoutButton.SetText("Request Timeout");
             }
         }
+        */
 	}
 
     public void TimeoutButtonClicked() {
@@ -185,7 +199,7 @@ public class CanvasManager : MonoBehaviour {
     public void DisplayTurnActive(Team initiatingTeam) {
         turnButton.TurnActive(initiatingTeam);
 
-        timeoutButton.gameObject.SetActive(false);
+        //timeoutButton.gameObject.SetActive(false);
     }
 
     public void DisplayFootnotePanel(Athlete athlete) {
@@ -213,8 +227,8 @@ public class CanvasManager : MonoBehaviour {
 
 	public void DisplayPostMatchPanel() {
         postMatchPanel.SetActive(true);
-        homeFinalScore.text = home.score.ToString();
-        awayFinalScore.text = away.score.ToString();
+        homeFinalScore.text = home.GetCurrentMatchData().GetTeamMatchData(home).GetScore().ToString();
+        awayFinalScore.text = away.GetCurrentMatchData().GetTeamMatchData(away).GetScore().ToString();
         homeFinalScore.color = home.primaryColor;
         awayFinalScore.color = away.primaryColor;
 
@@ -233,7 +247,13 @@ public class CanvasManager : MonoBehaviour {
             continueButton.GetComponentInChildren<TextMeshProUGUI>().text = "Replay";
             continueButton.onClick.AddListener(() => modeController.Rematch());
         } else {
-            continueButton.GetComponentInChildren<TextMeshProUGUI>().text = "Continue";
+            Team playerTeam = matchController.GetTeam(true);
+            if(playerTeam.GetCurrentMatchData().GetTeamMatchData(playerTeam).DidTeamWin()) {
+                continueButton.GetComponentInChildren<TextMeshProUGUI>().text = "Continue";
+            } else {
+                continueButton.GetComponentInChildren<TextMeshProUGUI>().text = "Restart";
+            }
+            
             continueButton.onClick.AddListener(() => modeController.EndGauntletMatch());
         }
 
@@ -244,7 +264,6 @@ public class CanvasManager : MonoBehaviour {
     }
 
     public void SetShowcaseAthletes() {
-
         Athlete mvp = matchController.GetMatchData().GetMVP();
 
         Athlete homeMVP = matchController.GetMatchData().GetHomeMVP();
@@ -292,14 +311,28 @@ public class CanvasManager : MonoBehaviour {
     }
 
     public void DisplayGauntletAdvancement() {
+        gauntletPanel.SetActive(true);
+
         StartCoroutine(MoveObjectToPosition(Camera.main.gameObject, cameraController.downPosition));
+
+        Team team = matchController.GetTeam(true);
+
+        gauntletTitleText.text = "Gauntlet Round " + modeController.GetGauntletRound();
+        gauntletTitleText.transform.parent.GetComponent<Image>().color = team.primaryColor;
+        gauntletTitleText.transform.parent.GetChild(1).GetComponent<Image>().color = team.secondaryColor;
     }
 
-    public void UpdateRuleChangeButton(Rule newRule, int num) {
-        GameObject ruleButton = ruleChangeHolder.GetChild(num).gameObject;
-        ruleButton.GetComponentInChildren<TextMeshProUGUI>().text = newRule.description;
-        ruleButton.GetComponent<Button>().onClick.RemoveAllListeners();
-        ruleButton.GetComponent<Button>().onClick.AddListener(() => modeController.SelectNewGauntletRule(newRule));
+    public void SetGauntletRuleChangeButtons(Team gauntletTeam) {
+        for(int i = 0; i < ruleChangeHolder.childCount; i++) {
+            RuleChangeButton ruleChangeButton = ruleChangeHolder.GetChild(i).GetComponent<RuleChangeButton>();
+            ruleChangeButton.SetTeam(gauntletTeam);
+        }
+    }
+
+    public void UpdateRuleChangeButton(Rule currentRule, Rule newRule, int num) {
+        RuleChangeButton ruleChangeButton = ruleChangeHolder.GetChild(num).GetComponent<RuleChangeButton>();
+        ruleChangeButton.SetRuleCircleSprites(ruleCircle, ruleRing);
+        ruleChangeButton.SetRuleChangeButton(currentRule, newRule);
     }
 
 	public IEnumerator MoveObjectToPosition(GameObject obj, Vector3 endPos) {
@@ -317,5 +350,24 @@ public class CanvasManager : MonoBehaviour {
         }
 
         obj.transform.position = endPos;
+    }
+
+    public void DisplayCustomRuleChangers() {
+        customRulesPanel.SetActive(true);
+
+        StartCoroutine(MoveObjectToPosition(Camera.main.gameObject, cameraController.downPosition));
+
+        for(int i = 0; i < customRulesHolder.childCount; i++) {
+            CustomRuleChanger ruleChanger = customRulesHolder.GetChild(i).GetComponent<CustomRuleChanger>();
+            ruleChanger.SetCustomRuleChanger(modeController.GetRuleSet().ruleSlotList[i]);
+        }
+    }
+
+    public void UndisplayCustomRuleChangers() {
+        matchController.SetupCourt(modeController.GetRuleSet());
+        modeController.SetNewRosters();
+        matchController.ResetSides();
+
+        StartCoroutine(MoveObjectToPosition(Camera.main.gameObject, cameraController.startPosition));
     }
 }

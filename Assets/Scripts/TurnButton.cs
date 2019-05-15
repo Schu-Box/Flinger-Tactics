@@ -89,7 +89,7 @@ public class TurnButton : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
 	}
 
 	public IEnumerator Flashing() {
-		Color startColor = border.color;
+		Color startColor = Color.white;
 		Color endColor;
 
 		if(startColor == borderInactiveColor ) {

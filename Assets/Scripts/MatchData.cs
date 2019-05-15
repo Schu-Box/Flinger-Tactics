@@ -58,9 +58,10 @@ public class MatchData {
 
 public class TeamMatchData {
 	public Team team;
-
 	public List<AthleteMatchData> athleteMatchData = new List<AthleteMatchData>();
 
+	private bool wonThisGame = false;
+	private int score = 0;
 	private int numTimeouts = 1;
 
 	public TeamMatchData(Team t) {
@@ -92,6 +93,22 @@ public class TeamMatchData {
 		}
 
 		return teamTotalStatList;
+	}
+
+	public bool DidTeamWin() {
+		return wonThisGame;
+	}
+
+	public void SetWin(bool wonIt) {
+		wonThisGame = wonIt;
+	}
+
+	public int GetScore() {
+		return score;
+	}
+
+	public void IncreaseScore(int num) {
+		score += num;
 	}
 
 	public bool HasTimeout() {

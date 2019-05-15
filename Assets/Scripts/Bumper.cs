@@ -32,6 +32,8 @@ public class Bumper : MonoBehaviour {
 	private bool immune = false;
 	private bool goal = true;
 
+	private bool disabled = false;
+
 	void Awake() {
 		matchController = FindObjectOfType<MatchController>();
 		cameraController = FindObjectOfType<CameraController>();
@@ -79,7 +81,7 @@ public class Bumper : MonoBehaviour {
 	private void OnCollisionEnter2D(Collision2D collision) {
 		currentCoroutine = StartCoroutine(BumpAnimation());
 
-		audioManager.PlaySound("bumperBump");
+		audioManager.Play("bumperBump");
 
 		if(!indestructible && !immune) {
 			if(collision.gameObject.CompareTag("Ball")) {
@@ -152,7 +154,7 @@ public class Bumper : MonoBehaviour {
 
 		yield return currentCoroutine;
 
-		audioManager.PlaySound("bumperBreak");
+		audioManager.Play("bumperBreak");
 
 		Vector2 shrinkSize = new Vector2(originalSize.x * 0.9f, 0);
 
@@ -175,6 +177,8 @@ public class Bumper : MonoBehaviour {
 	public void Deactivate() {
 		spriteRenderer.enabled = false;
 		collie.enabled = false;
+
+		disabled = true;
 	}
 
 	public void EndCoroutines() {
@@ -195,6 +199,8 @@ public class Bumper : MonoBehaviour {
 	public void Reactivate() {
 		spriteRenderer.enabled = true;
 		collie.enabled = true;
+
+		disabled = false;
 	}
 
 	public IEnumerator RestoreAnimation() {
@@ -204,10 +210,10 @@ public class Bumper : MonoBehaviour {
 		transform.localScale = originalSize;
 
 		float timer = 0f;
-		float duration = 40f;
+		float duration = 0.4f;
 		WaitForFixedUpdate waiter = new WaitForFixedUpdate();
 		while(timer < duration) {
-			timer++;
+			timer += Time.deltaTime;
 
 			transform.position = Vector3.Lerp(offFieldPosition, restPosition, timer/duration);
 
@@ -215,5 +221,9 @@ public class Bumper : MonoBehaviour {
 		}
 
 		immune = false;
+	}
+
+	public bool GetDisabled() {
+		return disabled;
 	}
 }

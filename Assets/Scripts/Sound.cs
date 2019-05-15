@@ -1,23 +1,44 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
-[CreateAssetMenu(fileName = "Sound", menuName = "Sound", order = 2)]
+public enum PitchMode {
+	Fixed, 
+	Halftones, 
+	Range
+};
+
+public enum VolumeMode {
+	Fixed, 
+	Range
+};
+
+[CreateAssetMenu(fileName = "New Sound", menuName = "Sound", order = 2)]
 public class Sound : ScriptableObject {
 
+	public AudioMixerGroup channel;
 	public List<AudioClip> clips;
-	public float volume = 0.5f;
-	public Vector2 pitchRange = new Vector2(1, 1);
 
-	public AudioClip GetClip() {
-		if(clips.Count > 0) {
-			return clips[Random.Range(0, clips.Count)];
-		} else {
-			return null;
-		}
-	}
+	// pitch
+	public PitchMode pitchMode;
+	[Range(0.25f, 2f)] public float pitchFixed = 1f;
+	public bool halftonesRandom = true; // false = in pentatonic order, true = in random order
+	public int halftonesVariations = 11;
+	public Vector2 pitchRange = new Vector2(0.9f, 1.2f);
 
-	public float GetPitch() {
-		return Random.Range(pitchRange.x, pitchRange.y);
-	}
+
+
+	// volume
+	public VolumeMode volumeMode;
+	public float volumeFixed = 0.5f;
+	public Vector2 volumeRange = new Vector2(0.1f, 0.3f);
+
+
+
+	// ambience
+	[Header ("Ambience")]
+	public bool isAmbientLoop = false;
+	public float ambientFadeInSeconds = 4f;
+	public float ambientFadeOutSeconds = 2f;
 }

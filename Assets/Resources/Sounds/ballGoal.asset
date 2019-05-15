@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 759aa101c65de49159533f40c5afd66c, type: 3}
+  m_Name: ballGoal
+  m_EditorClassIdentifier: 
+  channel: {fileID: 243841508607732634, guid: 3a3eb34410cfe4f509d1078770d5b44b, type: 2}
+  clips:
+  - {fileID: 8300000, guid: fec315fa29efb4c7a9f2cb48e4da4b07, type: 3}
+  - {fileID: 8300000, guid: e3c52ab5e246d404b8d84a5c9376eadd, type: 3}
+  - {fileID: 8300000, guid: 54992dc35d9654349b12d034c44d0de5, type: 3}
+  - {fileID: 8300000, guid: 9d301047882d8496f86de00d66b07359, type: 3}
+  - {fileID: 8300000, guid: 0906728b2fcdc484681121195193be02, type: 3}
+  - {fileID: 8300000, guid: 6dc64ead72da4454b8f45baeb7a094c7, type: 3}
+  - {fileID: 8300000, guid: cb518e0cf7180460c8874c65e93eeeef, type: 3}
+  - {fileID: 8300000, guid: 63e1fdf8b9b934eac9c4d54216522b4d, type: 3}
+  - {fileID: 8300000, guid: ee9da677f7ba24ea68c7d7cc144a9baa, type: 3}
+  - {fileID: 8300000, guid: a9ca5bb255202445689b0f3fc91e0000, type: 3}
+  - {fileID: 8300000, guid: d786a90fad0a3411f9c76eff4b99d334, type: 3}
+  pitchMode: 2
+  pitchFixed: 1
+  halftonesRandom: 1
+  halftonesVariations: 11
+  pitchRange: {x: 1, y: 1.3}
+  volumeMode: 0
+  volumeFixed: 0.5
+  volumeRange: {x: 0.1, y: 0.3}
+  isAmbientLoop: 0
+  ambientFadeInSeconds: 4
+  ambientFadeOutSeconds: 2

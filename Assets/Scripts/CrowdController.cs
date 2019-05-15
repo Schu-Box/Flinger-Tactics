@@ -13,7 +13,8 @@ public class CrowdController : MonoBehaviour {
 	private MatchController matchController;
 	private AudioManager audioManager;
 
-	private List<AthleteController> crowdList = new List<AthleteController>();
+	private List<Crowd> crowdList = new List<Crowd>();
+	private bool crowdPresent = false;
 
 
 	void Start() {
@@ -31,30 +32,38 @@ public class CrowdController : MonoBehaviour {
 
 	public void SetStadiumSeats(Team team) {
 		for(int i = 0; i < transform.childCount; i++) {
+			Color sectionColor;
+			if(i % 2 == 1) {
+				sectionColor = team.primaryColor;
+			} else {
+				sectionColor = team.secondaryColor;
+			}
 			for(int j = 0; j < transform.GetChild(i).childCount; j++) {
 				GameObject seatObj = transform.GetChild(i).GetChild(j).gameObject;
-				seatObj.GetComponent<SpriteRenderer>().color = team.primaryColor;
+
+				seatObj.GetComponent<SpriteRenderer>().color = sectionColor;
 			}
 		}
 	}
 
 	public void SetCrowd() {
+		if(crowdPresent) {
+			ClearCrowd();
+		}
+
+		crowdPresent = true;
 		for(int i = 0; i < transform.childCount; i++) {
 			for(int j = 0; j < transform.GetChild(i).childCount; j++) {
 				GameObject seatObj = transform.GetChild(i).GetChild(j).gameObject;
-
-				if(seatObj.transform.childCount > 0) {
-					Destroy(seatObj.transform.GetChild(0).gameObject);
-				}
 
 				float rando = Random.value;
 				if(rando > 0.7) {
 					//Leave the seat empty
 				} else {
 					GameObject crowdAthlete = Instantiate(crowdPrefab, seatObj.transform.position, seatObj.transform.rotation, seatObj.transform);
-					crowdAthlete.GetComponent<AthleteController>().SetAthlete(null);
+					crowdAthlete.GetComponent<Crowd>().SetCrowdMember();
 
-					crowdList.Add(crowdAthlete.GetComponent<AthleteController>());
+					crowdList.Add(crowdAthlete.GetComponent<Crowd>());
 				}
 			}
 		}
@@ -62,21 +71,34 @@ public class CrowdController : MonoBehaviour {
 		ExpressEmotion("watching");
 	}
 
+	public void ClearCrowd() {
+		for(int i = 0; i < transform.childCount; i++) {
+			for(int j = 0; j < transform.GetChild(i).childCount; j++) {
+				GameObject seatObj = transform.GetChild(i).GetChild(j).gameObject;
+
+				if(seatObj.transform.childCount > 0) {
+					crowdList.Remove(seatObj.transform.GetChild(0).GetComponent<Crowd>());
+					Destroy(seatObj.transform.GetChild(0).gameObject);
+				}
+			}
+		}
+	}
+
 	public void SetFocus() {
-		List<GameObject> focalObjects = new List<GameObject>();
+		List<FocalObject> focalObjects = new List<FocalObject>();
 
 		List<BallController> balls = matchController.GetBallsOnField();
 		for(int i = 0; i < balls.Count; i++) {
-			focalObjects.Add(balls[i].gameObject);
+			focalObjects.Add(balls[i].GetComponent<FocalObject>());
 		}
 		List<AthleteController> athletes = matchController.GetAllAthletesOnField();
 		for(int i = 0; i < athletes.Count; i++) {
-			focalObjects.Add(athletes[i].gameObject);
+			focalObjects.Add(athletes[i].GetComponent<FocalObject>());
 		}
 
 		for(int i = 0; i < crowdList.Count; i++) {
 			float rando = Random.value;
-			GameObject chosenObj;
+			FocalObject chosenObj;
 			if(rando > 0.2) { //80% chance they focus on a ball
 				chosenObj = focalObjects[Random.Range(0, balls.Count)];
 			} else {
@@ -87,15 +109,9 @@ public class CrowdController : MonoBehaviour {
 		}
 	}
 
-	public void StartWatching() {
-		for(int i = 0; i < crowdList.Count; i++) {
-			crowdList[i].StartWatching();
-		}
-	}
-
 	public void ExpressEmotion(string emotion) {
 		for(int i = 0; i < crowdList.Count; i++) {
-			crowdList[i].GetFace().ChangeExpression(emotion, 2f);
+			crowdList[i].GetAthleteController().GetFace().ChangeExpression(emotion, 2f);
 		}
 	}
 
@@ -103,13 +119,13 @@ public class CrowdController : MonoBehaviour {
 		Team fromTeam = matchController.GetTeam(home);
 
 		for(int i = 0; i < crowdList.Count; i++) {
-			if(crowdList[i].GetAthlete().GetTeam() == fromTeam) {
-				crowdList[i].GetFace().ChangeExpression(emotion, 2f);
+			if(crowdList[i].GetAthleteController().GetAthlete().GetTeam() == fromTeam) {
+				crowdList[i].GetAthleteController().GetFace().ChangeExpression(emotion, 2f);
 			}
 		}
 	}
 
-	public IEnumerator FlashSteps(Color flashColor, Sound sound, int repeats, float delayBetween) {
+	public IEnumerator FlashSteps(Color flashColor, string soundID, int repeats, float delayBetween) {
 		WaitForFixedUpdate waiter = new WaitForFixedUpdate();
 
 		for(int i = 0; i < stepFills.Count; i++) {
@@ -118,7 +134,7 @@ public class CrowdController : MonoBehaviour {
 
 		for(int r = 0; r < repeats; r++) {
 			if(audioManager != null) {
-				audioManager.PlaySound(sound, 1f);
+				audioManager.Play(soundID);
 			}
 
 			for(int i = 0; i < stepFills.Count; i++) {

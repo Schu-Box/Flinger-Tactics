@@ -11,6 +11,8 @@ public class SpawnBox : MonoBehaviour {
 	public void SetSpawnBox(int numSpawns) {
 		box = GetComponent<BoxCollider2D>();
 		
+		orderedHeights = new List<float>();
+		
 		List<float> unorderedHeights = new List<float>();
 		float yUnitLength = box.size.y / numSpawns;
 

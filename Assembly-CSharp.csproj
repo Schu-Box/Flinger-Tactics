@@ -63,8 +63,11 @@
      <Compile Include="Assets\Scripts\BumperTrigger.cs" />
      <Compile Include="Assets\Scripts\CameraController.cs" />
      <Compile Include="Assets\Scripts\CanvasManager.cs" />
+     <Compile Include="Assets\Scripts\Crowd.cs" />
      <Compile Include="Assets\Scripts\CrowdController.cs" />
+     <Compile Include="Assets\Scripts\CustomRuleChanger.cs" />
      <Compile Include="Assets\Scripts\Face.cs" />
+     <Compile Include="Assets\Scripts\FocalObject.cs" />
      <Compile Include="Assets\Scripts\FootnoteManager.cs" />
      <Compile Include="Assets\Scripts\GoalController.cs" />
      <Compile Include="Assets\Scripts\GoalTrigger.cs" />
@@ -72,9 +75,11 @@
      <Compile Include="Assets\Scripts\MatchData.cs" />
      <Compile Include="Assets\Scripts\ModeController.cs" />
      <Compile Include="Assets\Scripts\RaisedButton.cs" />
+     <Compile Include="Assets\Scripts\RuleChangeButton.cs" />
      <Compile Include="Assets\Scripts\RuleSet.cs" />
      <Compile Include="Assets\Scripts\ShowcaseAthleteUI.cs" />
      <Compile Include="Assets\Scripts\Sound.cs" />
+     <Compile Include="Assets\Scripts\SoundSettings.cs" />
      <Compile Include="Assets\Scripts\SpawnBox.cs" />
      <Compile Include="Assets\Scripts\TailBody.cs" />
      <Compile Include="Assets\Scripts\TailTip.cs" />

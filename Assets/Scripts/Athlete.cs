@@ -10,16 +10,15 @@ public class Team {
     public string name;
 	public string fieldString;
     public Color primaryColor;
+	public Color secondaryColor;
 	private Color lightTint;
 	private Color darkTint;
+
+	private int jerseyNum = -1;
 
 	private List<MatchData> matchData = new List<MatchData>();
 
     public List<Athlete> athletes = new List<Athlete>();
-
-    //In Game
-    public int score = 0;
-    public bool wonTheGame = false;
 
 	public void SetNewRoster(int numAthletes) {
 		for(int i = 0; i < numAthletes; i++) {
@@ -27,8 +26,13 @@ public class Team {
 			athletes[i].SetTeam(this);
 		}
 
-		lightTint = Color.Lerp(primaryColor, Color.white, 0.7f);
+		lightTint = Color.Lerp(secondaryColor, Color.white, 0.7f);
 		darkTint = Color.Lerp(primaryColor, Color.black, 0.2f);
+	}
+
+	public void AddAthleteToRoster() {
+		athletes.Add(new Athlete());
+		athletes[athletes.Count - 1].SetTeam(this);
 	}
 
 	public void AssignNewMatchData(MatchData match) {
@@ -59,7 +63,7 @@ public class Athlete {
 
 	public int jerseyNumber;
 
-	public float flingForce = 700f;
+	public float flingForce = 800f;
 
 	public float minPull = 0.3f;
 	public float maxPull = 1.2f;
@@ -81,7 +85,7 @@ public class Athlete {
 		} else {
 			athleteData = Resources.Load<AthleteData>("BoxAthleteData");
 		} 
-		athleteData.AddSkinColors(standardAthleteData.skinColorList);
+		//athleteData.AddSkinColors(standardAthleteData.skinColorList);
 
 		List<string> nameList = athleteData.nameList;
 		name = nameList[Random.Range(0, nameList.Count)];
@@ -102,10 +106,6 @@ public class Athlete {
 		} else {
 			jerseyNumber = Random.Range(36, 100);
 		}
-		
-		
-
-		flingForce = 700f;
 
 		//Stats
 		statList.Add(new Stat(StatType.Goals, 30));

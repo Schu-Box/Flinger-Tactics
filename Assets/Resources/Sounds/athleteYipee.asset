@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 759aa101c65de49159533f40c5afd66c, type: 3}
+  m_Name: athleteYipee
+  m_EditorClassIdentifier: 
+  channel: {fileID: 243943012360960536, guid: 3a3eb34410cfe4f509d1078770d5b44b, type: 2}
+  clips:
+  - {fileID: 8300000, guid: 1cea7792c153647568afba6a77cbdd16, type: 3}
+  - {fileID: 8300000, guid: 557b9ad93570d492da591f2867029a1b, type: 3}
+  - {fileID: 8300000, guid: 1d0ebaeed659f43fc9d33369a72d7341, type: 3}
+  - {fileID: 8300000, guid: 4bfd87896720d4a33b9e9abce5c16a89, type: 3}
+  - {fileID: 8300000, guid: 83a558db6bc1e40029851b32b35a8f56, type: 3}
+  - {fileID: 8300000, guid: 6103f02848993447f89397d772ca7024, type: 3}
+  - {fileID: 8300000, guid: 4bf31a8440b6a4d858516cc6c4d4038f, type: 3}
+  - {fileID: 8300000, guid: 6c2f92dc5d7ea423b97a7c111d88c635, type: 3}
+  - {fileID: 8300000, guid: eb1655006bab84a94a0973a237428a55, type: 3}
+  - {fileID: 8300000, guid: efb49a4d982ec405cbbd48b5146f9f30, type: 3}
+  - {fileID: 8300000, guid: e5ced4454d18c4e07910e347d41df5df, type: 3}
+  - {fileID: 8300000, guid: 5101252451686419cb89fa35378821e7, type: 3}
+  - {fileID: 8300000, guid: 784604ae535ec487d97f7e3081800713, type: 3}
+  - {fileID: 8300000, guid: dae0412ee863e4948b8ee9ffc459730f, type: 3}
+  - {fileID: 8300000, guid: 0d3965084ba964502a1790ab2b39a987, type: 3}
+  - {fileID: 8300000, guid: 66f18001a382548e594b1f2378b80b9c, type: 3}
+  - {fileID: 8300000, guid: e162d139f258148a6926badedbb504c9, type: 3}
+  - {fileID: 8300000, guid: 74563abcf1cac4fe1b0ca6403d96f5d0, type: 3}
+  - {fileID: 8300000, guid: 23d2eb0a097a54803827640c310f49b1, type: 3}
+  - {fileID: 8300000, guid: c83cd0ce02275483da4ef45e6ec644bc, type: 3}
+  - {fileID: 8300000, guid: 1d94167cc033347138c0705323010f13, type: 3}
+  - {fileID: 8300000, guid: 6834eecdf9295422d97a38624a629da5, type: 3}
+  - {fileID: 8300000, guid: 5a118494770e949fbab42fe3c46a10f6, type: 3}
+  - {fileID: 8300000, guid: 7dc5764df0bb94da88807f57fb6210a3, type: 3}
+  - {fileID: 8300000, guid: a73dda5df4e064dab93295bc10150ca5, type: 3}
+  - {fileID: 8300000, guid: 2f3325f8a54884844a251f677755e0ff, type: 3}
+  - {fileID: 8300000, guid: 85ab63424de11421e82435304f995684, type: 3}
+  - {fileID: 8300000, guid: 053bcc15f62614357ae14339607d4156, type: 3}
+  - {fileID: 8300000, guid: ff4c3e034b2d645f39c7d87d06522f23, type: 3}
+  - {fileID: 8300000, guid: 50eadbd09ff4d4d6690a52b9a12188f3, type: 3}
+  - {fileID: 8300000, guid: 2985b6971179f44e3a6c36c995431d4a, type: 3}
+  - {fileID: 8300000, guid: b813ee3f96e3b492087af808a7301954, type: 3}
+  - {fileID: 8300000, guid: 662f76af862b74c1289161a3a9107194, type: 3}
+  - {fileID: 8300000, guid: 75451b8040c884b9798b25f02614226c, type: 3}
+  pitchMode: 2
+  pitchFixed: 1
+  halftonesRandom: 1
+  halftonesVariations: 11
+  pitchRange: {x: 0.9, y: 1.1}
+  volumeMode: 0
+  volumeFixed: 0.5
+  volumeRange: {x: 0.1, y: 0.3}
+  isAmbientLoop: 0
+  ambientFadeInSeconds: 4
+  ambientFadeOutSeconds: 2

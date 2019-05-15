@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4769474919909100}
   - component: {fileID: 114549548090036078}
   - component: {fileID: 114035466999977976}
+  - component: {fileID: 114552776759100962}
   - component: {fileID: 210258509047925406}
   - component: {fileID: 212874026284673360}
   - component: {fileID: 58476481318052970}
@@ -599,6 +600,18 @@ MonoBehaviour:
   - {fileID: 212542769374552926}
   - {fileID: 212460014980260268}
   jersey: {fileID: 212616363728311398}
+  jerseyStripes: {fileID: 0}
+--- !u!114 &114552776759100962
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1066861467329680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f9331d5932eb4550b85bc77cbc95364, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114819292289066002
 MonoBehaviour:
   m_ObjectHideFlags: 1

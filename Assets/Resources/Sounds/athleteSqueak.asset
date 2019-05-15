@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 759aa101c65de49159533f40c5afd66c, type: 3}
+  m_Name: athleteSqueak
+  m_EditorClassIdentifier: 
+  channel: {fileID: 243943012360960536, guid: 3a3eb34410cfe4f509d1078770d5b44b, type: 2}
+  clips:
+  - {fileID: 8300000, guid: 447264e60ecc841cf9a28853728f4d2c, type: 3}
+  - {fileID: 8300000, guid: 6b6e2be6799bc4965b4102065786627b, type: 3}
+  - {fileID: 8300000, guid: 921947a2167ac4b43ab087edb93d90ab, type: 3}
+  - {fileID: 8300000, guid: b93e8adaad9bf4ad98b67f6b1ea833d7, type: 3}
+  - {fileID: 8300000, guid: dc4ca66ec49d0413db7e4c1d55aba550, type: 3}
+  - {fileID: 8300000, guid: ccf149264480b4e9d93683b1a3e7c0e0, type: 3}
+  - {fileID: 8300000, guid: 970f858178d894901af37703e41f4803, type: 3}
+  - {fileID: 8300000, guid: 7b7514b45763b44d9837d9e68d892102, type: 3}
+  - {fileID: 8300000, guid: e011e4600c2d645bcbbddccc9fb49293, type: 3}
+  - {fileID: 8300000, guid: ee74fc573bd754152a944a00c33a94bf, type: 3}
+  - {fileID: 8300000, guid: 5f194a7da54f34000a061aa4aec2502c, type: 3}
+  - {fileID: 8300000, guid: 0e306c56136e94a969177623cfd340f3, type: 3}
+  - {fileID: 8300000, guid: 7c2ff0f00850f45a7922f0be578d4bb2, type: 3}
+  - {fileID: 8300000, guid: 90c6cfad279e041cd8416b20cccc860f, type: 3}
+  - {fileID: 8300000, guid: 80c2567a9f7314f529eac01c931c735e, type: 3}
+  - {fileID: 8300000, guid: 4e12835a440604b70bbf1838a958b670, type: 3}
+  - {fileID: 8300000, guid: c8e1c99bce5244e5a925331765ff076d, type: 3}
+  - {fileID: 8300000, guid: c9fb1f0b975b14ed8b76500de21c7be9, type: 3}
+  - {fileID: 8300000, guid: 2750b5d8a99394ceeafa68fd941be1a5, type: 3}
+  - {fileID: 8300000, guid: 70ff91c77aae244fa8cc48008e6f7d5f, type: 3}
+  - {fileID: 8300000, guid: 8e351e73418ca4e28ac38853bb9304f0, type: 3}
+  - {fileID: 8300000, guid: 844cb1b44b1c447178b7b1a962168c06, type: 3}
+  - {fileID: 8300000, guid: b2604dc1ab8254e0193f017f3d6fde88, type: 3}
+  pitchMode: 2
+  pitchFixed: 1
+  halftonesRandom: 1
+  halftonesVariations: 11
+  pitchRange: {x: 0.9, y: 1.1}
+  volumeMode: 0
+  volumeFixed: 0.5
+  volumeRange: {x: 0.1, y: 0.3}
+  isAmbientLoop: 0
+  ambientFadeInSeconds: 4
+  ambientFadeOutSeconds: 2

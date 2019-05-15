@@ -11,9 +11,14 @@ public class ModeController : MonoBehaviour {
     private CanvasManager canvasManager;
     private AudioManager audioManager;
     private MatchController matchController;
+
     private RuleSet currentRuleSet = new RuleSet();
 
     public List<Team> teamList = new List<Team>();
+
+    public static Team gauntletTeam;
+
+    private int gauntletRound = 0;
 
     void Start() {
         cameraController = Camera.main.transform.GetComponent<CameraController>();
@@ -22,18 +27,19 @@ public class ModeController : MonoBehaviour {
         audioManager = FindObjectOfType<AudioManager>();
         matchController = FindObjectOfType<MatchController>();
 
-        matchController.SetupCourt(currentRuleSet);
-
         canvasManager.DisplayPreMatch();
 
         string modeID = PlayerPrefs.GetString("mode");
         if(modeID == "playNow") {
+            currentRuleSet.ChangeRule(currentRuleSet.GetRuleSlot("athleteFieldCount").possibleRules[1]);
+            currentRuleSet.ChangeRule(currentRuleSet.GetRuleSlot("athleteRosterCount").possibleRules[1]);
+            currentRuleSet.ChangeRule(currentRuleSet.GetRuleSlot("ballCount").possibleRules[1]);
+
             SetNewRosters();
 
-            TeamSelectionPhase();
+            matchController.SetupCourt(currentRuleSet);
 
-            matchController.GetTeam(false).computerControlled = true;
-            matchController.GetTeam(true).computerControlled = true;
+            TeamSelectionPhase();
         } else if(modeID == "gauntlet") {
             Debug.Log("You're now in the gauntlet.");
 
@@ -42,7 +48,7 @@ public class ModeController : MonoBehaviour {
 
             SetNewRosters();
 
-            SetupGauntletMatch();
+            StartGauntlet();
         } else {
             Debug.Log("Null mode selected");
         }
@@ -66,7 +72,10 @@ public class ModeController : MonoBehaviour {
             ToggleMute();
         } else if(Input.GetKeyDown(KeyCode.W)) {
             matchController.EndMatch();
-            matchController.GetTeam(true).wonTheGame = true;
+            
+            matchController.GetMatchData().homeTeamData.SetWin(true);
+        } else if(Input.GetKeyDown(KeyCode.C)) {
+            canvasManager.customRulesButon.SetActive(true);
         }
     }
 
@@ -90,15 +99,23 @@ public class ModeController : MonoBehaviour {
 
     public void SetNewRosters() {
         for(int i = 0; i < teamList.Count; i++) {
-            teamList[i].SetNewRoster(currentRuleSet.GetRule("athleteOnFieldCount").value);
+            teamList[i].SetNewRoster(currentRuleSet.GetRule("athleteRosterCount").value);
+        }
+    }
+
+    public void AddAthleteToEachRoster() {
+        for(int i = 0; i < teamList.Count; i++) {
+            teamList[i].AddAthleteToRoster();
         }
     }
 
     public void TeamSelectionPhase() {
         matchController.SetSide(true, teamList[0]);
         matchController.SetSide(false, teamList[1]);
+    }
 
-        //matchController.DisableAllAthleteInteraction();
+    public void ToggleComputerControl(Team team) {
+        team.computerControlled = !team.computerControlled;
     }
 
     public void CycleTeamSelected(bool homeSide, bool cycleDown) {
@@ -163,22 +180,33 @@ public class ModeController : MonoBehaviour {
         SceneManager.LoadScene(0);
     }
 
-    public void SetupGauntletMatch() {
-        matchController.SetSide(true, teamList[0]);
-        matchController.SetSide(false, teamList[1]);
+    public void StartGauntlet() {
+        gauntletRound = 0;
+        gauntletTeam = teamList[0];
 
-        matchController.GetTeam(false).computerControlled = true;
+        canvasManager.SetGauntletRuleChangeButtons(gauntletTeam);
+
+        SetupGauntletMatch();
     }
 
-    public void StartGauntletMatch() {
-        matchController.StartMatch();
+    public void SetupGauntletMatch() {
+        matchController.SetupCourt(currentRuleSet);
+
+        matchController.SetSide(true, gauntletTeam);
+
+        Team gauntletOpponent = teamList[1 + gauntletRound % (teamList.Count - 1)];
+        matchController.SetSide(false, gauntletOpponent);
+
+        matchController.GetTeam(false).computerControlled = true;
+
+        gauntletRound++;
     }
 
     public void EndGauntletMatch() {
         bool victory;
-        
         //This assumes that the player is the home team and also idk if it'll even work
-        if(matchController.GetTeam(true).wonTheGame) {
+        Team playerTeam = matchController.GetTeam(true);
+        if(matchController.GetMatchData().GetTeamMatchData(playerTeam).DidTeamWin()) {
             victory = true;
         } else {
             victory = false;
@@ -192,40 +220,59 @@ public class ModeController : MonoBehaviour {
 	}
 
 	public void AdvanceInGauntlet() {
-		Rule ruleChoice1 = currentRuleSet.GetRandomRuleChange();
-		Rule ruleChoice2 = currentRuleSet.GetRandomRuleChange();
-		while(ruleChoice2 == ruleChoice1) {
-			ruleChoice2 = currentRuleSet.GetRandomRuleChange();
-		}
-		Rule ruleChoice3 = currentRuleSet.GetRandomRuleChange();
-		while(ruleChoice3 == ruleChoice1 || ruleChoice3 == ruleChoice2) {
-			ruleChoice2 = currentRuleSet.GetRandomRuleChange();
-		}
-
-		Debug.Log(ruleChoice1.ruleID + " to " + ruleChoice1.value);
-		Debug.Log(ruleChoice2.ruleID + " to " + ruleChoice2.value);
-		Debug.Log(ruleChoice3.ruleID + " to " + ruleChoice3.value);
+        matchController.ClearField();
 
         canvasManager.DisplayGauntletAdvancement();
-        canvasManager.UpdateRuleChangeButton(ruleChoice1, 0);
-        canvasManager.UpdateRuleChangeButton(ruleChoice2, 1);
-        canvasManager.UpdateRuleChangeButton(ruleChoice3, 2);
+
+        List<Rule> possibleRules = currentRuleSet.GetAvailableRuleChanges();
+        List<Rule> chosenRules = new List<Rule>();
+		for(int i = 0; i < 3; i++) {
+            if(possibleRules.Count > 0) {
+                Rule newRule = possibleRules[Random.Range(0, possibleRules.Count)];
+                possibleRules.Remove(newRule);
+                chosenRules.Add(newRule);
+
+                Rule currentRule = currentRuleSet.GetRuleSlot(newRule.ruleID).GetCurrentRule();
+
+                canvasManager.UpdateRuleChangeButton(currentRule, newRule, i);
+            } else {
+                Debug.Log("Not enough rules");
+            }
+        }
 	}
+
+    public RuleSet GetRuleSet() {
+        return currentRuleSet;
+    }
 
     public void SelectNewGauntletRule(Rule rule) {
         currentRuleSet.ChangeRule(rule);
+
+        if(rule.ruleID == "athleteRosterCount") {
+            AddAthleteToEachRoster();
+        }
+
+        StartCoroutine(WaitBeforeAdvancement());
+    }
+
+    public IEnumerator WaitBeforeAdvancement() {
+        yield return new WaitForSeconds(0.5f);
 
         NextGauntletMatch();
     }
 
     public void NextGauntletMatch() {
-        matchController.SetupCourt(currentRuleSet);
         SetupGauntletMatch();
 
         canvasManager.DisplayPreMatch();
     }
 
+    public int GetGauntletRound() {
+        return gauntletRound;
+    }
+
 	public void GauntletOver() {
-		Debug.Log("Gauntlet is over. You lose.");	
+		Debug.Log("Gauntlet is over. You lose.");
+        SceneManager.LoadScene(1);
 	}
 }

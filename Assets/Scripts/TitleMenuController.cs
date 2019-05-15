@@ -26,8 +26,8 @@ public class TitleMenuController : MonoBehaviour {
 
 		matchController.SetupCourt(ruleSet);
 
-		practiceTeam_Home.SetNewRoster(ruleSet.GetRule("athleteOnRosterCount").value);
-		practiceTeam_Away.SetNewRoster(ruleSet.GetRule("athleteOnRosterCount").value);
+		practiceTeam_Home.SetNewRoster(ruleSet.GetRule("athleteRosterCount").value);
+		practiceTeam_Away.SetNewRoster(ruleSet.GetRule("athleteRosterCount").value);
 
 		matchController.SetUnbounded(true);
 

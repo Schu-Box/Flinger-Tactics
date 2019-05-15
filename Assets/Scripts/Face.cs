@@ -169,7 +169,7 @@ public class Face : MonoBehaviour {
 
 
 			if(matchController != null && matchController.GetMatchEnded()) {
-				if(athleteController.GetAthlete().GetTeam().wonTheGame) {
+				if(athleteController.GetAthlete().GetTeam().GetCurrentMatchData().GetTeamMatchData(athleteController.GetAthlete().GetTeam()).DidTeamWin()) {
 					SetFaceSprite("victory");
 				} else {
 					SetFaceSprite("defeat");
