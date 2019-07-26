@@ -6,6 +6,8 @@ public class MatchData {
 	public TeamMatchData homeTeamData;
 	public TeamMatchData awayTeamData;
 
+	public Team winner;
+
 	public MatchData(Team homeTeam, Team awayTeam) {
 		homeTeamData = new TeamMatchData(homeTeam);
 		awayTeamData = new TeamMatchData(awayTeam);
@@ -53,6 +55,22 @@ public class MatchData {
 
 	public Athlete GetAwayMVP() {
 		return GetBestAthlete(awayTeamData.athleteMatchData);
+	}
+
+	public void SetWinner(Team winningTeam) {
+		winner = winningTeam;
+
+		if(homeTeamData.team == winningTeam) {
+			homeTeamData.SetWin(true);
+			awayTeamData.SetWin(false);
+		} else {
+			homeTeamData.SetWin(false);
+			awayTeamData.SetWin(true);
+		}
+	}
+
+	public Team GetWinner() {
+		return winner;
 	}
 }
 

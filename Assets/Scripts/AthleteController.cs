@@ -28,6 +28,8 @@ public class AthleteController : MonoBehaviour{
 	private Tongue tongue;
 	private TextMeshPro jerseyText;
 
+	private GravityField gravityField;
+
 	private MatchController matchController;
 	private CameraController cameraController;
 	private AudioManager audioManager;
@@ -74,9 +76,12 @@ public class AthleteController : MonoBehaviour{
 
 		body.SetBody();
 		tailBody.SetTailBody();
+		SetTailBodyActive(false);
 		tailTip.SetTailTip();
 		face.SetFace();
 		tongue.SetTongue();
+
+		gravityField = GetComponentInChildren<GravityField>();
 	}
 
 	public void SetAthlete(Athlete a) {
@@ -211,6 +216,15 @@ public class AthleteController : MonoBehaviour{
 		} else {
 			if(collision.gameObject.CompareTag("Ball")) {
 				IncreaseStat(StatType.Touches);
+
+				if(gravityField.IsGravityFieldEnabled()) {
+					if(!moving) {
+						gravityField.PossessBall(collision.gameObject.GetComponent<BallController>());
+						StoppedMoving();
+					} else {
+						gravityField.StopGravitation(collision.gameObject);
+					}
+				}
 			} /* else if(collision.gameObject.CompareTag("Bumper")) {
 				IncreaseStat("bounces");
 			}
@@ -236,11 +250,29 @@ public class AthleteController : MonoBehaviour{
 		disabledInteraction = true;
 	}
 
+	int setLayer;
+
+	public void SetBodyLayer(int layer) {
+		gameObject.layer = layer;
+		setLayer = layer;
+	}
+
+	public void ResetBodyLayer() {
+		gameObject.layer = setLayer;
+	}
+
+	public int GetLayer() {
+		return setLayer;
+	}
+
 	public void IgnoreRaycasts(bool ignoring) {
 		if(ignoring) {
 			tailTip.gameObject.layer = 2;
+
+			//gameObject.layer = 2;
 		} else {
 			tailTip.gameObject.layer = 0;
+			//SetBodyLayer(setLayer);
 		}
 	}
 
@@ -286,7 +318,10 @@ public class AthleteController : MonoBehaviour{
 		tailTip.SetColor(darkerSkinColor);
 
 		face.SetColor(skinColor);
-		tailBody.SetColor(skinColor);
+		
+		if(tailBody != null) {
+			tailBody.SetColor(skinColor);
+		}
 
 		for(int i = 0; i < legList.Count; i++) {
 			legList[i].GetComponent<SpriteRenderer>().color = skinColor;
@@ -313,7 +348,7 @@ public class AthleteController : MonoBehaviour{
 		if(!crowdAthlete) {
 			matchController.AthleteHovered(athlete);
 
-			if(!disabledInteraction) {
+			if(!disabledInteraction && !athlete.GetTeam().computerControlled) {
 				if(!matchController.GetAthleteBeingDragged()) {
 					face.SetFaceSprite("hovered");
 				}
@@ -325,7 +360,7 @@ public class AthleteController : MonoBehaviour{
 		if(!crowdAthlete) {
 			matchController.AthleteUnhovered(athlete);
 
-			if(!disabledInteraction) {
+			if(!disabledInteraction && !athlete.GetTeam().computerControlled) {
 				if(!matchController.GetAthleteBeingDragged() && !moving) {
 					face.SetFaceSprite("neutral");
 				}
@@ -346,19 +381,21 @@ public class AthleteController : MonoBehaviour{
 		//face.SetFaceSprite("dragging");
 		if(!crowdAthlete) {
 			if(!disabledInteraction && !athlete.GetTeam().computerControlled) {
-				GetComponent<SortingGroup>().sortingLayerName = "Focal Athlete";
-
-				matchController.SetAthleteBeingDragged(true);
+				matchController.SetAthleteBeingDragged(this);
 
 				ExtendLegs();
 
-				//Unready();
+				//matchController.DetermineGravityFields(this);
 			}
 		}
 	}
 
 	public void TailAdjusted(Vector3 direction) {
+		SetTailBodyActive(true); //This coule be handled a bit better
+
 		if(direction.magnitude > athlete.minPull) {
+			//gravityField.DisableGravityField();
+
 			if(direction.magnitude >= athlete.maxPull) {
 				direction = Vector3.ClampMagnitude(direction, athlete.maxPull);
 			}
@@ -422,22 +459,26 @@ public class AthleteController : MonoBehaviour{
 
 	public void Unclicked() {
 		if(!crowdAthlete) {
-			matchController.SetAthleteBeingDragged(false);
-
-			GetComponent<SortingGroup>().sortingLayerName = "Athletes";
-
-			if(directionDragged != Vector3.zero) { //Athlete will move
-				StartAction();
-				/*
-				if(instantInteraction) {
-					
-				} else {
-					ReadyUp();
+			if(!disabledInteraction) {
+				if(matchController.GetAthleteBeingDragged() == this) {
+					matchController.SetAthleteBeingDragged(null);
 				}
-				*/
-			} else {
-				face.SetFaceSprite("neutral");
-				RetractLegs();
+
+				if(directionDragged != Vector3.zero) { //Athlete will move
+					StartAction();
+					/*
+					if(instantInteraction) {
+						
+					} else {
+						ReadyUp();
+					}
+					*/
+				} else {
+					face.SetFaceSprite("neutral");
+					RetractLegs();
+
+					//matchController.DetermineGravityFields(null);
+				}
 			}
 		}
 	}
@@ -482,7 +523,7 @@ public class AthleteController : MonoBehaviour{
 	public void StartAction() {
 		Unready();
 
-		matchController.Fling(this);
+		matchController.BeginActiveTurnPhase(this);
 
 		if(directionDragged != Vector3.zero) {
 			FlingAthlete();
@@ -496,7 +537,6 @@ public class AthleteController : MonoBehaviour{
 	public void FlingAthlete() {
 		audioManager.Play("athleteYipee");
 
-		matchController.SetAthleteInitiater(this);
 		IncreaseStat(StatType.Flings);
 
 		Vector2 minDirectionDrag = directionDragged.normalized * athlete.minPull;
@@ -581,6 +621,12 @@ public class AthleteController : MonoBehaviour{
 		ExtendLegs();
 
 		focalObject.TriggerWatchers();
+
+		/*
+		if(gravityField.IsGravityFieldActive()) {
+			gravityField.DisableGravityField();
+		}
+		*/
 	}
 	public void StoppedMoving() {
 		moving = false;
@@ -687,14 +733,8 @@ public class AthleteController : MonoBehaviour{
 		}
 	}
 
-	public void FinishMatch() {
-		//if(GetTeam().
-		//If team won, victory face, else defeat face
-		if(athlete.GetTeam().GetCurrentMatchData().GetTeamMatchData(athlete.GetTeam()).DidTeamWin()) {
-			face.SetFaceSprite("victory");
-		} else {
-			face.SetFaceSprite("defeat");
-		}
+	public void SetFaceSprite(string faceSpriteID) {
+		face.SetFaceSprite(faceSpriteID);
 	}
 
 	public Face GetFace() {
@@ -753,17 +793,22 @@ public class AthleteController : MonoBehaviour{
 		}
 	}
 
-	public void SubstituteAthleteOnField(Vector2 spawnPosition, Vector3 spawnAngle, Transform chair) {
+	public void PrepareSubstitute(Vector2 spawnPosition, Vector3 spawnAngle, Transform chair) {
 		transform.localPosition = spawnPosition;
 		transform.eulerAngles = spawnAngle;
 		transform.localScale = originalScale;
 		
-		gameObject.SetActive(true);
+		SetTailBodyActive(false);
 
 		substitute = true;
+		//
+		//AYY This never gets set back to false. Probably causing you issues, bro
+
 		gameObject.layer = 8;
 
-		body.EnableBody();
+		//GetComponent<SortingGroup>().sortingLayerName = "Focal Athlete";
+
+		//IgnoreRaycasts(true);
 
 		//RestoreAthleteColor();
 
@@ -771,41 +816,16 @@ public class AthleteController : MonoBehaviour{
 		AttachToChair(chair);
 	}
 
-	/*
-	public IEnumerator LaunchAthleteToSubstituteChair(float percentForce, Transform chair) {
-		directionDragged = Vector3.zero - transform.position;
-		if(directionDragged.magnitude >= athlete.maxPull) {
-			directionDragged = Vector3.ClampMagnitude(directionDragged, athlete.maxPull);
-		} //The direction starts maximimally dragged towards the center
-
-		directionDragged *= percentForce; //And then is multiplied by percentForce. 0.5f should result in half max force, etc... (But is there a min force? I don't think so bro we good.)
-
-		Vector2 minDirectionDrag = directionDragged.normalized * athlete.minPull;
-		Vector2 adjustedDirection = (Vector2)directionDragged - minDirectionDrag;
-		if(adjustedDirection.magnitude < 0) {
-			adjustedDirection = Vector2.zero;
-		}
-
-		Vector2 force = adjustedDirection * athlete.flingForce;
-		body.AddForce(force);
-
-		directionDragged = Vector3.zero;
-
-		ResetTail();
-
-		WaitForFixedUpdate waiter = new WaitForFixedUpdate();
-		moving = true;
-		while(moving) {
-			yield return waiter;
-		}
-
-		AttachToChair(chair);
-	}
-	*/
-
 	public void AttachToChair(Transform chair) {
-		transform.SetParent(chair);
-		transform.localPosition = Vector2.zero;
+		//transform.SetParent(chair);
+		//transform.localPosition = Vector2.zero;
+
+		chair.GetComponent<SubstituteChair>().SetCurrentSubstitute(this);
+	}
+
+	public void AddForce(Vector2 forceAdded) {
+		moving = true;
+		body.AddForce(forceAdded);
 	}
 
 	public void EnteredBumper(Bumper bumper) {
@@ -824,5 +844,25 @@ public class AthleteController : MonoBehaviour{
 			}
 			*/
 		}
+	}
+
+	public void SetTailBodyActive(bool setActive) {
+		tailBody.gameObject.SetActive(setActive);
+	}
+
+	public void EnableGravityField() {
+		gravityField.EnableGravityField();
+	}
+	
+	public void ActivateGravityField() {
+		gravityField.ActivateGravityField();
+	}
+	
+	public void DisableGravityField() {
+		gravityField.DisableGravityField();
+	}
+
+	public bool IsGravityFieldEnabled() {
+		return gravityField.IsGravityFieldEnabled();
 	}
 }

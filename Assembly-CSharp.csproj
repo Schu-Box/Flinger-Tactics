@@ -71,6 +71,7 @@
      <Compile Include="Assets\Scripts\FootnoteManager.cs" />
      <Compile Include="Assets\Scripts\GoalController.cs" />
      <Compile Include="Assets\Scripts\GoalTrigger.cs" />
+     <Compile Include="Assets\Scripts\GravityField.cs" />
      <Compile Include="Assets\Scripts\MatchController.cs" />
      <Compile Include="Assets\Scripts\MatchData.cs" />
      <Compile Include="Assets\Scripts\ModeController.cs" />
@@ -81,6 +82,8 @@
      <Compile Include="Assets\Scripts\Sound.cs" />
      <Compile Include="Assets\Scripts\SoundSettings.cs" />
      <Compile Include="Assets\Scripts\SpawnBox.cs" />
+     <Compile Include="Assets\Scripts\SubstituteChair.cs" />
+     <Compile Include="Assets\Scripts\SubstitutePlatform.cs" />
      <Compile Include="Assets\Scripts\TailBody.cs" />
      <Compile Include="Assets\Scripts\TailTip.cs" />
      <Compile Include="Assets\Scripts\TeamPostMatchPanel.cs" />
@@ -88,6 +91,7 @@
      <Compile Include="Assets\Scripts\TitleMenuController.cs" />
      <Compile Include="Assets\Scripts\Tongue.cs" />
      <Compile Include="Assets\Scripts\TurnButton.cs" />
+     <Compile Include="Assets\Scripts\VictoryPanel.cs" />
      <Compile Include="Assets\Scripts\WallController.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />

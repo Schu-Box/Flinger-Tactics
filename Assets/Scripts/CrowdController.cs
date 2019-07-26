@@ -125,6 +125,16 @@ public class CrowdController : MonoBehaviour {
 		}
 	}
 
+	public void SetPostMatchFaces() {
+		for(int i = 0; i < crowdList.Count; i++) {
+			if(crowdList[i].GetAthleteController().GetAthlete().GetTeam() == matchController.GetMatchData().GetWinner()) {
+				crowdList[i].GetAthleteController().SetFaceSprite("victory");
+			} else {
+				crowdList[i].GetAthleteController().SetFaceSprite("defeat");
+			}
+		}
+	}
+
 	public IEnumerator FlashSteps(Color flashColor, string soundID, int repeats, float delayBetween) {
 		WaitForFixedUpdate waiter = new WaitForFixedUpdate();
 

@@ -300,9 +300,14 @@ public class BallController : MonoBehaviour {
 		focalObject.TriggerWatchers();
 	}
 
+	public void StopMovement() {
+		StoppedMoving();
+	}
+
 	private void StoppedMoving() {
 		moving = false;
 		rb.velocity = Vector2.zero;
+		rb.angularVelocity = 0f;
 
 		StartCoroutine(FadeSprite(lightSlot));
 

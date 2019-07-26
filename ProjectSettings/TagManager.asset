@@ -58,9 +58,6 @@ TagManager:
   - name: Crowd Athlete
     uniqueID: 2908818261
     locked: 0
-  - name: UI
-    uniqueID: 2602950163
-    locked: 0
   - name: Athletes
     uniqueID: 3853730747
     locked: 0
@@ -70,6 +67,12 @@ TagManager:
   - name: Goals
     uniqueID: 77692565
     locked: 0
+  - name: UI
+    uniqueID: 2602950163
+    locked: 0
   - name: Focal Athlete
     uniqueID: 4203939923
+    locked: 0
+  - name: UI Overlay
+    uniqueID: 2240973005
     locked: 0

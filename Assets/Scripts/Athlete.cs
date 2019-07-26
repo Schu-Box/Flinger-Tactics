@@ -26,7 +26,7 @@ public class Team {
 			athletes[i].SetTeam(this);
 		}
 
-		lightTint = Color.Lerp(secondaryColor, Color.white, 0.7f);
+		lightTint = Color.Lerp(primaryColor, Color.white, 0.7f);
 		darkTint = Color.Lerp(primaryColor, Color.black, 0.2f);
 	}
 
@@ -99,7 +99,9 @@ public class Athlete {
 		tongueColor = colorList[Random.Range(0, colorList.Count)];
 
 		rando = Random.value;
-		if(rando > 0.6) {
+		if(rando == 1) {
+			jerseyNumber = 420;
+		} else if(rando > 0.6) {
 			jerseyNumber = Random.Range(0, 22);
 		} else if(rando > 0.3) {
 			jerseyNumber = Random.Range(0, 36);

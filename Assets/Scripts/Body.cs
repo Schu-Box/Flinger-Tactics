@@ -82,4 +82,12 @@ public class Body : MonoBehaviour {
 		//rb.bodyType = RigidbodyType2D.Dynamic;
 		collie.isTrigger = false;
 	}
+
+	public void EnableStaticBody() {
+		rb.bodyType = RigidbodyType2D.Static;
+	}
+
+	public void EnableDynamicBody() {
+		rb.bodyType = RigidbodyType2D.Dynamic;
+	}
 }

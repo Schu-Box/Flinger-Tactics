@@ -1,6 +1,6 @@
 OSXStandalone
 PlayerPath?
-/Users/DanShoes/Desktop/Flicky Tactics.app
+/Users/DanShoes/Desktop/Flinger Tactics.app
 SceneListBegin?
 Assets/Scenes/Start.unity
 Assets/Scenes/Play Now.unity
@@ -59,7 +59,7 @@ f61c0793411f10cf5fbfa1473fef5ef2 UnityEngine.UI.dll:UnityEngine.UI.ToggleGroup
 08b76d65254f973ee82b50ead13ef296 Assembly-CSharp.dll:.RaisedButton
 4cca0eebefde9e9c2b957e8319d8d20b Unity.TextMeshPro.dll:TMPro.TMP_InputField
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.SpawnBox
-ad9bfa687a8401a64986f4fe208900d3 Assembly-CSharp.dll:.CanvasManager
+19ab276b266160231c45b267897011d9 Assembly-CSharp.dll:.CanvasManager
 a35dc9cca2faebc5f5f1aeb9e8e47bbe UnityEngine.UI.dll:UnityEngine.UI.AspectRatioFitter
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.UI.dll:UnityEngine.EventSystems.BaseInput
 49cd62a578efc0a599b810a2b66cd49c UnityEngine.UI.dll:UnityEngine.UI.Button
@@ -104,7 +104,7 @@ ff05dcdf90651c3d98a9cad3df5e471e UnityEngine.Timeline.dll:UnityEngine.Timeline.C
 30afa8783a8bbee2e465ec9ce1efaee2 UnityEngine.Timeline.dll:UnityEngine.Timeline.GroupTrack
 30afa8783a8bbee2e465ec9ce1efaee2 UnityEngine.Timeline.dll:UnityEngine.Timeline.PlayableTrack
 607d64d2c4bc76ac9876e6f7b9cc7edf UnityEngine.Timeline.dll:UnityEngine.Timeline.TimelineAsset
-e28d046b596293a897f8013da1431139 Assembly-CSharp.dll:.MatchController
+a8ba588d90a868df8d85256a17c5734b Assembly-CSharp.dll:.MatchController
 5833a86cc374f497ae8d9fb9d8c3e5f4 Unity.TextMeshPro.dll:TMPro.TMP_SubMeshUI
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.TailTip
 fc1e0f4d8439d9928083474691511a13 UnityEngine.Networking.dll:UnityEngine.Networking.NetworkAnimator
@@ -142,6 +142,7 @@ fb33cf9b901a05a1bf6367c2617f6182 Assembly-CSharp.dll:.FocalObject
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.Tongue
 b5ef2e28956407abb004cdba87b8cb3a Assembly-CSharp.dll:.Face
 65c129538c3b1f07082e1ae53f0f0d47 Unity.TextMeshPro.dll:TMPro.TMP_Asset
+05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.GravityField
 62229a3e4d53ca59bec192e89627ed52 Assembly-CSharp.dll:TMPro.Examples.CameraController
 24f5d7f36a6306ded2afa4f1a8134af7 Assembly-CSharp.dll:.FootnoteManager
 75cd0c6c744b9733ef29aa6c59ece2b1 Assembly-CSharp.dll:TMPro.Examples.VertexJitter
@@ -171,6 +172,7 @@ e9bdabf9265d758d56f01bb188916fa8 UnityEngine.Networking.dll:UnityEngine.Networki
 3f32f08a64daf40b09ed864d96fe3840 UnityEngine.Networking.dll:UnityEngine.Networking.NetworkTransform
 73843688b51256aed059f049c540bca8 UnityEngine.Networking.dll:UnityEngine.Networking.NetworkTransformChild
 528ea1fd7c01796fc60c4e2f172ea229 UnityEngine.Networking.dll:UnityEngine.Networking.NetworkTransformVisualizer
+05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.CustomRuleChanger
 a9bfb2b97514212096f49382180df608 Assembly-CSharp.dll:.CameraController
 34e025057ef78b1bf238460cdf6583a3 Assembly-CSharp.dll:TMPro.Examples.ObjectSpin
 20dbc65c7917b6d13b082ad3aa79d9ed Unity.TextMeshPro.dll:TMPro.PackageResourceImporterWindow
@@ -230,4 +232,6 @@ b8f04bdad423045528c67dfa4c3dca0d Assembly-CSharp.dll:TMPro.Examples.VertexShakeA
 9a3d91bf41bc6feaadf36efb858efd42 Unity.TextMeshPro.dll:TMPro.TMP_SubMesh
 527b38a24754a673c3855e801fcde355 Assembly-CSharp.dll:.AudioManager
 2e8b3b865e1ea71418dda14622d82e3c Assembly-CSharp.dll:.TeamPostMatchPanel
-05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.CustomRuleChanger
+05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.SubstituteChair
+05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.SubstitutePlatform
+eaa5a0b43685b989183563caee80291d Assembly-CSharp.dll:.VictoryPanel

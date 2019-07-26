@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 public class MatchController : MonoBehaviour {
 
@@ -43,12 +45,14 @@ public class MatchController : MonoBehaviour {
 
     public GameObject substituteChair;
 
-    public Vector2 homeSpawnSpot;
-    public Vector2 awaySpawnSpot;
+    private List<SubstituteChair> subChairsActive = new List<SubstituteChair>();
     
     //Ready stuff is now unused
     private bool homeReady = false;
     private bool awayReady = false;
+
+    private bool homeSubAvailable = false;
+    private bool awaySubAvailable = false;
 
 	private bool unbounded = false;
 
@@ -58,11 +62,11 @@ public class MatchController : MonoBehaviour {
     private int turnNumber = 1;
     private bool homeStarts = false;
     private bool homeTurn = false;
-    private bool athleteBeingDragged = false;
-    private bool turnActive = false;
     private bool substituteInbound = false;
+    private bool turnActive = false;
     private bool ballRespawning = false;
 
+    private AthleteController athleteBeingDragged;
     private AthleteController athleteInitiater;
 
 	public static bool simultaneousTurns = true;
@@ -89,12 +93,31 @@ public class MatchController : MonoBehaviour {
         Physics2D.IgnoreLayerCollision(8, 9, true); //Makes the substitutes ignore goals and bumpers and the crowd
         Physics2D.IgnoreLayerCollision(8, 10, true);
         Physics2D.IgnoreLayerCollision(8, 11, true);
+        Physics2D.IgnoreLayerCollision(8, 12, true);
+        Physics2D.IgnoreLayerCollision(8, 13, true);
         Physics2D.IgnoreLayerCollision(8, 16, true);
         Physics2D.IgnoreLayerCollision(8, 18, true); //Makes substitutes ignore substitute chairs
         Physics2D.IgnoreLayerCollision(18, 9, true); //Makes the substitute chair ignore goals and bumpers and the crowd
         Physics2D.IgnoreLayerCollision(18, 10, true);
         Physics2D.IgnoreLayerCollision(18, 11, true);
         Physics2D.IgnoreLayerCollision(18, 16, true);
+
+
+
+
+        /*
+        Physics2D.IgnoreLayerCollision(2, 9, true);
+        Physics2D.IgnoreLayerCollision(2, 10, true);
+        Physics2D.IgnoreLayerCollision(2, 11, true);
+        Physics2D.IgnoreLayerCollision(2, 16, true);
+        Physics2D.IgnoreLayerCollision(2, 18, true);
+
+        Physics2D.IgnoreLayerCollision(18, 9, true); //Makes the substitute chair ignore goals and bumpers and the crowd
+        Physics2D.IgnoreLayerCollision(18, 10, true);
+        Physics2D.IgnoreLayerCollision(18, 11, true);
+        Physics2D.IgnoreLayerCollision(18, 16, true);
+        */
+
         
 
         simultaneousTurns = false;
@@ -111,7 +134,11 @@ public class MatchController : MonoBehaviour {
     void Update () {
         if (Input.GetMouseButtonDown(0)) {
             CastRay();
-        }       
+        }
+
+        if(Input.GetButtonDown("Cancel")) {
+            SceneManager.LoadScene(0);
+        }  
     }
 
     void CastRay() {
@@ -121,8 +148,11 @@ public class MatchController : MonoBehaviour {
         for(int i = 0; i < hits.Length; i++) {
             //Debug.Log(hits[i].collider.gameObject.name);
             if (hits[i].collider.gameObject.GetComponent<AthleteController>() != null) {
-                hits[i].collider.gameObject.GetComponentInParent<AthleteController>().MouseClick();
-                break;
+                AthleteController ac = hits[i].collider.gameObject.GetComponentInParent<AthleteController>();
+                if(!ac.IsDisabled()) {
+                    ac.MouseClick();
+                    break;
+                }
             }
         }
     }
@@ -303,7 +333,7 @@ public class MatchController : MonoBehaviour {
             ac.SetAthlete(athlete);
 
             if(homeSide) {
-                ac.gameObject.layer = 12;
+                ac.SetBodyLayer(12);
                 
                 if(i < totalSpawnedAthletes) {
                     homeAthletesOnField.Add(ac);
@@ -312,7 +342,7 @@ public class MatchController : MonoBehaviour {
                     ac.gameObject.SetActive(false);
                 }
             }  else {
-                ac.gameObject.layer = 13;
+                ac.SetBodyLayer(13);
 
                 if(i < totalSpawnedAthletes) {
                     awayAthletesOnField.Add(ac);
@@ -335,22 +365,30 @@ public class MatchController : MonoBehaviour {
     }
 
     public void AthleteHovered(Athlete athlete) {
-        if(canvasManager != null && !athleteBeingDragged) {
+        if(canvasManager != null && athleteBeingDragged == null) {
             canvasManager.DisplayFootnotePanel(athlete);
         }
     }
 
     public void AthleteUnhovered(Athlete athlete) {
-        if(canvasManager != null && !athleteBeingDragged) {
+        if(canvasManager != null && athleteBeingDragged == null) {
             canvasManager.HideFootnotePanel();
         }
     }
 
-    public void SetAthleteBeingDragged(bool beingDragged) {
-        athleteBeingDragged = beingDragged;
+    public void SetAthleteBeingDragged(AthleteController athlete) {
+        if(athlete == null) {
+            if(athleteBeingDragged != null) {
+                athleteBeingDragged.GetComponent<SortingGroup>().sortingLayerName = "Athletes";
+            }
+        } else {
+            athlete.GetComponent<SortingGroup>().sortingLayerName = "Focal Athlete";
+        }
+
+        athleteBeingDragged = athlete;
     }
 
-    public bool GetAthleteBeingDragged() {
+    public AthleteController GetAthleteBeingDragged() {
         return athleteBeingDragged;
     }
 
@@ -365,6 +403,7 @@ public class MatchController : MonoBehaviour {
         overtime = false;
 
         audioManager.Play("matchStart");
+        audioManager.AmbientPlay("matchMusic");
 
         matchData = new MatchData(homeTeam, awayTeam);
         homeTeam.AssignNewMatchData(matchData);
@@ -449,6 +488,7 @@ public class MatchController : MonoBehaviour {
         }
 
         WaitForFixedUpdate waiter = new WaitForFixedUpdate();
+
         while(CheckForMovement()) {
             yield return waiter;
         }
@@ -463,6 +503,10 @@ public class MatchController : MonoBehaviour {
 
         if(homeTurn) { //If home just went, increase the turn number
             turnNumber++;
+
+            if(canvasManager != null) {
+                canvasManager.StartCoroutine(canvasManager.AnimateTurnIndicator());
+            }
         }
 
         homeTurn = !homeTurn;
@@ -493,29 +537,56 @@ public class MatchController : MonoBehaviour {
 		if(!unbounded) {
             if(homeTurn) {
                 for(int i = 0; i < homeAthletesOnField.Count; i++) {
-                    homeAthletesOnField[i].EnableInteraction();
-                    homeAthletesOnField[i].IgnoreRaycasts(false);
-                    homeAthletesOnField[i].RestoreAthleteColor();
-                    homeAthletesOnField[i].DisableBody();
+                    AthleteController a = homeAthletesOnField[i];
+                    a.EnableInteraction();
+                    a.IgnoreRaycasts(false);
+                    a.RestoreAthleteColor();
+                    a.DisableBody();
+
+                    //a.DisableGravityField();
                 }
                 for(int i = 0; i < awayAthletesOnField.Count; i++) {
-                    awayAthletesOnField[i].DisableInteraction();
-                    awayAthletesOnField[i].IgnoreRaycasts(true);
-                    awayAthletesOnField[i].DimAthleteColor();
-                    awayAthletesOnField[i].EnableBody();
-                }
+                    AthleteController a = awayAthletesOnField[i];
+
+                    a.DisableInteraction();
+                    a.IgnoreRaycasts(true);
+                    a.DimAthleteColor();
+                    a.EnableBody();
+
+                    /*
+                    if(a.GetAthlete().athleteData.typeString == "Box") {
+                        a.EnableGravityField();
+                    } else {
+                        a.DisableGravityField();
+                    }
+                    */
+                 }
             } else {
                 for(int i = 0; i < homeAthletesOnField.Count; i++) {
-                    homeAthletesOnField[i].DisableInteraction();
-                    homeAthletesOnField[i].IgnoreRaycasts(true);
-                    homeAthletesOnField[i].DimAthleteColor();
-                    homeAthletesOnField[i].EnableBody();
+                    AthleteController a = homeAthletesOnField[i];
+
+                    a.DisableInteraction();
+                    a.IgnoreRaycasts(true);
+                    a.DimAthleteColor();
+                    a.EnableBody();
+
+                    /*
+                    if(a.GetAthlete().athleteData.typeString == "Box") {
+                        a.EnableGravityField();
+                    } else {
+                        a.DisableGravityField();
+                    }
+                    */
                 }
                 for(int i = 0; i < awayAthletesOnField.Count; i++) {
-                    awayAthletesOnField[i].EnableInteraction();
-                    awayAthletesOnField[i].IgnoreRaycasts(false);
-                    awayAthletesOnField[i].RestoreAthleteColor();
-                    awayAthletesOnField[i].DisableBody();
+                    AthleteController a = awayAthletesOnField[i];
+
+                    a.EnableInteraction();
+                    a.IgnoreRaycasts(false);
+                    a.RestoreAthleteColor();
+                    a.DisableBody();
+
+                    //a.DisableGravityField();
                 }
             }
 		} else {
@@ -527,6 +598,8 @@ public class MatchController : MonoBehaviour {
             }
         }
 
+        AllowSubstitutions(homeTurn);
+
         PretendMouseJustAppeared();
         
         if(crowdController != null) {
@@ -536,110 +609,293 @@ public class MatchController : MonoBehaviour {
         if(!matchEnded) {
             if(homeTurn) {
                 if(homeTeam.computerControlled) {
-                   StartCoroutine(ComputerTurn(homeAthletesOnField, (Vector2)awayGoal.transform.position));
+                   StartCoroutine(ComputerTurn(true, (Vector2)awayGoal.transform.position));
                 }
             } else {
                 if(awayTeam.computerControlled) {
-                    StartCoroutine(ComputerTurn(awayAthletesOnField, (Vector2)homeGoal.transform.position));
+                    StartCoroutine(ComputerTurn(false, (Vector2)homeGoal.transform.position));
                 }
             }
         }
     }
 
-    public IEnumerator ComputerTurn(List<AthleteController> athletes, Vector2 targetGoal) {
+    public void AllowSubstitutions(bool home) {
+        Vector2 spawnSpot = Vector2.zero;
+        Vector3 spawnAngle;
+
+        AthleteController athleteSubbingIn;
+
+        inboundSubstitutes = new List<AthleteController>();
+
+        if(homeTurn) {
+            int substitutesNeeded = ruleSet.GetRule("athleteFieldCount").value - homeAthletesOnField.Count;
+            if(substitutesNeeded > 0) {
+                homeSubAvailable = true;
+
+                homeGoal.OpenSubPlatform();
+
+                spawnSpot = homeGoal.GetSubPlatform().GetSubChairOrigin();
+                spawnAngle = new Vector3(0, 0, 90);
+
+                athleteSubbingIn = inactiveHomeAthletes[0];
+
+                inboundSubstitutes.Add(athleteSubbingIn);
+
+                SubstituteChair subChair = Instantiate(substituteChair, spawnSpot, Quaternion.Euler(spawnAngle), substituteHolder).GetComponent<SubstituteChair>();
+                subChair.SetChair(true);
+                subChairsActive.Add(subChair);
+
+                athleteSubbingIn.PrepareSubstitute(spawnSpot, spawnAngle, subChair.transform);
+
+                StartCoroutine(MoveSubChairTo(subChair, homeGoal.GetSubPlatform().GetSubChairRest()));
+            } //Not sure yet for multiple subs
+        } else {
+            int substitutesNeeded = ruleSet.GetRule("athleteFieldCount").value - awayAthletesOnField.Count;
+            if(substitutesNeeded > 0) {
+                awaySubAvailable = true;
+                
+                awayGoal.OpenSubPlatform();
+
+                spawnSpot = awayGoal.GetSubPlatform().GetSubChairOrigin();
+                spawnAngle = new Vector3(0, 0, 270);
+
+                athleteSubbingIn = inactiveAwayAthletes[0];
+                inactiveAwayAthletes.Remove(athleteSubbingIn);
+
+                inboundSubstitutes.Add(athleteSubbingIn);
+
+                SubstituteChair subChair = Instantiate(substituteChair, spawnSpot, Quaternion.Euler(spawnAngle), substituteHolder).GetComponent<SubstituteChair>();
+                subChair.SetChair(false);
+                subChairsActive.Add(subChair);
+
+                athleteSubbingIn.PrepareSubstitute(spawnSpot, spawnAngle, subChair.transform);
+
+                StartCoroutine(MoveSubChairTo(subChair, awayGoal.GetSubPlatform().GetSubChairRest()));
+            }
+        }
+    }
+
+    public IEnumerator MoveSubChairTo(SubstituteChair subChair, Vector3 endPos) {
+        Vector3 startPos = subChair.transform.position;
+
+        WaitForFixedUpdate waiter = new WaitForFixedUpdate();
+        float duration = 0.5f;
+        float timer = 0f;
+        while(timer < duration) {
+            timer += Time.deltaTime;
+
+            subChair.transform.position = Vector3.Lerp(startPos, endPos, timer/duration);
+
+            yield return waiter;
+        }
+
+        subChair.SetInteractable(true);
+    }
+
+    public List<SubstituteChair> GetSubChairsActive() {
+        return subChairsActive;
+    }
+
+    public void ClearSubChairsActive() {
+        for(int i = 0; i < subChairsActive.Count; i++) {
+            SubstituteChair subChair = subChairsActive[i];
+            /*
+            if(subChair.transform.GetComponentInChildren<AthleteController>() != null) {
+                subChair.transform.GetComponentInChildren<AthleteController>().transform.SetParent(athleteHolder);
+            }
+            */
+            Destroy(subChair.gameObject);
+        }
+        subChairsActive = new List<SubstituteChair>();
+    }
+
+    public IEnumerator ComputerTurn(bool home, Vector2 targetGoal) {
         Debug.Log("Computer turn");
+        //Incorportate Subs
 
         yield return new WaitForSeconds(0.5f);
 
-        AthleteController chosenAthlete;
+        AthleteController chosenAthlete = null;
         Vector2 target = Vector2.zero;
 
-        AthleteController athleteClosestToBall = null;
-        float howCloseTheyBe = 999f;
-        for(int a = 0; a < athletes.Count; a++) {
-            AthleteController checkedAthlete = athletes[a];
-            for(int b = 0; b < ballsOnField.Count; b++) {
-                BallController checkedBall = ballsOnField[b];
-                if(targetGoal.x < 0) { //If it's the home goal (and they're the away team)
-                    if(checkedBall.transform.position.x < checkedAthlete.transform.position.x) {
-                        Vector2 distance = checkedBall.transform.position - checkedAthlete.transform.position;
-                        float difference = Mathf.Abs(distance.magnitude);
-                        if(difference < howCloseTheyBe) {
-                            target = checkedBall.transform.position;
-                            athleteClosestToBall = checkedAthlete;
-                            howCloseTheyBe = difference;
-                        }
-                    } // else the athlete is in between the ball and their target goal
-                } else {
-                    if(checkedBall.transform.position.x > checkedAthlete.transform.position.x) {
-                        Vector2 distance = checkedBall.transform.position - checkedAthlete.transform.position;
-                        float difference = Mathf.Abs(distance.magnitude);
-                        if(difference < howCloseTheyBe) {
-                            target = checkedBall.transform.position;
-                            athleteClosestToBall = checkedAthlete;
-                            howCloseTheyBe = difference;
-                        }
-                    } // else the athlete is in between the ball and their target goal
-                }
-            }
-        }
-        chosenAthlete = athleteClosestToBall;
         
-        if(chosenAthlete == null) {
-            AthleteController athleteClosestToGoal = null;
-            float howClose = 999f;
-            for(int a = 0; a < athletes.Count; a++) {
-                AthleteController checkedAthlete = athletes[a];
-                if(targetGoal.x < 0) { //If it's the home goal (and they're the away team)
-                    if(targetGoal.x < checkedAthlete.transform.position.x) {
-                        Vector2 distance = targetGoal - (Vector2)checkedAthlete.transform.position;
-                        float difference = Mathf.Abs(distance.magnitude);
-                        if(difference < howClose) {
-                            athleteClosestToGoal = checkedAthlete;
-                            howClose = difference;
-                        }
-                    }
-                } else {
-                    if(targetGoal.x > checkedAthlete.transform.position.x) {
-                        Vector2 distance = targetGoal - (Vector2)checkedAthlete.transform.position;
-                        float difference = Mathf.Abs(distance.magnitude);
-                        if(difference < howClose) {
-                            athleteClosestToGoal = checkedAthlete;
-                            howClose = difference;
-                        }
-                    }
-                }
+        bool usingSubstitute;
+
+        if(home && homeSubAvailable) {
+            usingSubstitute = true;
+
+            BallController closestBall = null;
+            float closestDistance = 999f;
+            for(int i = 0; i < ballsOnField.Count; i++) {
+                float difference = ballsOnField[i].transform.position.x - homeGoal.transform.position.x;
+                difference = Mathf.Abs(difference);
+                if(difference < closestDistance) {
+                    closestBall = ballsOnField[i];
+                    closestDistance = difference;
+
+                    target = closestBall.transform.position;
+                } 
+            }
+        } else if(!home && awaySubAvailable) {
+            usingSubstitute = true;
+
+            BallController closestBall = null;
+            float closestDistance = 999f;
+            for(int i = 0; i < ballsOnField.Count; i++) {
+                float difference = ballsOnField[i].transform.position.x - awayGoal.transform.position.x;
+                difference = Mathf.Abs(difference);
+                if(difference < closestDistance) {
+                    closestBall = ballsOnField[i];
+                    closestDistance = difference;
+
+                    target = closestBall.transform.position;
+                } 
+            }
+        } else {
+            usingSubstitute = false;
+
+            List<AthleteController> athletes;
+            if(home) {
+                athletes = homeAthletesOnField;
+            } else {
+                athletes = awayAthletesOnField;
             }
 
-            target = targetGoal;
-            chosenAthlete = athleteClosestToGoal;
+            AthleteController athleteClosestToBall = null;
+            float howCloseTheyBe = 999f;
+            for(int a = 0; a < athletes.Count; a++) {
+                AthleteController checkedAthlete = athletes[a];
+                for(int b = 0; b < ballsOnField.Count; b++) {
+                    BallController checkedBall = ballsOnField[b];
+                    if(targetGoal.x < 0) { //If it's the home goal (and they're the away team)
+                        if(checkedBall.transform.position.x < checkedAthlete.transform.position.x) {
+                            Vector2 distance = checkedBall.transform.position - checkedAthlete.transform.position;
+                            float difference = Mathf.Abs(distance.magnitude);
+                            if(difference < howCloseTheyBe) {
+                                target = checkedBall.transform.position;
+                                athleteClosestToBall = checkedAthlete;
+                                howCloseTheyBe = difference;
+                            }
+                        } // else the athlete is in between the ball and their target goal
+                    } else {
+                        if(checkedBall.transform.position.x > checkedAthlete.transform.position.x) {
+                            Vector2 distance = checkedBall.transform.position - checkedAthlete.transform.position;
+                            float difference = Mathf.Abs(distance.magnitude);
+                            if(difference < howCloseTheyBe) {
+                                target = checkedBall.transform.position;
+                                athleteClosestToBall = checkedAthlete;
+                                howCloseTheyBe = difference;
+                            }
+                        } // else the athlete is in between the ball and their target goal
+                    }
+                }
+            }
+            chosenAthlete = athleteClosestToBall;
+            
+            if(chosenAthlete == null) {
+                AthleteController athleteClosestToGoal = null;
+                float howClose = 999f;
+                for(int a = 0; a < athletes.Count; a++) {
+                    AthleteController checkedAthlete = athletes[a];
+                    if(targetGoal.x < 0) { //If it's the home goal (and they're the away team)
+                        if(targetGoal.x < checkedAthlete.transform.position.x) {
+                            Vector2 distance = targetGoal - (Vector2)checkedAthlete.transform.position;
+                            float difference = Mathf.Abs(distance.magnitude);
+                            if(difference < howClose) {
+                                athleteClosestToGoal = checkedAthlete;
+                                howClose = difference;
+                            }
+                        }
+                    } else {
+                        if(targetGoal.x > checkedAthlete.transform.position.x) {
+                            Vector2 distance = targetGoal - (Vector2)checkedAthlete.transform.position;
+                            float difference = Mathf.Abs(distance.magnitude);
+                            if(difference < howClose) {
+                                athleteClosestToGoal = checkedAthlete;
+                                howClose = difference;
+                            }
+                        }
+                    }
+                }
+
+                target = targetGoal;
+                chosenAthlete = athleteClosestToGoal;
+            }
         }
+
+        Vector3 adjustedTarget = (Vector3)target;
+        Vector3 finalTarget = Vector3.zero;
+        Vector3 startVector = Vector3.zero;
+
+        if(usingSubstitute) {
+            SubstituteChair subChair = subChairsActive[0];
+            chosenAthlete = subChair.GetCurrentSubstitute();
+
+            adjustedTarget.x = subChair.transform.position.x;
+
+            startVector = subChair.transform.position;
+
+            finalTarget = adjustedTarget;
+            finalTarget.x = subChair.transform.position.x + subChair.GetMaxStretch().x;
+        } else {
+            adjustedTarget = (Vector3)target - chosenAthlete.transform.position; //Get the difference between the target and the athlete
+        
+            SetAthleteBeingDragged(chosenAthlete);
+        }
+
+        Vector2 randomOffset = Random.insideUnitCircle / 3;
+        target += randomOffset;
 
         if(canvasManager != null) {
             canvasManager.DisplayFootnotePanel(chosenAthlete.GetAthlete());
         }
 
-        Vector2 randomOffset = Random.insideUnitCircle / 3;
-
-        target += randomOffset;
-       
-        Vector3 adjustedTarget = (Vector3)target - chosenAthlete.transform.position; //Get the difference between the target and the athlete
-
         WaitForFixedUpdate waiter = new WaitForFixedUpdate();
         float timer = 0f;
-        float duration = 1f;
+        float duration = 0.8f;
         while(timer < duration) {
             timer += Time.deltaTime;
 
-            Vector3 stepToTarget = Vector3.Lerp(Vector3.zero, adjustedTarget, timer/duration);
+            Vector3 stepToTarget = Vector3.Lerp(startVector, adjustedTarget, timer/duration);
 
-            chosenAthlete.TailAdjusted(stepToTarget);
+            if(usingSubstitute) {
+                //THIS IS ASSuming that there can only be one sub chair active at a time
+
+                subChairsActive[0].AdjustPosition(stepToTarget);
+            } else {
+                chosenAthlete.TailAdjusted(stepToTarget);
+            }
 
             yield return waiter;
         }
 
-        //chosenAthlete.AdjustTailAndFling(target, 1);
-        chosenAthlete.StartAction();
+        if(usingSubstitute) {
+            timer = 0f;
+            duration = 0.6f;
+            while(timer < duration) {
+                timer += Time.deltaTime;
+
+                Vector3 stepToTarget = Vector3.Lerp(adjustedTarget, finalTarget, timer/duration);
+
+                subChairsActive[0].AdjustPosition(stepToTarget);
+
+                yield return waiter;
+            }
+        }
+
+        if(usingSubstitute) {
+            subChairsActive[0].ChairClicked();
+        } else {
+            chosenAthlete.StartAction();
+        }
+    }
+
+    public IEnumerator ComputerSubstitution(SubstituteChair subChair) {
+
+        yield return new WaitForSeconds(0.1f);
+
+        subChair.ChairClicked();
+
     }
 
     private bool timeoutRequested = false;
@@ -687,6 +943,10 @@ public class MatchController : MonoBehaviour {
         return team;
     }
 
+    public int GetTurn() {
+        return turnNumber;
+    }
+
 	 public bool IsHomeTurn() {
         return homeTurn;
     }
@@ -717,25 +977,69 @@ public class MatchController : MonoBehaviour {
         }
     }
     */
-    
-    public void Fling(AthleteController flungAthlete) { //Turn is now active]
+
+    public void DetermineGravityFields(AthleteController initiator) {
+        if(initiator != null) {
+            for(int i = 0; i < allAthletesOnField.Count; i++) {
+                AthleteController a = allAthletesOnField[i];
+
+                string typeString = a.GetAthlete().athleteData.typeString;
+                if(typeString == "Circle") {
+                    if(a.GetAthlete().GetTeam() == initiator.GetAthlete().GetTeam() && a != initiator) {
+                        a.EnableGravityField();
+                    }
+                } else if(typeString == "Triangle") {
+                    if(a == initiator) {
+                        a.EnableGravityField();
+                    }
+                }
+            }
+        } else {
+            for(int i = 0; i < allAthletesOnField.Count; i++) {
+                allAthletesOnField[i].DisableGravityField();
+            }
+        }
+    }
+
+    public void BeginActiveTurnPhase(AthleteController initiatior) {
+        athleteInitiater = initiatior;
 
         if(turnNumber >= turnCap) {
             audioManager.AmbientStop("lastTurn");
         }
 
-        athleteBeingDragged = false;
+        SetAthleteBeingDragged(null);
 
 		if(!unbounded) {
             for(int i = 0; i < allAthletesOnField.Count; i++) {
-                allAthletesOnField[i].DisableInteraction();
-                allAthletesOnField[i].EnableBody();
-                allAthletesOnField[i].RestoreAthleteColor();
+                AthleteController a = allAthletesOnField[i];
+
+                a.DisableInteraction();
+                a.EnableBody();
+                a.RestoreAthleteColor();
+
+                a.SetTailBodyActive(false);
+
+                /*
+                if(a.IsGravityFieldEnabled()) {
+                    a.ActivateGravityField();
+                }
+                */
+            }
+
+            if(homeTurn) {
+                if(homeSubAvailable) {
+                    homeGoal.CloseSubPlatform();
+                }
+            } else {
+                if(awaySubAvailable) {
+                    awayGoal.CloseSubPlatform();
+                }
             }
         }
 
         if(canvasManager != null) {
-            canvasManager.DisplayTurnActive(flungAthlete.GetAthlete().GetTeam());
+            canvasManager.DisplayTurnActive(initiatior.GetAthlete().GetTeam());
         }
 
         turnActive = true;
@@ -743,20 +1047,10 @@ public class MatchController : MonoBehaviour {
         if(waitForTurnEndCoroutine == null) {
             waitForTurnEndCoroutine = StartCoroutine(WaitForTurnEnd());
         } //else the turn is already being ended
-
-        /*
-        if(crowdController != null) {
-            crowdController.StartWatching();
-        }
-        */
     }
 
     public bool IsTurnActive() {
         return turnActive;
-    }
-
-    public void SetAthleteInitiater(AthleteController ac) {
-        athleteInitiater = ac;
     }
 
     public AthleteController GetAthleteInitiater() {
@@ -771,10 +1065,11 @@ public class MatchController : MonoBehaviour {
 
         WaitForFixedUpdate waiter = new WaitForFixedUpdate();
        
-        while(CheckForMovement()) {
+        while(CheckForMovement() || substituteInbound) {
             yield return waiter;
         }
 
+        /*
         for(int i = 0; i < outboundSubstitutes.Count; i++) {
             if(outboundSubstitutes[i].GetAthlete().GetTeam() == homeTeam) {
                yield return StartCoroutine(WaitForSubstitute(true));
@@ -784,6 +1079,7 @@ public class MatchController : MonoBehaviour {
         }
 
         outboundSubstitutes = new List<AthleteController>();
+        */
 
         StartCoroutine(EndTurn());
         waitForTurnEndCoroutine = null;
@@ -813,51 +1109,6 @@ public class MatchController : MonoBehaviour {
         } else {
             return false;
         }
-    }
-
-    public IEnumerator WaitForSubstitute(bool home) {
-        Debug.Log("Subbing athlete in");
-
-        substituteInbound = true;
-
-        Vector2 spawnSpot = Vector2.zero;
-        Vector3 spawnAngle;
-
-        Vector2 chairSpawn;
-
-        AthleteController athleteSubbingIn;
-
-        Team team;
-        if(home) {
-            team = homeTeam;
-
-            spawnSpot = homeSpawnSpot;
-            spawnAngle = new Vector3(0, 0, 90);
-
-            athleteSubbingIn = inactiveHomeAthletes[0];
-            inactiveHomeAthletes.Remove(athleteSubbingIn);
-
-            chairSpawn = homeGoal.transform.position;
-        } else {
-            team = awayTeam;
-
-            spawnSpot = awaySpawnSpot;
-            spawnAngle = new Vector3(0, 0, 270);
-
-            athleteSubbingIn = inactiveAwayAthletes[0];
-            inactiveAwayAthletes.Remove(athleteSubbingIn);
-
-            chairSpawn = awayGoal.transform.position;
-        }
-
-        inboundSubstitutes.Add(athleteSubbingIn);
-
-        GameObject subChair = Instantiate(substituteChair, chairSpawn, Quaternion.Euler(spawnAngle), substituteHolder);
-        subChair.GetComponent<SpriteRenderer>().color = team.primaryColor;
-
-        athleteSubbingIn.SubstituteAthleteOnField(spawnSpot, spawnAngle, subChair.transform);
-
-        yield return StartCoroutine(MoveChairOntoField(subChair.transform));
     }
 
     //This is no longer a coroutine so I did a lil yieldy yieldy. All the coroutine stuff has been moved to pre-turn
@@ -892,7 +1143,7 @@ public class MatchController : MonoBehaviour {
             }
         } else {
             //Settings for golden goal
-            if(tied) {
+            if(tied || !homeTurn) { //If it's tied or the away team just went
                 StartCoroutine(WaitToStartTurn());
             } else {
                 EndMatch();
@@ -1016,29 +1267,65 @@ public class MatchController : MonoBehaviour {
 
 	public void EndMatch() {
     	matchEnded = true;
-        
-        canvasManager.DisplayEndMatch();
+
+        cameraController.AddTrauma(1f);
 
         int homeScore = matchData.GetTeamMatchData(homeTeam).GetScore();
         int awayScore = matchData.GetTeamMatchData(awayTeam).GetScore();
 
+        Team winner = null;
         if(homeScore > awayScore) {
-            matchData.GetTeamMatchData(homeTeam).SetWin(true);
+            winner = homeTeam;
             audioManager.Play("victory");
         } else if(awayScore > homeScore) {
-            matchData.GetTeamMatchData(awayTeam).SetWin(true);
+            winner = awayTeam;
             audioManager.Play("defeat");
         } else {
-            Debug.Log("Tie Game");
+            Debug.Log("Tie Game but this message should NEVER display, right?");
             audioManager.Play("overtime");
+        }
+
+        if(winner != null) {
+            matchData.SetWinner(winner);
+        }
+
+        if(canvasManager != null) {
+            canvasManager.DisplayEndMatch();
         }
 
         if(crowdController != null) {
             crowdController.StartCoroutine(crowdController.FlashSteps(Color.white, "matchOverLight", 2, 0.03f));
         }
 
+        DeterminePostMatchFaceStates(winner);
+    }
+
+    public void DeterminePostMatchFaceStates(Team winningTeam) {
         for(int i = 0; i < allAthletesOnField.Count; i++) {
-           allAthletesOnField[i].FinishMatch();
+            if(allAthletesOnField[i].GetAthlete().GetTeam() == winningTeam) {
+                allAthletesOnField[i].SetFaceSprite("victory");
+            } else {
+                allAthletesOnField[i].SetFaceSprite("defeat");
+            }
+        }
+
+        for(int i = 0; i < inactiveHomeAthletes.Count; i++) {
+            if(homeTeam == winningTeam) {
+                inactiveHomeAthletes[i].SetFaceSprite("victory");
+            } else {
+                inactiveHomeAthletes[i].SetFaceSprite("defeat");
+            }
+        }
+        for(int i = 0; i < inactiveAwayAthletes.Count; i++) {
+            if(awayTeam == winningTeam) {
+                inactiveAwayAthletes[i].SetFaceSprite("victory");
+            } else {
+                inactiveAwayAthletes[i].SetFaceSprite("defeat");
+            }
+        }
+
+        if(crowdController != null) {
+            crowdController.SetPostMatchFaces();
         }
     }
 
@@ -1085,64 +1372,53 @@ public class MatchController : MonoBehaviour {
         StartCoroutine(ac.RemoveAthleteFromField(goalCenter));
     }
 
-    public IEnumerator MoveChairOntoField(Transform chair) {
-        Vector2 chairStart = chair.localPosition;
-        Vector2 chairEnd = chair.localPosition;
-        float chairExtension = 3.5f;
-
-        if(chair.localPosition.x < 0) {
-            chairEnd.x = chairEnd.x + chairExtension;
-        } else {
-            chairEnd.x = chairEnd.x - chairExtension;
-        }
-
-        WaitForFixedUpdate waiter = new WaitForFixedUpdate();
-        float duration = 1f;
-        float timer = 0f;
-        while(timer < duration) {
-            timer += Time.deltaTime;
-
-            chair.localPosition = Vector2.Lerp(chairStart, chairEnd, timer/duration);
-
-            yield return waiter;
-        }
-
-        Transform substitute = chair.GetChild(0);
-        substitute.SetParent(athleteHolder);
-
+    public void SubstituteAthleteIn(AthleteController ac) {
         if(audioManager != null) {
             audioManager.Play("subIn");
         }
 
-        duration = 1.5f;
-        timer = 0f;
-        while(timer < duration) {
-            timer += Time.deltaTime;
-
-            chair.localPosition = Vector2.Lerp(chairEnd, chairStart, timer/duration);
-
-            yield return waiter;
-        }
-
-        AddAthleteToField(substitute.GetComponent<AthleteController>());
-
-        Destroy(chair.gameObject);
-    }
-
-    public void AddAthleteToField(AthleteController ac) {
         inboundSubstitutes.Remove(ac);
 
-        if(inboundSubstitutes.Count == 0) {
-            substituteInbound = false;
-        }
-
         allAthletesOnField.Add(ac);
+
+        substituteInbound = true;
+
         if(ac.GetAthlete().GetTeam() == homeTeam) {
             homeAthletesOnField.Add(ac);
-            ac.gameObject.layer = 12;
+
+            inactiveHomeAthletes.Remove(ac);
+
+            bool noMoreSubs = true;
+            for(int i = 0; i < inboundSubstitutes.Count; i++) {
+                if(inboundSubstitutes[i].GetAthlete().GetTeam() == homeTeam) {
+                    noMoreSubs = false;
+                    break;
+                }
+            }
+            if(noMoreSubs) {
+                homeSubAvailable = false;
+            }
         } else {
             awayAthletesOnField.Add(ac);
-            ac.gameObject.layer = 13;
+
+            inactiveAwayAthletes.Remove(ac);
+
+            bool noMoreSubs = true;
+            for(int i = 0; i < inboundSubstitutes.Count; i++) {
+                if(inboundSubstitutes[i].GetAthlete().GetTeam() == awayTeam) {
+                    noMoreSubs = false;
+                    break;
+                }
+            }
+            if(noMoreSubs) {
+                awaySubAvailable = false;
+            }
         }
+
+        BeginActiveTurnPhase(ac);
+    }
+
+    public void ResetSubstituteStatus() {
+        substituteInbound = false;
     }
 }

@@ -31,8 +31,8 @@ public class ModeController : MonoBehaviour {
 
         string modeID = PlayerPrefs.GetString("mode");
         if(modeID == "playNow") {
-            currentRuleSet.ChangeRule(currentRuleSet.GetRuleSlot("athleteFieldCount").possibleRules[1]);
-            currentRuleSet.ChangeRule(currentRuleSet.GetRuleSlot("athleteRosterCount").possibleRules[1]);
+            currentRuleSet.ChangeRule(currentRuleSet.GetRuleSlot("athleteFieldCount").possibleRules[2]);
+            currentRuleSet.ChangeRule(currentRuleSet.GetRuleSlot("athleteRosterCount").possibleRules[2]);
             currentRuleSet.ChangeRule(currentRuleSet.GetRuleSlot("ballCount").possibleRules[1]);
 
             SetNewRosters();
@@ -56,16 +56,7 @@ public class ModeController : MonoBehaviour {
 
     void Update() {
         if(Input.GetButtonDown("Submit")) {
-            /*
-            if(!homeReady) {
-                ReadyTeam(true);
-            }
-            if(!awayReady) {
-                ReadyTeam(false);
-            }
-            */
-        } else if(Input.GetButtonDown("Cancel")) {
-            SceneManager.LoadScene(0);
+            //Unused
         } else if(Input.GetKeyDown(KeyCode.E)) {
             matchController.EndMatch();
         } else if(Input.GetKeyDown(KeyCode.M)) {
@@ -74,8 +65,16 @@ public class ModeController : MonoBehaviour {
             matchController.EndMatch();
             
             matchController.GetMatchData().homeTeamData.SetWin(true);
-        } else if(Input.GetKeyDown(KeyCode.C)) {
-            canvasManager.customRulesButon.SetActive(true);
+        } else if(Input.GetKeyDown(KeyCode.A) && !matchController.GetMatchStarted()) {
+            currentRuleSet.ChangeRule(currentRuleSet.GetRuleSlot("athleteFieldCount").possibleRules[2]);
+            currentRuleSet.ChangeRule(currentRuleSet.GetRuleSlot("athleteRosterCount").possibleRules[2]);
+            currentRuleSet.ChangeRule(currentRuleSet.GetRuleSlot("ballCount").possibleRules[1]);
+            currentRuleSet.ChangeRule(currentRuleSet.GetRuleSlot("turnCount").possibleRules[9]);
+
+            matchController.GetTeam(true).computerControlled = true;
+            matchController.GetTeam(false).computerControlled = true;
+
+            matchController.StartMatch();
         }
     }
 

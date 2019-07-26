@@ -18,6 +18,11 @@ public class CanvasManager : MonoBehaviour {
     public TextMeshProUGUI awayScoreText;
     private float scoreFontSize;
 
+    public TextMeshProUGUI turnIndicatorText;
+    public Vector3 turnIndicatorStart;
+    public Vector3 turnIndicatorMid;
+    public Vector3 turnIndicatorEnd;
+
     private FootnoteManager footnoteManager;
 
     public RaisedButton timeoutButton;
@@ -35,6 +40,8 @@ public class CanvasManager : MonoBehaviour {
     public Button arrowButton_away;
     public Button continueButton;
     public GameObject statTable;
+
+    public VictoryPanel victoryPanel;
 
     [Header("Team Post Match Panel")]
     public TeamPostMatchPanel teamPostMatchPanel;
@@ -75,9 +82,14 @@ public class CanvasManager : MonoBehaviour {
 		postMatchPanel.SetActive(false);
 
         timeoutButton.gameObject.SetActive(false);
-        customRulesButon.gameObject.SetActive(false);
+        //customRulesButon.gameObject.SetActive(false);
         customRulesPanel.SetActive(false);
         gauntletPanel.SetActive(false);
+
+        turnIndicatorText.transform.localPosition = turnIndicatorStart;
+        turnIndicatorText.gameObject.SetActive(false);
+
+        victoryPanel.gameObject.SetActive(false);
 	}
 
 	public void DisplayPreMatch() {
@@ -188,6 +200,65 @@ public class CanvasManager : MonoBehaviour {
         */
 	}
 
+    public IEnumerator AnimateTurnIndicator() {
+        turnIndicatorText.gameObject.SetActive(true);
+
+        turnIndicatorText.transform.localPosition = turnIndicatorStart;
+        
+        turnIndicatorText.text = "Turn " + matchController.GetTurn();
+
+        Vector3 startSize = turnIndicatorText.transform.localScale;
+
+        float fontStart = turnIndicatorText.fontSize;
+        float fontIncreaseSize = fontStart + 20f;
+
+        WaitForFixedUpdate waiter = new WaitForFixedUpdate();
+        float timer = 0f;
+        float duration = 0.3f;
+        while(timer < duration) {
+            timer += Time.deltaTime;
+
+            turnIndicatorText.transform.localPosition = Vector3.Lerp(turnIndicatorStart, turnIndicatorMid, timer/duration);
+
+            yield return waiter;
+        }
+
+        timer = 0f;
+        duration = 0.4f;
+        while(timer < duration) {
+            timer += Time.deltaTime;
+
+            turnIndicatorText.fontSize = Mathf.Lerp(fontStart, fontIncreaseSize, timer/duration);
+
+            yield return waiter;
+        }
+
+        timer = 0f;
+        duration = 0.4f;
+        while(timer < duration) {
+            timer += Time.deltaTime;
+
+            turnIndicatorText.fontSize = Mathf.Lerp(fontIncreaseSize, fontStart, timer/duration);
+
+            yield return waiter;
+        }
+
+        timer = 0f;
+        duration = 0.2f;
+        while(timer < duration) {
+            timer += Time.deltaTime;
+
+            turnIndicatorText.transform.localPosition = Vector3.Lerp(turnIndicatorMid, turnIndicatorEnd, timer/duration);
+            turnIndicatorText.transform.localScale = Vector3.Lerp(startSize, Vector3.zero, timer/duration);
+
+            yield return waiter;
+        }
+
+        turnIndicatorText.transform.localPosition = turnIndicatorEnd;
+        turnIndicatorText.transform.localScale = startSize;
+        turnIndicatorText.gameObject.SetActive(false);
+    }
+
     public void TimeoutButtonClicked() {
         if(matchController.IsTimeoutAcceptable()) {
             matchController.UseTimeout();
@@ -219,10 +290,17 @@ public class CanvasManager : MonoBehaviour {
     }
 
 	public void DisplayEndMatch() {
+        turnIndicatorText.text = "";
 		turnLabelText.text = "";
         turnCapText.text = "";
 
         turnButton.PostMatch();
+
+        Team victor = matchController.GetMatchData().GetWinner();
+        
+        Debug.Log(victor.name);
+
+        victoryPanel.SetVictoryTeam(victor);
 	}
 
 	public void DisplayPostMatchPanel() {

@@ -466,7 +466,7 @@ MeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -441236549
-  m_SortingLayer: 6
+  m_SortingLayer: 5
   m_SortingOrder: 1
 --- !u!33 &33142801042873382
 MeshFilter:

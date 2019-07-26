@@ -10,7 +10,9 @@ public class GoalController : MonoBehaviour {
 	private MatchController matchController;
 	private CameraController cameraController;
 	private SpriteRenderer spriteRenderer;
+
 	private Bumper bumper;
+	private SubstitutePlatform subPlatform;
 
 	void Start() {
 		matchController = FindObjectOfType<MatchController>();
@@ -18,12 +20,30 @@ public class GoalController : MonoBehaviour {
 		spriteRenderer = GetComponent<SpriteRenderer>();
 		bumper = GetComponent<Bumper>();
 
+		subPlatform = transform.GetChild(1).GetComponent<SubstitutePlatform>();
+
 		bumper.SetAsGoal(true);
+	}
+
+	public void OpenSubPlatform() {
+		StartCoroutine(subPlatform.AnimateSubPlatformOpening());
+	}
+	
+
+	public void CloseSubPlatform() {
+		StartCoroutine(subPlatform.AnimateSubPlatformClosing());
+
+		List<SubstituteChair> subChairList = matchController.GetSubChairsActive();
+		for(int i = 0; i < subChairList.Count; i++) {
+			subChairList[i].SetInteractable(false);
+		}
 	}
 
 	public void SetTeamRelations(Team owner, Team attacker) {
 		teamOwner = owner;
 		goalAttacker = attacker;
+
+		subPlatform.SetTeam(owner);
 	}
 
 	public Team GetGoalAttacker() {
@@ -92,5 +112,9 @@ public class GoalController : MonoBehaviour {
 		*/
 
 		spriteRenderer.color = teamOwner.primaryColor;
+	}
+
+	public SubstitutePlatform GetSubPlatform() {
+		return subPlatform;
 	}
 }
