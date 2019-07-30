@@ -27,6 +27,8 @@ public class CanvasManager : MonoBehaviour {
 
     public RaisedButton timeoutButton;
 
+    public GameObject quoteBoxObj;
+
 
     [Header("Post Match UI")]
     public GameObject postMatchPanel;
@@ -90,6 +92,11 @@ public class CanvasManager : MonoBehaviour {
         turnIndicatorText.gameObject.SetActive(false);
 
         victoryPanel.gameObject.SetActive(false);
+
+        /*
+        quoteBox.SetQuoteBox();
+        quoteBox.gameObject.SetActive(false);
+        */
 	}
 
 	public void DisplayPreMatch() {
@@ -447,5 +454,12 @@ public class CanvasManager : MonoBehaviour {
         matchController.ResetSides();
 
         StartCoroutine(MoveObjectToPosition(Camera.main.gameObject, cameraController.startPosition));
+    }
+
+    public void DisplayQuote(AthleteController speaker, string quote) {
+        GameObject newQuote = Instantiate(quoteBoxObj, Vector3.zero, Quaternion.identity, this.transform);
+        QuoteBox quoteBox = newQuote.GetComponent<QuoteBox>();
+
+        quoteBox.SetQuoteBox(speaker, quote);
     }
 }

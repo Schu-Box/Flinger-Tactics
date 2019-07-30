@@ -30,8 +30,6 @@ public class MatchController : MonoBehaviour {
     public SpawnBox homeSpawnBox;
     public SpawnBox awaySpawnBox;
 
-    private CrowdController crowdController;
-
 	private List<AthleteController> homeAthletesOnField = new List<AthleteController>();
     private List<AthleteController> awayAthletesOnField = new List<AthleteController>();
     private List<AthleteController> allAthletesOnField = new List<AthleteController>();
@@ -66,6 +64,8 @@ public class MatchController : MonoBehaviour {
     private bool turnActive = false;
     private bool ballRespawning = false;
 
+    private bool athleteHovered = false;
+
     private AthleteController athleteBeingDragged;
     private AthleteController athleteInitiater;
 
@@ -76,6 +76,8 @@ public class MatchController : MonoBehaviour {
 	private CanvasManager canvasManager;
     private CameraController cameraController;
 	private AudioManager audioManager;
+    private CrowdController crowdController;
+    private QuoteManager quoteManager;
 
     private MatchData matchData;
     private RuleSet ruleSet;
@@ -129,6 +131,7 @@ public class MatchController : MonoBehaviour {
         cameraController = FindObjectOfType<CameraController>();
 		audioManager = FindObjectOfType<AudioManager>();
         crowdController = FindObjectOfType<CrowdController>();
+        quoteManager = FindObjectOfType<QuoteManager>();
 	}
 
     void Update () {
@@ -364,16 +367,45 @@ public class MatchController : MonoBehaviour {
         }
     }
 
-    public void AthleteHovered(Athlete athlete) {
+    public void AthleteHovered(AthleteController ac) {
         if(canvasManager != null && athleteBeingDragged == null) {
-            canvasManager.DisplayFootnotePanel(athlete);
+            athleteHovered = true;
+
+            canvasManager.DisplayFootnotePanel(ac.GetAthlete());
+
+            if(!turnActive) {
+                string quote = "";
+                if(matchStarted) {
+                    quote = quoteManager.GetPreFlingQuote(ac.GetAthlete());
+                } else {
+                    quote = quoteManager.GetPreMatchQuote(ac.GetAthlete());
+                }
+
+                if(!ac.GetSpokeThisTurn()) {
+                    DisplayQuote(ac, quote);
+                }
+            }
         }
     }
 
-    public void AthleteUnhovered(Athlete athlete) {
+    public void DisplayQuote(AthleteController ac, string quote) {
+        ac.SetSpokeThisTurn(true);
+
+        canvasManager.DisplayQuote(ac, quote);
+    }
+
+    public void AthleteUnhovered(AthleteController ac) {
         if(canvasManager != null && athleteBeingDragged == null) {
+            athleteHovered = false;
+
             canvasManager.HideFootnotePanel();
+
+            //UndisplayQuote();
         }
+    }
+
+    public bool GetAthleteHovered() {
+        return athleteHovered;
     }
 
     public void SetAthleteBeingDragged(AthleteController athlete) {
@@ -384,6 +416,8 @@ public class MatchController : MonoBehaviour {
         } else {
             athlete.GetComponent<SortingGroup>().sortingLayerName = "Focal Athlete";
         }
+
+        //UndisplayQuote();
 
         athleteBeingDragged = athlete;
     }
@@ -526,9 +560,11 @@ public class MatchController : MonoBehaviour {
         	canvasManager.DisplayNextTurn(turnNumber);
 		}
 
+        /*
         if(turnNumber >= turnCap) {
             audioManager.AmbientPlay("lastTurn");
         }
+        */
 
         for(int i = 0; i < ballsOnField.Count; i++) {
             ballsOnField[i].ResetTouchOrder();
@@ -597,6 +633,15 @@ public class MatchController : MonoBehaviour {
                 awayAthletesOnField[i].EnableInteraction();
             }
         }
+
+        for(int i = 0; i < homeAthletesOnField.Count; i++) {
+            homeAthletesOnField[i].SetSpokeThisTurn(false);
+        }
+        for(int i = 0; i < awayAthletesOnField.Count; i++) {
+            awayAthletesOnField[i].SetSpokeThisTurn(false);
+        }
+
+        //Can subs speak?
 
         AllowSubstitutions(homeTurn);
 
@@ -1004,9 +1049,11 @@ public class MatchController : MonoBehaviour {
     public void BeginActiveTurnPhase(AthleteController initiatior) {
         athleteInitiater = initiatior;
 
+        /*
         if(turnNumber >= turnCap) {
             audioManager.AmbientStop("lastTurn");
         }
+        */
 
         SetAthleteBeingDragged(null);
 

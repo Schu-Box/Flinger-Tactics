@@ -50,6 +50,8 @@ public class AthleteController : MonoBehaviour{
 	private float expressionTimer = 0f;
 	private bool substitute = false;
 
+	private bool spokeThisTurn = false;
+
 	private Vector2 lastVelocity;
 	private Vector3 originalScale;
 
@@ -346,11 +348,13 @@ public class AthleteController : MonoBehaviour{
 
 	public void MouseEnter() {
 		if(!crowdAthlete) {
-			matchController.AthleteHovered(athlete);
+			if(!matchController.GetAthleteHovered()) {
+				matchController.AthleteHovered(this);
 
-			if(!disabledInteraction && !athlete.GetTeam().computerControlled) {
-				if(!matchController.GetAthleteBeingDragged()) {
-					face.SetFaceSprite("hovered");
+				if(!disabledInteraction && !athlete.GetTeam().computerControlled) {
+					if(!matchController.GetAthleteBeingDragged()) {
+						face.SetFaceSprite("hovered");
+					}
 				}
 			}
 		}
@@ -358,11 +362,13 @@ public class AthleteController : MonoBehaviour{
 
 	public void MouseExit() {
 		if(!crowdAthlete) {
-			matchController.AthleteUnhovered(athlete);
+			if(matchController.GetAthleteHovered()) {
+				matchController.AthleteUnhovered(this);
 
-			if(!disabledInteraction && !athlete.GetTeam().computerControlled) {
-				if(!matchController.GetAthleteBeingDragged() && !moving) {
-					face.SetFaceSprite("neutral");
+				if(!disabledInteraction && !athlete.GetTeam().computerControlled) {
+					if(!matchController.GetAthleteBeingDragged() && !moving) {
+						face.SetFaceSprite("neutral");
+					}
 				}
 			}
 		}
@@ -864,5 +870,13 @@ public class AthleteController : MonoBehaviour{
 
 	public bool IsGravityFieldEnabled() {
 		return gravityField.IsGravityFieldEnabled();
+	}
+
+	public void SetSpokeThisTurn(bool spoke) {
+		spokeThisTurn = spoke;
+	}
+
+	public bool GetSpokeThisTurn() {
+		return spokeThisTurn;
 	}
 }

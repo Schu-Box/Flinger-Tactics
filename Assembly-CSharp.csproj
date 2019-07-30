@@ -75,6 +75,8 @@
      <Compile Include="Assets\Scripts\MatchController.cs" />
      <Compile Include="Assets\Scripts\MatchData.cs" />
      <Compile Include="Assets\Scripts\ModeController.cs" />
+     <Compile Include="Assets\Scripts\QuoteBox.cs" />
+     <Compile Include="Assets\Scripts\QuoteManager.cs" />
      <Compile Include="Assets\Scripts\RaisedButton.cs" />
      <Compile Include="Assets\Scripts\RuleChangeButton.cs" />
      <Compile Include="Assets\Scripts\RuleSet.cs" />

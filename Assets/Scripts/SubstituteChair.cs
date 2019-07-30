@@ -12,6 +12,8 @@ public class SubstituteChair : MonoBehaviour {
 
 	private Color startColor;
 
+	private float launchForce = 500f;
+
 	private float maxXStretch;
 	private float maxYStretch;
 
@@ -82,7 +84,7 @@ public class SubstituteChair : MonoBehaviour {
 
 		SubstitutePlatform subPlat;
 
-		float onBarRoom = 0.45f;
+		float onBarRoom = 0.3f;
 
 		if(homeSub) {
 			if(targetPosition.x > subChairRest.x - onBarRoom) { //Then keep the chair locked in place
@@ -201,7 +203,7 @@ public class SubstituteChair : MonoBehaviour {
 
 		Debug.Log(percentForce);
 
-        float xForce = 400f * percentForce;
+        float xForce = launchForce * percentForce;
         if(ac.GetAthlete().GetTeam() != matchController.GetTeam(true)) {
             xForce = -xForce;
         }
