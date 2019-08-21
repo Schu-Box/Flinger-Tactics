@@ -49,7 +49,14 @@ MonoBehaviour:
   - {r: 0.82710314, g: 0.8584906, b: 0.43329477, a: 1}
   - {r: 0.76894116, g: 0.8018868, b: 0.6694998, a: 1}
   - {r: 0.72136396, g: 0.8018868, b: 0.63923997, a: 1}
-  typeString: Circle
+  personalityList:
+  - {fileID: 11400000, guid: c2e03ce37fe7f409c874a9c37d9116a7, type: 2}
+  - {fileID: 11400000, guid: d7c6a5189bce746bbb210af361c3733f, type: 2}
+  - {fileID: 11400000, guid: 86ce1e78af3284b2ea7706e2c14e3190, type: 2}
+  - {fileID: 11400000, guid: 62469e984c0b24c2abeb891b50bcddf4, type: 2}
+  - {fileID: 11400000, guid: 2a67283b471ae425cade2140345fcdba, type: 2}
+  - {fileID: 11400000, guid: 5c62b0849c903449b86f724a1c997e22, type: 2}
+  classString: Circle
   bumperModifier: 1
   bodySprite: {fileID: 21300000, guid: 2be1292db46a243e2bc9c2add5baf04e, type: 3}
   faceBaseSprite: {fileID: 21300000, guid: 2012a1f136be3499e8c6c369ad6a2411, type: 3}

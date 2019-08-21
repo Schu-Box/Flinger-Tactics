@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c016dee5c2ce4b528f2ff456026ffb5, type: 3}
+  m_Name: Xenoglot
+  m_EditorClassIdentifier: 
+  id: Xenoglot
+  preMatchTeamQuoteList:
+  - Hiya!
+  - Hey hey!
+  - Heyyyaa!
+  - Hellah!
+  - Howhow!
+  preMatchOpponentQuoteList:
+  - Ooga!
+  - Oggha!
+  - Yogga!
+  - Yogga yu!
+  - No!
+  preFlingTeamQuoteList:
+  - Waahah?
+  - Weehou!
+  - Fling!
+  - Flingy fling!
+  - Ahwooo!
+  - Yayahh!
+  - Wheeee!
+  - Heweggo!
+  - Yup yup!
+  - Leggo!
+  preFlingOpponentQuoteList:
+  - Eh?
+  - Nono!!
+  - Yagga!!
+  - Neh!
+  - Naw!
+  - Yogga!
+  - Uff yogga!
+  - Heh?
+  - Yo oggo no malla!
+  - Yo yo no go! Go!
+  goalQuoteList:
+  - Ahah!
+  - Yaya yah!
+  - Yah ya hey!
+  - Bookie!
+  - Googly!
+  - Gol! I gol!
+  - Yaw? Yah!
+  - Haha hey!
+  - Yah!!!
+  - Ahahahup!
+  ownGoalQuoteList:
+  - Oooo oo! Oo!
+  - Naw...
+  - Oh oh...
+  - Uff!
+  - I nono!
+  postMatchWinQuoteList:
+  - Ahahah!
+  - Yaya hey!
+  - Yaya viky!
+  - Viky! Viky!
+  - Tictry!
+  postMatchLoseQuoteList:
+  - Ugh...
+  - Hmmpphff...
+  - Uff!!
+  - No viky?
+  - Oh... Ah...
+  substituteQuoteList:
+  - Fling fling fling!
+  - Yaya time!
+  - Me and friendies!
+  - Sub sub!
+  - Substiscoot!

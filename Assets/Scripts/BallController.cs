@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BallController : MonoBehaviour {
 
+	private MatchController matchController;
+
 	private CameraController cameraController;
 	private AudioManager audioManager;
 
@@ -31,6 +33,8 @@ public class BallController : MonoBehaviour {
 	private Color inactiveColor = Color.white;
 
 	private void Start() { 
+		matchController = FindObjectOfType<MatchController>();
+
 		cameraController = FindObjectOfType<CameraController>();
 		audioManager = FindObjectOfType<AudioManager>();
 
@@ -153,6 +157,7 @@ public class BallController : MonoBehaviour {
 		} else {
 			//It's an own goal
 			Debug.Log("Own goal!");
+			matchController.AthleteOwnGoal(initiater);
 		}
 
 		ResetTouchOrder();
@@ -198,6 +203,8 @@ public class BallController : MonoBehaviour {
 		if(!initiaterCredited && initiater != scorer) { //If the initiater was not awarded an assist or a goal, give them an assist
 			initiater.IncreaseStat(StatType.Assists);
 		}
+
+		matchController.AthleteGoal(scorer);
 	}
 
 	public IEnumerator ScoreAnimation(Color scorerColor, Vector3 goalCenter) {
@@ -342,5 +349,10 @@ public class BallController : MonoBehaviour {
 		}
 
 		sr.color = fadedColor;
+	}
+
+	public void AddForce(Vector2 forceAdded) {
+		moving = true;
+		rb.AddForce(forceAdded);
 	}
 }

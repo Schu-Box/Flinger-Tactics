@@ -9,9 +9,12 @@ public class Bumper : MonoBehaviour {
 	private MatchController matchController;
 	private CameraController cameraController;
 	private AudioManager audioManager;
-	private AudioSource audioSource;
+	private ParticleManager particleManager;
+
+
 	private SpriteRenderer spriteRenderer;
 	private Collider2D collie;
+
 
 	private BumperTrigger bumperTrigger;
 
@@ -38,7 +41,8 @@ public class Bumper : MonoBehaviour {
 		matchController = FindObjectOfType<MatchController>();
 		cameraController = FindObjectOfType<CameraController>();
 		audioManager = FindObjectOfType<AudioManager>();
-		audioSource = GetComponent<AudioSource>();
+		particleManager = FindObjectOfType<ParticleManager>();
+
 		spriteRenderer = GetComponent<SpriteRenderer>();
 		collie = GetComponent<Collider2D>();
 
@@ -95,9 +99,18 @@ public class Bumper : MonoBehaviour {
 						matchController.GetAthleteInitiater().IncreaseStat(StatType.Breaks);
 					}
 				}
-			} else if(collision.gameObject.CompareTag("Athlete") && collision.gameObject.GetComponent<AthleteController>().GetAthlete().GetTeam() != teamOwner) {
-				BreakBlock();
-				collision.gameObject.GetComponent<AthleteController>().IncreaseStat(StatType.Breaks);
+			} else if(collision.gameObject.CompareTag("Athlete")) {
+				AthleteController ac = collision.gameObject.GetComponent<AthleteController>();
+				if(ac.GetAthlete().GetTeam() != teamOwner) {
+					BreakBlock();
+					ac.IncreaseStat(StatType.Breaks);
+				} else {
+					//if athlete sendsShockwaves
+					if(ac.GetSendsShockwaves()) {
+						cameraController.AddTrauma(0.4f);
+						SendShockwave();
+					}
+				}
 			} else {
 				//Do nothing
 			}
@@ -146,6 +159,8 @@ public class Bumper : MonoBehaviour {
 	}
 
 	public void BreakBlock() {
+		particleManager.PlayBreak(this);
+
 		StartCoroutine(DestoryAfterAnimation());
 	}
 
@@ -193,6 +208,8 @@ public class Bumper : MonoBehaviour {
 	public void RestoreBumper() {
 		Reactivate();
 
+		particleManager.PlayBumperRestoration(this);
+
 		StartCoroutine(RestoreAnimation());
 	}
 
@@ -208,6 +225,8 @@ public class Bumper : MonoBehaviour {
 
 		transform.position = offFieldPosition;
 		transform.localScale = originalSize;
+
+		yield return new WaitForSeconds(0.6f);
 
 		float timer = 0f;
 		float duration = 0.4f;
@@ -225,5 +244,27 @@ public class Bumper : MonoBehaviour {
 
 	public bool GetDisabled() {
 		return disabled;
+	}
+
+	public bool GetImmunue() {
+		return immune;
+	}
+
+	public void SendShockwave() {
+		Debug.Log("Shockwave");
+
+		Shockwave shocker = Instantiate(matchController.shockwavePrefab, Vector3.zero, Quaternion.identity, this.transform).GetComponent<Shockwave>();
+
+		float xDistance = 5f;
+		Vector3 endPosition = Vector3.zero;
+		if(teamOwner == matchController.GetTeam(true)) { //if it's the home team
+			endPosition.x += xDistance;
+		} else {
+			shocker.transform.localEulerAngles = new Vector3(180, 0, 0);
+
+			endPosition.x += xDistance;
+		}
+
+		StartCoroutine(shocker.AnimateShockwave(endPosition, teamOwner.secondaryColor));
 	}
 }

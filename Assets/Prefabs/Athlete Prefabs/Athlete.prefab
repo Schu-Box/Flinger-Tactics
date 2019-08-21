@@ -214,7 +214,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1890608623415672
 GameObject:
   m_ObjectHideFlags: 0
@@ -653,7 +653,7 @@ MonoBehaviour:
   face_Hovered: {fileID: 21300000, guid: 8e6c8b6ef88384d52b3ee8bfa0aa1dd4, type: 3}
   face_Dragging: {fileID: 21300000, guid: 92eae272b5a0b4c529e04a9b160916a9, type: 3}
   face_Going: {fileID: 21300000, guid: fcb7ccd927ca141f693c60ab309110d1, type: 3}
-  face_Dizzy: {fileID: 21300000, guid: 48cde56b4818a4dfa8fca8a1d3c3ff84, type: 3}
+  face_Dizzy: {fileID: 21300000, guid: 827c3704bb8b04fdabe50b7baeac0bef, type: 3}
   face_Bumped: {fileID: 21300000, guid: 827c3704bb8b04fdabe50b7baeac0bef, type: 3}
   face_BumpedEnemy: {fileID: 21300000, guid: 529bb6f3821e64af581103ed9e66d8fb, type: 3}
   face_BumpedTeammate: {fileID: 21300000, guid: 2cd17fc75d94f42929e61b09d7cd0cff,
@@ -661,6 +661,17 @@ MonoBehaviour:
   face_Stopped: {fileID: 21300000, guid: 45cce6358db63445b8c6c9738f9ceaf1, type: 3}
   face_Victory: {fileID: 21300000, guid: fcb7ccd927ca141f693c60ab309110d1, type: 3}
   face_Defeat: {fileID: 21300000, guid: 45cce6358db63445b8c6c9738f9ceaf1, type: 3}
+  face_Paralyzed: {fileID: 21300000, guid: 48cde56b4818a4dfa8fca8a1d3c3ff84, type: 3}
+  face_Woken: {fileID: 21300000, guid: a78583ad369c5445d85b83062b6f623c, type: 3}
+  face_Speaking: {fileID: 21300000, guid: 036bde07f2c224852b6c74052a45ce27, type: 3}
+  speakingSprites:
+  - {fileID: 21300000, guid: a612118c4086b4a649bc35caad210e8c, type: 3}
+  - {fileID: 21300000, guid: 4e7808bee9aad4dd4b5b523b6a687f35, type: 3}
+  - {fileID: 21300000, guid: 169ff2c1396c84b6b83aabdd54426b9e, type: 3}
+  - {fileID: 21300000, guid: 48632780fb9f94b759a5dccc42720747, type: 3}
+  - {fileID: 21300000, guid: 169ff2c1396c84b6b83aabdd54426b9e, type: 3}
+  - {fileID: 21300000, guid: 4e7808bee9aad4dd4b5b523b6a687f35, type: 3}
+  - {fileID: 21300000, guid: a612118c4086b4a649bc35caad210e8c, type: 3}
 --- !u!114 &114081790028390782
 MonoBehaviour:
   m_ObjectHideFlags: 1

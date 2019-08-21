@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c016dee5c2ce4b528f2ff456026ffb5, type: 3}
+  m_Name: Disrespectful
+  m_EditorClassIdentifier: 
+  id: Disrespectful
+  preMatchTeamQuoteList:
+  - Let's crush them!
+  - This'll be a blowout!
+  - Ha! They think they can beat us?!
+  - This is gonna be too easy.
+  - Let's play a flinger down to keep it fair.
+  preMatchOpponentQuoteList:
+  - You chumps have no chance!
+  - Hah! You think you can beat us??
+  - If we play you're gonna lose.
+  - Ready to lose?
+  - Prepare for defeat! Big defeat!
+  preFlingTeamQuoteList:
+  - Just fling me at that stoopy head!
+  - They can't hope to contain me!
+  - Yah! Time to destroy them!
+  - Just fling me and I'll score.
+  - Fling away and ruin their day!
+  preFlingOpponentQuoteList:
+  - Go back to your team, chump.
+  - You're the coach? Ha good luck.
+  - Good luck... You'll need it.
+  - Don't even bother flinging, loser.
+  - I'm not your friend!
+  goalQuoteList:
+  - Hah! Told you losers!
+  - It's too easy!
+  - That's what I do, babbbbyyyy!
+  - That's all day!
+  - Can y'all play some defense?!
+  ownGoalQuoteList:
+  - Yogga!
+  - Coach why'd you do that?!
+  - Coach you're making me look bad!
+  - AGGHHH!! So unlucky!
+  - uff...
+  postMatchWinQuoteList:
+  - Hahaha! Too easy!
+  - gg 2 ez
+  - Can we have some real competition next time?
+  - Can we play for real now?
+  - If I was them I'd be embarassed.
+  postMatchLoseQuoteList:
+  - Yogga!!!
+  - Coach you made us lose!
+  - They got so lucky!!!
+  - Rematch! That was pure luck!
+  - What was my team even doing?!
+  substituteQuoteList:
+  - I shoulda never been on the bench!
+  - You can't win without me! Fling me on!
+  - Bout time! You need me!
+  - Sub me on if you wanna win!
+  - I'm too good to be on the bench!

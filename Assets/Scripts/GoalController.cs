@@ -25,6 +25,18 @@ public class GoalController : MonoBehaviour {
 		bumper.SetAsGoal(true);
 	}
 
+	void OnCollisionEnter2D(Collision2D collision) {
+		if(collision.gameObject.tag == "Athlete") {
+			AthleteController ac = collision.gameObject.GetComponent<AthleteController>();
+			if(!ac.crowdAthlete && ac.GetAthlete().GetTeam() == teamOwner) {
+				//Restore the last bumper they hit
+				if(ac.GetRestoresBumper()) {
+					matchController.RestoreBumper(ac.GetLastBumperEntered());
+				}
+			}
+		}
+	}
+
 	public void OpenSubPlatform() {
 		StartCoroutine(subPlatform.AnimateSubPlatformOpening());
 	}
@@ -72,7 +84,7 @@ public class GoalController : MonoBehaviour {
 	*/
 
 	public void BallEnteredTrigger(BallController ball) {
-		matchController.ScoreGoal(goalAttacker, ball, transform.position);
+		matchController.ScoreGoal(goalAttacker, ball, transform);
 
 		StartCoroutine(GoalFlash());
 	}

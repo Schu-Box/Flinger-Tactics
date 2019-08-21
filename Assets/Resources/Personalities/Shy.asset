@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c016dee5c2ce4b528f2ff456026ffb5, type: 3}
+  m_Name: Shy
+  m_EditorClassIdentifier: 
+  id: Shy
+  preMatchTeamQuoteList:
+  - '...'
+  - Hey
+  - Oh... Hey...
+  - Hello
+  - Hi
+  preMatchOpponentQuoteList:
+  - '...'
+  - Please ignore me...
+  - Oh ummm I'm not on your team
+  - Me? I'm nobody.
+  - Please leve me alone...
+  preFlingTeamQuoteList:
+  - '...'
+  - Me? Flingy time? Alright...
+  - You're gonna fling me, aren't you?
+  - Ummm I guess I can fling now.
+  - Do I have to fling?
+  preFlingOpponentQuoteList:
+  - '...'
+  - Please ignore me...
+  - It's your turn.
+  - It's not my turn.
+  - We shouldn't talk...
+  goalQuoteList:
+  - '...'
+  - A goal? Yes!
+  - Aha I did it!
+  - Oh that was me? Yah!
+  - Did anyone see that?
+  ownGoalQuoteList:
+  - '...'
+  - Oh no no no...
+  - I wish I wasn't here...
+  - Why'd you have to fling me??
+  - This is why I shouldn't fling...
+  postMatchWinQuoteList:
+  - '...'
+  - Oh hey we did it!
+  - I hope I helped.
+  - I'm so glad it's over...
+  - Wow my teammates are so good!
+  postMatchLoseQuoteList:
+  - '...'
+  - I never should've became a flinger...
+  - I shouldn't be flinging...
+  - We lost...
+  - I'm sorry...
+  substituteQuoteList:
+  - '...'
+  - Huh? Me?
+  - Oh... You want me to go out there?
+  - I have to go out with the others now?
+  - Can I stay inside, coach?

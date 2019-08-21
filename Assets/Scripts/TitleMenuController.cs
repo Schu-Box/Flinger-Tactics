@@ -66,6 +66,11 @@ public class TitleMenuController : MonoBehaviour {
 		StartNewGame();
 	}
 
+	public void SelectCompetitiveMode() {
+		PlayerPrefs.SetString("mode", "competitive");
+		StartNewGame();
+	}
+
 	public void StartNewGame() {
 		Debug.Log("Entering Play Scene");
 		SceneManager.LoadScene(1);

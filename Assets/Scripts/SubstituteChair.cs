@@ -66,6 +66,16 @@ public class SubstituteChair : MonoBehaviour {
 		return currentSubstitute;
 	}	
 
+	public void OnMouseEnter() {
+		Debug.Log("Mouse entered sub chair");
+
+		if(interactable) {
+			if(currentSubstitute != null && currentSubstitute.GetSpokeThisTurn()) {
+                matchController.DisplayQuote(currentSubstitute, currentSubstitute.GetAthlete().GetQuote("substitute"));
+			}
+		}
+	}
+
 	public void OnMouseDrag() {
 		if(interactable) {
 			Vector3 mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, -Camera.main.transform.position.z);

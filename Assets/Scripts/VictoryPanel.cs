@@ -17,6 +17,10 @@ public class VictoryPanel : MonoBehaviour {
 	public Vector3 onPosition;
 	//public Vector3 endOffPosition;
 
+	private Team winningTeam;
+
+	private ParticleManager particleManager;
+
 	void Awake() {
 		panelBorder = GetComponent<Image>();
 		panel = transform.GetChild(0).GetComponent<Image>();
@@ -24,10 +28,14 @@ public class VictoryPanel : MonoBehaviour {
 
 		teamText = panel.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
 		resultText = panel.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+
+		particleManager = FindObjectOfType<ParticleManager>();
 	}
 
 	public void SetVictoryTeam(Team team) {
 		gameObject.SetActive(true);
+
+		winningTeam = team;
 
 		panel.color = team.GetLightTint();
 
@@ -51,5 +59,7 @@ public class VictoryPanel : MonoBehaviour {
 
 			yield return waiter;
 		}
+
+		particleManager.PlayVictoryConfetti(transform.position, winningTeam);
 	}
 }

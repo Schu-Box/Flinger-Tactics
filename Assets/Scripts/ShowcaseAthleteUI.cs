@@ -13,8 +13,10 @@ public class ShowcaseAthleteUI : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
 	//Highlights Panel
 	public GameObject highlightsPanel;
-	public TextMeshProUGUI stat1Text;
-	public TextMeshProUGUI stat2Text;
+	public TextMeshProUGUI stat1Num;
+	public TextMeshProUGUI stat1Label;
+	public TextMeshProUGUI stat2Num;
+	public TextMeshProUGUI stat2Label;
 
 	//Stat Panel
 	public GameObject statPanel;
@@ -42,15 +44,19 @@ public class ShowcaseAthleteUI : MonoBehaviour, IPointerEnterHandler, IPointerEx
 		Stat secondStat = team.GetCurrentMatchData().GetTeamMatchData(team).GetAthleteMatchData(athlete).GetNthBestStat(2);
 
 		if(firstStat != null && firstStat.GetCount() > 0) {
-			stat1Text.text = firstStat.GetCount() + " " + firstStat.GetStatName();
+			stat1Num.text = firstStat.GetCount().ToString();
+			stat1Label.text = firstStat.GetStatName();
 		} else {
-			stat1Text.text = "";
+			stat1Num.text = "";
+			stat1Label.text = "";
 		}
 
 		if(secondStat != null && secondStat.GetCount() > 0) {
-			stat2Text.text = secondStat.GetCount() + " " + secondStat.GetStatName();
+			stat2Num.text = secondStat.GetCount().ToString();
+			stat2Label.text = secondStat.GetStatName();
 		} else {
-			stat2Text.text = "";
+			stat2Num.text = "";
+			stat2Label.text = "";
 		}
 
 		if(highlightsPanel.activeSelf) {
@@ -81,11 +87,6 @@ public class ShowcaseAthleteUI : MonoBehaviour, IPointerEnterHandler, IPointerEx
 	public void OnPointerExit(PointerEventData eventData) {
         //ScrollDown();
     }
-
-	public void SetStatStrings(string stat1, string stat2) {
-		stat1Text.text = stat1;
-		stat2Text.text = stat2;
-	}
 
 	public void ScrollUp() {
 		StartCoroutine(MoveObjectFromTo(highlightsPanel, highlightStartPos, highlightEndPos, 0.3f));

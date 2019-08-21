@@ -9,7 +9,9 @@ public class AthleteData : ScriptableObject {
 
 	public List<Color> skinColorList = new List<Color>();
 
-	public string typeString;
+	public List<Personality> personalityList = new List<Personality>();
+
+	public string classString;
 
 	public float bumperModifier = 1f;
 

@@ -17,6 +17,11 @@ public class Face : MonoBehaviour {
 	public Sprite face_Stopped;
 	public Sprite face_Victory;
 	public Sprite face_Defeat;
+	public Sprite face_Paralyzed;
+	public Sprite face_Woken;
+	public Sprite face_Speaking;
+
+	public List<Sprite> speakingSprites;
 
 	private MatchController matchController;
 	private AthleteController athleteController;
@@ -52,6 +57,10 @@ public class Face : MonoBehaviour {
 	public void SetMaterial(Shader material) {
 		faceBaseSpriteRenderer.material.shader = material;
 		//spriteRenderer
+	}
+
+	public void SetFaceSprite(Sprite faceSprite) {
+		spriteRenderer.sprite = faceSprite;
 	}
 
 	public void SetFaceSprite(string faceSprite) {
@@ -94,10 +103,23 @@ public class Face : MonoBehaviour {
 				case "defeat":
 					newFace = face_Defeat;
 					break;
+				case "paralyzed":
+					newFace = face_Paralyzed;
+					break;
+				case "woken":
+					newFace = face_Woken;
+					break;
+				case "speaking":
+					newFace = face_Speaking;
+					break;
 				default:
 					Debug.Log(faceSprite + " expression does not exist");
 					newFace = face_Neutral;
 					break;
+			}
+
+			if(athleteController.GetParalyzed()) { //Overrides any other face if the athlete is paralyzed.
+				newFace = face_Paralyzed;
 			}
 
 			spriteRenderer.sprite = newFace;
@@ -114,20 +136,24 @@ public class Face : MonoBehaviour {
 
 	public void ChangeExpression(string expression, float duration) {
 
-		if(expressionCoroutine != null) { //Athlete is currently already expressing something
-			//expressionCoroutine = StartCoroutine(Express(expression, duration));
-		} else {
-			expressionCoroutine = StartCoroutine(Express(expression, duration));
+		if(!athleteController.GetParalyzed()) {
+			if(expressionCoroutine != null) { //Athlete is currently already expressing something
+				//expressionCoroutine = StartCoroutine(Express(expression, duration));
+			} else {
+				if(expression != "speaking") {
+					expressionCoroutine = StartCoroutine(Express(expression, duration));
+				} else {
+					expressionCoroutine = StartCoroutine(Speak(duration));
+				}
+			}
 		}
 	}
 
-	public IEnumerator Express(string expression, float duration) {
-		
+	private IEnumerator Express(string expression, float duration) {
 		SetFaceSprite(expression);
 
-		float timer = 0f;
-
 		WaitForFixedUpdate waiter = new WaitForFixedUpdate();
+		float timer = 0f;
 		while(timer < duration) {
 			timer += Time.deltaTime;
 			yield return waiter;
@@ -137,6 +163,41 @@ public class Face : MonoBehaviour {
 
 		expressionCoroutine = null;
 	}	
+
+	private IEnumerator Speak(float duration) {
+		SetFaceSprite(speakingSprites[0]);
+
+		WaitForFixedUpdate waiter = new WaitForFixedUpdate();
+		float timer = 0f;
+		while(timer < duration) {
+			timer += Time.deltaTime;
+
+			float cycleTime = duration / 2f;
+			float spriteIntervals = cycleTime / speakingSprites.Count;
+
+			float adjustedTime = timer % cycleTime;
+
+			int step = 0;
+			float timeRemaining = adjustedTime;
+			for(int i = 0; i < speakingSprites.Count; i++) {
+				if(timeRemaining > spriteIntervals) {
+					step++;
+
+					timeRemaining -= spriteIntervals;
+				} else { //else it's not time to move to the next sprite yet
+					break;
+				}
+			}
+
+			SetFaceSprite(speakingSprites[step]);
+
+			yield return waiter;
+		}
+
+		DetermineFaceState();
+
+		expressionCoroutine = null;
+	} 
 
 	public bool IsExpressing() {
 		if(expressionCoroutine != null) {
@@ -150,29 +211,37 @@ public class Face : MonoBehaviour {
 		if(athleteController.crowdAthlete) {
 			SetFaceSprite("watching");
 		} else {
-			if(athleteController.GetDizzy()) {
-					SetFaceSprite("dizzy");
-				} else {
-					if(athleteController.GetMoving()) {
-						SetFaceSprite("going");
+			if(athleteController.GetParalyzed()) {
+				SetFaceSprite("paralyzed");
+			} else {
+				if(athleteController.GetDizzy()) {
+						SetFaceSprite("dizzy");
 					} else {
-						/*
-						if(athleteController.GetReady()) { 
-							SetFaceSprite("ready");
+						if(athleteController.GetMoving()) {
+							SetFaceSprite("going");
 						} else {
-							SetFaceSprite("neutral");
+							/*
+							if(athleteController.GetReady()) { 
+								SetFaceSprite("ready");
+							} else {
+								SetFaceSprite("neutral");
+							}
+							*/
+							if(matchController.GetAthleteHovered()) {
+								SetFaceSprite("hovered");
+							} else {
+								SetFaceSprite("neutral");
+							}
 						}
-						*/
-						SetFaceSprite("neutral");
 					}
-				}
 
 
-			if(matchController != null && matchController.GetMatchEnded()) {
-				if(athleteController.GetAthlete().GetTeam().GetCurrentMatchData().GetTeamMatchData(athleteController.GetAthlete().GetTeam()).DidTeamWin()) {
-					SetFaceSprite("victory");
-				} else {
-					SetFaceSprite("defeat");
+				if(matchController != null && matchController.GetMatchEnded()) {
+					if(athleteController.GetAthlete().GetTeam().GetCurrentMatchData().GetTeamMatchData(athleteController.GetAthlete().GetTeam()).DidTeamWin()) {
+						SetFaceSprite("victory");
+					} else {
+						SetFaceSprite("defeat");
+					}
 				}
 			}
 		}

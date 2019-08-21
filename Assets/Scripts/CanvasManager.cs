@@ -6,6 +6,8 @@ using TMPro;
 
 public class CanvasManager : MonoBehaviour {
 
+    public Canvas overlayCanvas;
+
 	[Header("Team Selection UI")]
     public TeamSelectionPanel homeSelectionPanel;
     public TeamSelectionPanel awaySelectionPanel;
@@ -43,7 +45,10 @@ public class CanvasManager : MonoBehaviour {
     public Button continueButton;
     public GameObject statTable;
 
+    [Header("Post Match on Field")]
     public VictoryPanel victoryPanel;
+    public TextMeshProUGUI bestGoalDifferentialLabelText;
+    public TextMeshProUGUI bestGoalDifferentialNumText;
 
     [Header("Team Post Match Panel")]
     public TeamPostMatchPanel teamPostMatchPanel;
@@ -68,6 +73,7 @@ public class CanvasManager : MonoBehaviour {
     private ModeController modeController;
 	private MatchController matchController;
 	private CameraController cameraController;
+    private ParticleManager particleManager;
 
 	private Team home;
 	private Team away;
@@ -76,6 +82,7 @@ public class CanvasManager : MonoBehaviour {
         modeController = FindObjectOfType<ModeController>();
 		matchController = FindObjectOfType<MatchController>();
 		cameraController = FindObjectOfType<CameraController>();
+        particleManager = FindObjectOfType<ParticleManager>();
 
 		scoreFontSize = homeScoreText.fontSize;
 
@@ -92,6 +99,8 @@ public class CanvasManager : MonoBehaviour {
         turnIndicatorText.gameObject.SetActive(false);
 
         victoryPanel.gameObject.SetActive(false);
+        bestGoalDifferentialLabelText.gameObject.SetActive(false);
+        bestGoalDifferentialNumText.gameObject.SetActive(false);
 
         /*
         quoteBox.SetQuoteBox();
@@ -140,6 +149,11 @@ public class CanvasManager : MonoBehaviour {
         homeSelectionPanel.gameObject.SetActive(false);
         awaySelectionPanel.gameObject.SetActive(false);
         customRulesButon.gameObject.SetActive(false);
+
+        /*
+        Debug.Log("Debugger victory particles");
+        particleManager.PlayVictoryConfetti(Vector3.zero, home);
+        */
 	}
 
 	public IEnumerator DisplayScore(Team teamThatScored) {
@@ -304,10 +318,13 @@ public class CanvasManager : MonoBehaviour {
         turnButton.PostMatch();
 
         Team victor = matchController.GetMatchData().GetWinner();
-        
-        Debug.Log(victor.name);
 
         victoryPanel.SetVictoryTeam(victor);
+
+        if(PlayerPrefs.GetString("mode") == "competitive") {
+            bestGoalDifferentialLabelText.gameObject.SetActive(true);
+            bestGoalDifferentialNumText.gameObject.SetActive(true);
+        }
 	}
 
 	public void DisplayPostMatchPanel() {
@@ -319,8 +336,14 @@ public class CanvasManager : MonoBehaviour {
 
         homeNamePlate.GetComponent<Image>().color = home.primaryColor;
         awayNamePlate.GetComponent<Image>().color = away.primaryColor;
-        homeNamePlate.GetComponentInChildren<TextMeshProUGUI>().text = home.name;
-        awayNamePlate.GetComponentInChildren<TextMeshProUGUI>().text = away.name;
+
+        TextMeshProUGUI homeNameText = homeNamePlate.GetComponentInChildren<TextMeshProUGUI>();
+        homeNameText.text = home.nameLocation + '\n' + home.nameNickname;
+        homeNameText.color = home.primaryColor;
+
+        TextMeshProUGUI awayNameText = awayNamePlate.GetComponentInChildren<TextMeshProUGUI>();
+        awayNameText.text = away.nameLocation + '\n' + away.nameNickname;
+        awayNameText.color = away.primaryColor;
 
         arrowButton_home.GetComponent<Image>().color = home.primaryColor;
         arrowButton_away.GetComponent<Image>().color = away.primaryColor;
@@ -328,15 +351,16 @@ public class CanvasManager : MonoBehaviour {
         arrowButton_away.onClick.AddListener(() => DisplayTeamPanelPostMatch(false));
 
         continueButton.onClick.RemoveAllListeners();
-        if(PlayerPrefs.GetString("mode") == "playNow") {
-            continueButton.GetComponentInChildren<TextMeshProUGUI>().text = "Replay";
+        string modeID = PlayerPrefs.GetString("mode");
+        if(modeID == "playNow" || modeID == "competitive") {
+            continueButton.GetComponentInChildren<TextMeshProUGUI>().text = "REPLAY";
             continueButton.onClick.AddListener(() => modeController.Rematch());
         } else {
             Team playerTeam = matchController.GetTeam(true);
             if(playerTeam.GetCurrentMatchData().GetTeamMatchData(playerTeam).DidTeamWin()) {
-                continueButton.GetComponentInChildren<TextMeshProUGUI>().text = "Continue";
+                continueButton.GetComponentInChildren<TextMeshProUGUI>().text = "CONTINUE";
             } else {
-                continueButton.GetComponentInChildren<TextMeshProUGUI>().text = "Restart";
+                continueButton.GetComponentInChildren<TextMeshProUGUI>().text = "RESTART";
             }
             
             continueButton.onClick.AddListener(() => modeController.EndGauntletMatch());
@@ -457,9 +481,19 @@ public class CanvasManager : MonoBehaviour {
     }
 
     public void DisplayQuote(AthleteController speaker, string quote) {
-        GameObject newQuote = Instantiate(quoteBoxObj, Vector3.zero, Quaternion.identity, this.transform);
+        GameObject newQuote = Instantiate(quoteBoxObj, Vector3.zero, Quaternion.identity, overlayCanvas.transform);
         QuoteBox quoteBox = newQuote.GetComponent<QuoteBox>();
 
         quoteBox.SetQuoteBox(speaker, quote);
+    }
+
+    public void SetNewBestScore(Team bestTeam, int bestScore) {
+        bestGoalDifferentialNumText.text = bestScore.ToString();
+        bestGoalDifferentialNumText.color = bestTeam.primaryColor;
+    }
+
+    public void DisableTeamSelection() {
+        //homeSelectionPanel.gameObject.SetActive(false);
+        awaySelectionPanel.gameObject.SetActive(false);
     }
 }

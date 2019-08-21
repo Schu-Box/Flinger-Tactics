@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class RuleSet {
 	public List<RuleSlot> ruleSlotList = new List<RuleSlot>();
 
@@ -33,16 +34,17 @@ public class RuleSet {
 		}));
 
 		ruleSlotList.Add(new RuleSlot("turnCount", new List<Rule> { 
-			new Rule(10, "10 Turns", "Decrease the number of turns to 10."),
+			new Rule(5, "5 Turns", "Decrease the number of turns to 5."),
+			new Rule(10, "10 Turns", "Change the number of turns to 10."),
 			new Rule(15, "15 Turns", "Change the number of turns to 15."),
 			new Rule(20, "20 Turns", "Change the number of turns to 20."),
 			new Rule(25, "25 Turns", "Change the number of turns to 25."),
-			new Rule(30, "30 Turns", "Change the number of turns to 30."),
-			new Rule(32, "32 Turns", "Change the number of turns to 32."),
-			new Rule(36, "36 Turns", "Change the number of turns to 36."),
-			new Rule(40, "40 Turns", "Change the number of turns to 40."),
-			new Rule(44, "44 Turns", "Change the number of turns to 44."),
-			new Rule(48, "48 Turns", "Change the number of turns to 48.")
+			new Rule(30, "30 Turns", "Change the number of turns to 30.")
+			
+			//new Rule(36, "36 Turns", "Change the number of turns to 36."),
+			//new Rule(40, "40 Turns", "Change the number of turns to 40."),
+			//new Rule(44, "44 Turns", "Change the number of turns to 44."),
+			//new Rule(48, "48 Turns", "Change the number of turns to 48.")
 		}));
 
 		ruleSlotList.Add(new RuleSlot("drawResolution", new List<Rule> { 

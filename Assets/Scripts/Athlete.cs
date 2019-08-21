@@ -8,6 +8,8 @@ public class Team {
 
 	public bool computerControlled; //Needs to be private
     public string name;
+	public string nameLocation;
+	public string nameNickname;
 	public string fieldString;
     public Color primaryColor;
 	public Color secondaryColor;
@@ -55,6 +57,8 @@ public class Team {
 public class Athlete {
 
 	public AthleteData athleteData;
+
+	private Personality personality;
 
 	public string name;
 	public Color skinColor;
@@ -119,6 +123,9 @@ public class Athlete {
 		statList.Add(new Stat(StatType.Bumps, 1));
 
 		//statList.Add(new Stat("Bounces", 2));
+
+		List<Personality> personalityList = athleteData.personalityList;
+		personality = personalityList[Random.Range(0, personalityList.Count)];
 	}
 
 	public void SetTeam(Team t) {
@@ -170,6 +177,49 @@ public class Athlete {
 			total += statList[i].GetPointValueSum();
 		}
 		return total;
+	}
+
+	public Personality GetPersonality() {
+		return personality;
+	}
+
+	public string GetQuote(string quoteID) {
+		List<string> possibleQuotes = new List<string>();
+		
+		switch(quoteID) {
+			case "preMatchTeam":
+				possibleQuotes = personality.preMatchTeamQuoteList;
+				break;
+			case "preMatchOpponent":
+				possibleQuotes = personality.preMatchOpponentQuoteList;
+				break;
+			case "preFlingTeam":
+				possibleQuotes = personality.preFlingTeamQuoteList;
+				break;
+			case "preFlingOpponent":
+				possibleQuotes = personality.preFlingOpponentQuoteList;
+				break;
+			case "goal":
+				possibleQuotes = personality.goalQuoteList;
+				break;
+			case "ownGoal":
+				possibleQuotes = personality.ownGoalQuoteList;
+				break;
+			case "postMatchWin":
+				possibleQuotes = personality.postMatchWinQuoteList;
+				break;
+			case "postMatchLose":
+				possibleQuotes = personality.postMatchLoseQuoteList;
+				break;
+			case "substitute":
+				possibleQuotes = personality.substituteQuoteList;
+				break;
+
+			default:
+				return "That quote doesn't exist";
+		}
+
+		return possibleQuotes[Random.Range(0, possibleQuotes.Count)];
 	}
 }
 

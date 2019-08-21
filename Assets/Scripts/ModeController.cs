@@ -13,7 +13,6 @@ public class ModeController : MonoBehaviour {
     private MatchController matchController;
 
     private RuleSet currentRuleSet = new RuleSet();
-
     public List<Team> teamList = new List<Team>();
 
     public static Team gauntletTeam;
@@ -31,6 +30,7 @@ public class ModeController : MonoBehaviour {
 
         string modeID = PlayerPrefs.GetString("mode");
         if(modeID == "playNow") {
+            currentRuleSet.ChangeRule(currentRuleSet.GetRuleSlot("turnCount").possibleRules[1]);
             currentRuleSet.ChangeRule(currentRuleSet.GetRuleSlot("athleteFieldCount").possibleRules[2]);
             currentRuleSet.ChangeRule(currentRuleSet.GetRuleSlot("athleteRosterCount").possibleRules[2]);
             currentRuleSet.ChangeRule(currentRuleSet.GetRuleSlot("ballCount").possibleRules[1]);
@@ -49,6 +49,21 @@ public class ModeController : MonoBehaviour {
             SetNewRosters();
 
             StartGauntlet();
+        } else if (modeID == "competitive") {
+            Debug.Log("Oh we competing, huh?");
+
+            currentRuleSet.ChangeRule(currentRuleSet.GetRuleSlot("turnCount").possibleRules[3]);
+            currentRuleSet.ChangeRule(currentRuleSet.GetRuleSlot("athleteFieldCount").possibleRules[2]);
+            currentRuleSet.ChangeRule(currentRuleSet.GetRuleSlot("athleteRosterCount").possibleRules[2]);
+            currentRuleSet.ChangeRule(currentRuleSet.GetRuleSlot("ballCount").possibleRules[1]);
+
+            SetNewRosters();
+
+            matchController.SetupCourt(currentRuleSet);
+
+            TeamSelectionPhase();
+
+            canvasManager.DisableTeamSelection();
         } else {
             Debug.Log("Null mode selected");
         }
@@ -179,6 +194,25 @@ public class ModeController : MonoBehaviour {
         SceneManager.LoadScene(0);
     }
 
+    public void EndMatch(MatchData md) {
+        if(PlayerPrefs.GetString("mode") == "competitive") {
+            int goalDifferential = md.homeTeamData.GetScore() - md.awayTeamData.GetScore();
+            if(goalDifferential > PlayerPrefs.GetInt("bestGoalDiffernce", 0)) {
+                PlayerPrefs.SetInt("bestGoalDifference", goalDifferential);
+
+                if(canvasManager != null) {
+                    canvasManager.SetNewBestScore(md.homeTeamData.team, goalDifferential);
+                }
+            }
+        }
+    }
+
+
+
+
+
+
+    //Gauntlet Stuff
     public void StartGauntlet() {
         gauntletRound = 0;
         gauntletTeam = teamList[0];

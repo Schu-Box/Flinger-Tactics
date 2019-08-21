@@ -48,10 +48,10 @@ public class Body : MonoBehaviour {
 	public void SetSprite(Sprite sprite) {
 		spriteRenderer.sprite = sprite;
 
-		if(athleteController.GetAthlete().athleteData.typeString.ToLower() == "circle") {
+		if(athleteController.GetAthlete().athleteData.classString == "Circle") {
 			collie = GetComponent<CircleCollider2D>();
 		} else {
-			Destroy(gameObject.GetComponent<CircleCollider2D>());
+			Destroy(gameObject.GetComponent<CircleCollider2D>()); //Call this to get rid of the prefab circle
 			collie = gameObject.AddComponent<PolygonCollider2D>();
 		}
 	}

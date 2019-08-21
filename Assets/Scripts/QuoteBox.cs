@@ -20,7 +20,11 @@ public class QuoteBox : MonoBehaviour {
 
 	private float charIntervalIncrease = 15f;
 
+	private AthleteController latestAthleteController;
 	private string latestQuote;
+	private Vector3 distanceFromAC;
+
+	private Coroutine currentCoroutine = null;
 
 	bool goingRight = true;
 	public void SetQuoteBox(AthleteController ac, string quote) {
@@ -29,8 +33,6 @@ public class QuoteBox : MonoBehaviour {
 
 		text = transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
 		text.text = "";
-
-		
 
 		Vector3 offset = new Vector3(0, 0.4f, 0);
 		if(ac.transform.rotation.eulerAngles.z < 180) {
@@ -58,12 +60,18 @@ public class QuoteBox : MonoBehaviour {
     	transform.position = ac.transform.position + offset;
 
 		latestQuote = quote;
+		latestAthleteController = ac;
+		distanceFromAC = transform.position - ac.transform.position;
 
-		StartCoroutine(OpenQuote());
+		latestAthleteController.SetCurrentQuoteBox(this);
+
+		currentCoroutine = StartCoroutine(OpenQuote());
 	}
 
 	public IEnumerator OpenQuote() {
 		gameObject.SetActive(true);
+
+		latestAthleteController.SetSpeaking(true);
 
 		if(goingRight) {
 			rt.offsetMin = Vector2.zero;
@@ -100,7 +108,7 @@ public class QuoteBox : MonoBehaviour {
 
 		text.text = latestQuote;
 
-		StartCoroutine(SustainAndClose());
+		currentCoroutine = StartCoroutine(SustainAndClose());
 	}
 
 	public IEnumerator SustainAndClose() {
@@ -110,10 +118,21 @@ public class QuoteBox : MonoBehaviour {
 		while(timer < duration) {
 			timer += Time.deltaTime;
 
+			Vector3 newPosition = latestAthleteController.transform.position + distanceFromAC;
+			transform.position = newPosition;
+
 			yield return waiter;
 		}
 
-		StartCoroutine(CloseQuote());
+		currentCoroutine = StartCoroutine(CloseQuote());
+	}
+
+	public void PrematurelyClose() {
+		if(currentCoroutine != null) {
+			StopCoroutine(currentCoroutine);
+
+			currentCoroutine = StartCoroutine(CloseQuote());
+		}
 	}
 
 	public IEnumerator CloseQuote() {
@@ -140,6 +159,13 @@ public class QuoteBox : MonoBehaviour {
 		} else {
 			rt.offsetMin = startOffsetMin;
 		}
+
+		if(latestAthleteController != null) {
+			latestAthleteController.SetSpeaking(false);
+			latestAthleteController.GetFace().DetermineFaceState();
+		}
+
+		currentCoroutine = null;
 
 		Destroy(gameObject);
 	}

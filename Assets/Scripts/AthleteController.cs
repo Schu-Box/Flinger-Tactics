@@ -28,7 +28,8 @@ public class AthleteController : MonoBehaviour{
 	private Tongue tongue;
 	private TextMeshPro jerseyText;
 
-	private GravityField gravityField;
+	//private GravityField gravityField;
+	private ParticleManager particleManager;
 
 	private MatchController matchController;
 	private CameraController cameraController;
@@ -42,6 +43,8 @@ public class AthleteController : MonoBehaviour{
 	private Coroutine runningCoroutine;
 	private Coroutine tongueCoroutine;
 
+	private ParticleSystem activeParticles;
+
 	private bool instantInteraction = false;
 	private bool disabledInteraction = false;
 	private bool moving = false;
@@ -52,10 +55,22 @@ public class AthleteController : MonoBehaviour{
 
 	private bool spokeThisTurn = false;
 
+	private bool speaking = false;
+	private bool paralyzed = false;
+	private int turnPhasesTilUnparalyzed = 0;
+	private bool paralyzeChargeActive = false;
+	
+
+	//Abilities?
+	private bool restoresBumperOnHit = false;
+	private bool sendsShockwaveOnBumperHit = false;
+	private bool paralyzesOnTackle = false;
+
 	private Vector2 lastVelocity;
 	private Vector3 originalScale;
 
-	private List<Bumper> bumpersInside = new List<Bumper>();
+	private Bumper lastBumperEntered;
+	private QuoteBox currentQuoteBox;
 
 	void Awake() {
 		matchController = FindObjectOfType<MatchController>();
@@ -83,7 +98,8 @@ public class AthleteController : MonoBehaviour{
 		face.SetFace();
 		tongue.SetTongue();
 
-		gravityField = GetComponentInChildren<GravityField>();
+		//gravityField = GetComponentInChildren<GravityField>();
+		particleManager = FindObjectOfType<ParticleManager>();
 	}
 
 	public void SetAthlete(Athlete a) {
@@ -130,6 +146,26 @@ public class AthleteController : MonoBehaviour{
 		RetractLegs();
 
 		RestoreAthleteColor();
+
+		string c = athlete.athleteData.classString;
+
+		switch(c) {
+			case "Box":
+				restoresBumperOnHit = true;
+				break;
+
+			case "Circle":
+				sendsShockwaveOnBumperHit = true;
+				break;
+
+			case "Triangle":
+				paralyzesOnTackle = true;
+				break;
+
+			default:
+				Debug.Log("Class doesn't exist");
+				break;
+		};
 	}
 
 	public Athlete GetAthlete() {
@@ -201,24 +237,28 @@ public class AthleteController : MonoBehaviour{
 		
 		if(collision.gameObject.CompareTag("Athlete")){
 			//cameraController.AddTrauma(0.18f);
+			AthleteController ac = collision.gameObject.GetComponent<AthleteController>();
 
-			if(collision.gameObject.GetComponent<AthleteController>().GetAthlete().GetTeam() != GetAthlete().GetTeam()) {
+			if(ac.GetAthlete().GetTeam() != GetAthlete().GetTeam()) {
 				if(moving) {
 					IncreaseStat(StatType.Tackles);
 				}
 			}
 
-			if(!dizzy) {
-				if(collision.gameObject.GetComponent<AthleteController>().athlete.GetTeam() == athlete.GetTeam()) { //Teammate
-					face.ChangeExpression("bumpedteam", 2f);
-				} else { //Opponent
-					face.ChangeExpression("bumpedenemy", 1.5f);
-				}
+			if(paralyzesOnTackle && paralyzeChargeActive) {
+				ParalyzeAthlete(ac);
+			}
+
+			if(collision.gameObject.GetComponent<AthleteController>().athlete.GetTeam() == athlete.GetTeam()) { //Teammate
+				face.ChangeExpression("bumpedteam", 2f);
+			} else { //Opponent
+				face.ChangeExpression("bumpedenemy", 1.5f);
 			}
 		} else {
 			if(collision.gameObject.CompareTag("Ball")) {
 				IncreaseStat(StatType.Touches);
 
+				/*
 				if(gravityField.IsGravityFieldEnabled()) {
 					if(!moving) {
 						gravityField.PossessBall(collision.gameObject.GetComponent<BallController>());
@@ -227,6 +267,7 @@ public class AthleteController : MonoBehaviour{
 						gravityField.StopGravitation(collision.gameObject);
 					}
 				}
+				*/
 			} /* else if(collision.gameObject.CompareTag("Bumper")) {
 				IncreaseStat("bounces");
 			}
@@ -350,12 +391,6 @@ public class AthleteController : MonoBehaviour{
 		if(!crowdAthlete) {
 			if(!matchController.GetAthleteHovered()) {
 				matchController.AthleteHovered(this);
-
-				if(!disabledInteraction && !athlete.GetTeam().computerControlled) {
-					if(!matchController.GetAthleteBeingDragged()) {
-						face.SetFaceSprite("hovered");
-					}
-				}
 			}
 		}
 	}
@@ -364,11 +399,8 @@ public class AthleteController : MonoBehaviour{
 		if(!crowdAthlete) {
 			if(matchController.GetAthleteHovered()) {
 				matchController.AthleteUnhovered(this);
-
-				if(!disabledInteraction && !athlete.GetTeam().computerControlled) {
-					if(!matchController.GetAthleteBeingDragged() && !moving) {
-						face.SetFaceSprite("neutral");
-					}
+				if(!matchController.GetAthleteBeingDragged() && !moving && !matchController.IsTurnActive() && !paralyzed && !speaking) {
+					face.SetFaceSprite("neutral");
 				}
 			}
 		}
@@ -386,12 +418,15 @@ public class AthleteController : MonoBehaviour{
 	public void MouseClick() {
 		//face.SetFaceSprite("dragging");
 		if(!crowdAthlete) {
-			if(!disabledInteraction && !athlete.GetTeam().computerControlled) {
+			if(!disabledInteraction) {
 				matchController.SetAthleteBeingDragged(this);
 
 				ExtendLegs();
 
 				//matchController.DetermineGravityFields(this);
+				if(paralyzesOnTackle) {
+					StartParalyzeCharge();
+				}
 			}
 		}
 	}
@@ -480,10 +515,15 @@ public class AthleteController : MonoBehaviour{
 					}
 					*/
 				} else {
-					face.SetFaceSprite("neutral");
+					face.DetermineFaceState();
+
 					RetractLegs();
 
 					//matchController.DetermineGravityFields(null);
+
+					if(paralyzesOnTackle) {
+						StopParalyzeCharge();
+					}
 				}
 			}
 		}
@@ -559,6 +599,40 @@ public class AthleteController : MonoBehaviour{
 		directionDragged = Vector3.zero;
 
 		ResetTail();
+	}
+
+	public void PrepareForNextTurn(bool ourTurn) {
+		if(ourTurn && !paralyzed) {
+			EnableInteraction();
+            IgnoreRaycasts(false);
+            RestoreAthleteColor();
+            DisableBody();
+		} else {
+			DisableInteraction();
+            IgnoreRaycasts(true);
+            DimAthleteColor();
+            EnableBody();
+		}
+
+		StopParalyzeCharge();
+	}
+
+	public void BeginActiveTurn() {
+		if(paralyzed) {
+			if(turnPhasesTilUnparalyzed > 0) {
+				turnPhasesTilUnparalyzed--;
+			} else {
+				paralyzed = false;
+
+				face.ChangeExpression("woken", 1f);
+			}
+		}
+
+		DisableInteraction();
+        EnableBody();
+        RestoreAthleteColor();
+
+        SetTailBodyActive(false);
 	}
 
 	public void IncreaseStat(StatType type) {
@@ -639,6 +713,12 @@ public class AthleteController : MonoBehaviour{
 
 		if(!dizzy) {
 			face.ChangeExpression("stopped", 1.5f);
+		}
+
+		//WARNING: This system will prolly lead to problems. What's up future dan hope life is as great as it is right now!
+		if(activeParticles != null) {
+			activeParticles.Stop();
+			activeParticles = null;
 		}
 		
 		Unready();
@@ -780,25 +860,6 @@ public class AthleteController : MonoBehaviour{
         gameObject.transform.position = Vector2.zero;
     }
 
-	public void SetAllSpritesWhite() {
-		/*
-		Shader shade = Resources.Load("Shaders/Unlit_WhiteShader", typeof(Shader)) as Shader;
-		jersey.material.shader = shade;
-		body.SetMaterial(shade);
-		face.SetMaterial(shade);
-		tailTip.SetMaterial(shade);
-		*/
-		
-		jersey.color = Color.white;
-		body.SetColor(Color.white);
-		face.SetColor(Color.white);
-		tailTip.SetColor(Color.white);
-		
-		for(int i = 0; i < legList.Count; i++) {
-			legList[i].color = Color.white;
-		}
-	}
-
 	public void PrepareSubstitute(Vector2 spawnPosition, Vector3 spawnAngle, Transform chair) {
 		transform.localPosition = spawnPosition;
 		transform.eulerAngles = spawnAngle;
@@ -835,27 +896,23 @@ public class AthleteController : MonoBehaviour{
 	}
 
 	public void EnteredBumper(Bumper bumper) {
-		if(substitute) {
-			bumpersInside.Add(bumper);
-		}
+		lastBumperEntered = bumper;
 	}
 
 	public void ExitedBumper(Bumper bumper) {
-		if(substitute) {
-			bumpersInside.Remove(bumper);
-
-			/*
-			if(bumpersInside.Count == 0) {
-				matchController.AddAthleteToField(this);
-			}
-			*/
-		}
+		//Might not be able to do this so quickly
+		//lastBumperEntered = null;
 	}
+
+	public Bumper GetLastBumperEntered() {
+		return lastBumperEntered;
+	}	
 
 	public void SetTailBodyActive(bool setActive) {
 		tailBody.gameObject.SetActive(setActive);
 	}
 
+	/*
 	public void EnableGravityField() {
 		gravityField.EnableGravityField();
 	}
@@ -871,6 +928,7 @@ public class AthleteController : MonoBehaviour{
 	public bool IsGravityFieldEnabled() {
 		return gravityField.IsGravityFieldEnabled();
 	}
+	*/
 
 	public void SetSpokeThisTurn(bool spoke) {
 		spokeThisTurn = spoke;
@@ -878,5 +936,62 @@ public class AthleteController : MonoBehaviour{
 
 	public bool GetSpokeThisTurn() {
 		return spokeThisTurn;
+	}
+
+	public bool GetSendsShockwaves() {
+		return sendsShockwaveOnBumperHit;
+	}
+
+	public void StartParalyzeCharge() {
+		paralyzeChargeActive = true;
+
+		particleManager.PlayCharged(this);
+	}
+
+	public void ParalyzeAthlete(AthleteController ac) {
+		ac.paralyzed = true;
+		ac.turnPhasesTilUnparalyzed = 1;
+
+		StopParalyzeCharge();
+
+		ac.SetFaceSprite("paralyzed");
+	}
+
+	public void StopParalyzeCharge() {
+		paralyzeChargeActive = false;
+
+		particleManager.StopCharged(this);
+	}
+
+	public bool GetParalyzed() {
+		return paralyzed;
+	}
+
+	public bool GetRestoresBumper() {
+		return restoresBumperOnHit;
+	}
+
+	public void SetSpeaking(bool isSpeaking) {
+		speaking = isSpeaking;
+	}
+
+	public bool GetSpeaking() {
+		return speaking;
+	}	
+
+	public void SetCurrentQuoteBox(QuoteBox qb) {
+		currentQuoteBox = qb;
+	}
+
+	public QuoteBox GetCurrentQuoteBox() {
+		return currentQuoteBox;
+	}
+
+	public void SetActiveParticles(ParticleSystem ps) {
+		activeParticles = ps;
+	}
+
+	public ParticleSystem GetActiveParticles() {
+		return activeParticles;
 	}
 }
