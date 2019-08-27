@@ -9,6 +9,7 @@ public class ParticleManager : MonoBehaviour {
 	public GameObject goalParticlePrefab;
 	public GameObject bumperRestorationParticlePrefab;
 	public GameObject chargedParticlePrefab;
+	public GameObject dischargeParticlePrefab;
 	public GameObject victoryParticlePrefab;
 	public GameObject shockwavePaticlePrefab;
 
@@ -54,6 +55,7 @@ public class ParticleManager : MonoBehaviour {
 		ps.transform.eulerAngles = ac.transform.eulerAngles;
 
 		ac.SetActiveParticles(ps);
+		ps.GetComponent<ParticleScript>().SetAthleteController(ac);
 		
 		ParticleSystem.MainModule psm = ps.main;
 
@@ -70,6 +72,14 @@ public class ParticleManager : MonoBehaviour {
 		} else {
 			Debug.Log("ps don't exist thus it cannot be stopped.");
 		}
+	}
+
+	public void PlayDischarge(AthleteController ac) {
+		ParticleSystem ps = Instantiate(dischargeParticlePrefab, ac.transform.position, Quaternion.identity, court).GetComponent<ParticleSystem>();
+
+		ParticleSystem.MainModule psm = ps.main;
+
+		psm.startColor = ac.GetAthlete().GetTeam().GetDarkTint();
 	}
 
 	public void PlayVictoryConfetti(Vector3 startPos, Team winner) {

@@ -177,7 +177,7 @@ e9bdabf9265d758d56f01bb188916fa8 UnityEngine.Networking.dll:UnityEngine.Networki
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.CustomRuleChanger
 a9bfb2b97514212096f49382180df608 Assembly-CSharp.dll:.CameraController
 34e025057ef78b1bf238460cdf6583a3 Assembly-CSharp.dll:TMPro.Examples.ObjectSpin
-537a680aab86a4d3e305974020425e54 Assembly-CSharp.dll:.ParticleManager
+0a5d9d5518dfd6984a546dd09f6dcdc3 Assembly-CSharp.dll:.ParticleManager
 20dbc65c7917b6d13b082ad3aa79d9ed Unity.TextMeshPro.dll:TMPro.PackageResourceImporterWindow
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:TMPro.TMP_DigitValidator
 31c9d546d7fb163343d6ebc6dc926e4c Unity.TextMeshPro.dll:TMPro.TMP_FontAsset
@@ -239,3 +239,4 @@ b8f04bdad423045528c67dfa4c3dca0d Assembly-CSharp.dll:TMPro.Examples.VertexShakeA
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.SubstitutePlatform
 527b38a24754a673c3855e801fcde355 Assembly-CSharp.dll:.AudioManager
 2e8b3b865e1ea71418dda14622d82e3c Assembly-CSharp.dll:.TeamPostMatchPanel
+05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.ParticleScript

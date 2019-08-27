@@ -67,10 +67,8 @@ public class SubstituteChair : MonoBehaviour {
 	}	
 
 	public void OnMouseEnter() {
-		Debug.Log("Mouse entered sub chair");
-
 		if(interactable) {
-			if(currentSubstitute != null && currentSubstitute.GetSpokeThisTurn()) {
+			if(currentSubstitute != null && !currentSubstitute.GetSpokeThisTurn()) {
                 matchController.DisplayQuote(currentSubstitute, currentSubstitute.GetAthlete().GetQuote("substitute"));
 			}
 		}
@@ -85,6 +83,12 @@ public class SubstituteChair : MonoBehaviour {
 		}
 	}
 
+	public void OnMouseDown() {
+		if(currentSubstitute.GetSpeaking()) { //If the athlete is speaking, close the quote box prematurely
+            currentSubstitute.GetCurrentQuoteBox().PrematurelyClose();
+        }
+	}
+
 	private bool willLaunch = false;
 
 	public void AdjustPosition(Vector3 targetPosition) {
@@ -97,10 +101,10 @@ public class SubstituteChair : MonoBehaviour {
 		float onBarRoom = 0.3f;
 
 		if(homeSub) {
-			if(targetPosition.x > subChairRest.x - onBarRoom) { //Then keep the chair locked in place
+			if(targetPosition.x > subChairRest.x - onBarRoom) {  //Then keep the chair locked in place
 				willLaunch = false;
 				newFixedPosition.x = subChairRest.x;
-			} else {
+			} else { 
 				willLaunch = true;
 				newFixedPosition.x = Mathf.Clamp(targetPosition.x, subChairRest.x - maxXStretch, subChairRest.x);
 			}
@@ -139,6 +143,8 @@ public class SubstituteChair : MonoBehaviour {
 
 			matchController.SubstituteAthleteIn(currentSubstitute);
 			StartCoroutine(LaunchChairOntoField());
+		} else {
+			StartCoroutine(AnimateChair());
 		}
 	}
 
@@ -201,13 +207,17 @@ public class SubstituteChair : MonoBehaviour {
 
 		}
 
+		if(GetComponentInChildren<AthleteController>() != null) {
+			Debug.Log("BRUH BOY WHATCHY ON?)");
+		}
+
         Destroy(gameObject);
     }
 
 	public void LaunchAthleteFromChair(AthleteController ac, float percentForce) {
 		ac.gameObject.SetActive(true);
-        //ac.transform.SetParent(matchController.athleteHolder);
-		ac.transform.position = transform.position;
+        ac.transform.SetParent(matchController.athleteHolder);
+		//ac.transform.position = transform.position;
 
 		ac.ResetBodyLayer();
 

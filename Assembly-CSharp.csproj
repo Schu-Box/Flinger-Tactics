@@ -109,6 +109,7 @@
      <Compile Include="Assets\Scripts\MatchData.cs" />
      <Compile Include="Assets\Scripts\ModeController.cs" />
      <Compile Include="Assets\Scripts\ParticleManager.cs" />
+     <Compile Include="Assets\Scripts\ParticleScript.cs" />
      <Compile Include="Assets\Scripts\Personality.cs" />
      <Compile Include="Assets\Scripts\QuoteBox.cs" />
      <Compile Include="Assets\Scripts\QuoteManager.cs" />

@@ -212,6 +212,10 @@ public class AthleteController : MonoBehaviour{
 
 				legList[i].size = new Vector2(legList[i].size.x, newlegLength);
 			}
+
+			if(paralyzeChargeActive) {
+				activeParticles.gameObject.GetComponent<ParticleScript>().AdjustedVelocity(body.GetVelocity());
+			}
 		}
 
 		if(expressionTimer > 0f) {
@@ -614,7 +618,9 @@ public class AthleteController : MonoBehaviour{
             EnableBody();
 		}
 
-		StopParalyzeCharge();
+		if(paralyzeChargeActive) {
+			StopParalyzeCharge();
+		}
 	}
 
 	public void BeginActiveTurn() {
@@ -884,8 +890,8 @@ public class AthleteController : MonoBehaviour{
 	}
 
 	public void AttachToChair(Transform chair) {
-		//transform.SetParent(chair);
-		//transform.localPosition = Vector2.zero;
+		transform.SetParent(chair);
+		transform.localPosition = Vector2.zero;
 
 		chair.GetComponent<SubstituteChair>().SetCurrentSubstitute(this);
 	}
@@ -953,6 +959,7 @@ public class AthleteController : MonoBehaviour{
 		ac.turnPhasesTilUnparalyzed = 1;
 
 		StopParalyzeCharge();
+		particleManager.PlayDischarge(this);
 
 		ac.SetFaceSprite("paralyzed");
 	}

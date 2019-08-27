@@ -438,15 +438,15 @@ public class MatchController : MonoBehaviour {
     }
 
     public void DisplayQuote(AthleteController ac, string quote) {
+        Debug.Log("Displaying quote");
+
         if(ac.gameObject.activeSelf) {
-            ac.SetSpokeThisTurn(true);
+            ac.GetFace().ChangeExpression("speaking", 2.1f);
+        }
 
-			ac.GetFace().ChangeExpression("speaking", 2.1f);
+        ac.SetSpokeThisTurn(true);
 
-            //Debug.Log(ac.GetAthlete().GetPersonality());
-
-            canvasManager.DisplayQuote(ac, quote);
-        } //else they're off the field and can't speak
+        canvasManager.DisplayQuote(ac, quote);
     }
 
     public void AthleteUnhovered(AthleteController ac) {
@@ -651,6 +651,13 @@ public class MatchController : MonoBehaviour {
         for(int i = 0; i < awayAthletesOnField.Count; i++) {
             awayAthletesOnField[i].SetSpokeThisTurn(false);
         }
+        for(int i = 0; i < inactiveHomeAthletes.Count; i++) {
+            inactiveHomeAthletes[i].SetSpokeThisTurn(false);
+        }
+        for(int i = 0; i < inactiveAwayAthletes.Count; i++) {
+            inactiveAwayAthletes[i].SetSpokeThisTurn(false);
+        }
+        
 
         //Can subs speak?
 
@@ -677,13 +684,16 @@ public class MatchController : MonoBehaviour {
 
     public void AllowSubstitutions(bool home) {
         Vector2 spawnSpot = Vector2.zero;
-        Vector3 spawnAngle;
+        Vector2 endSpot = Vector2.zero;
+        Vector3 spawnAngle = Vector3.zero;
 
-        AthleteController athleteSubbingIn;
+        AthleteController athleteSubbingIn = null;
 
         inboundSubstitutes = new List<AthleteController>();
 
         if(homeTurn) {
+            homeGoal.SetCollidersEnabled(false);
+
             int substitutesNeeded = ruleSet.GetRule("athleteFieldCount").value - homeAthletesOnField.Count;
             if(substitutesNeeded > 0) {
                 homeSubAvailable = true;
@@ -691,21 +701,16 @@ public class MatchController : MonoBehaviour {
                 homeGoal.OpenSubPlatform();
 
                 spawnSpot = homeGoal.GetSubPlatform().GetSubChairOrigin();
+                endSpot = homeGoal.GetSubPlatform().GetSubChairRest();
                 spawnAngle = new Vector3(0, 0, 90);
 
                 athleteSubbingIn = inactiveHomeAthletes[0];
 
                 inboundSubstitutes.Add(athleteSubbingIn);
-
-                SubstituteChair subChair = Instantiate(substituteChair, spawnSpot, Quaternion.Euler(spawnAngle), substituteHolder).GetComponent<SubstituteChair>();
-                subChair.SetChair(true);
-                subChairsActive.Add(subChair);
-
-                athleteSubbingIn.PrepareSubstitute(spawnSpot, spawnAngle, subChair.transform);
-
-                StartCoroutine(MoveSubChairTo(subChair, homeGoal.GetSubPlatform().GetSubChairRest()));
             } //Not sure yet for multiple subs
         } else {
+            awayGoal.SetCollidersEnabled(false);
+
             int substitutesNeeded = ruleSet.GetRule("athleteFieldCount").value - awayAthletesOnField.Count;
             if(substitutesNeeded > 0) {
                 awaySubAvailable = true;
@@ -713,25 +718,27 @@ public class MatchController : MonoBehaviour {
                 awayGoal.OpenSubPlatform();
 
                 spawnSpot = awayGoal.GetSubPlatform().GetSubChairOrigin();
+                endSpot = awayGoal.GetSubPlatform().GetSubChairRest();
                 spawnAngle = new Vector3(0, 0, 270);
 
                 athleteSubbingIn = inactiveAwayAthletes[0];
-                inactiveAwayAthletes.Remove(athleteSubbingIn);
 
                 inboundSubstitutes.Add(athleteSubbingIn);
-
-                SubstituteChair subChair = Instantiate(substituteChair, spawnSpot, Quaternion.Euler(spawnAngle), substituteHolder).GetComponent<SubstituteChair>();
-                subChair.SetChair(false);
-                subChairsActive.Add(subChair);
-
-                athleteSubbingIn.PrepareSubstitute(spawnSpot, spawnAngle, subChair.transform);
-
-                StartCoroutine(MoveSubChairTo(subChair, awayGoal.GetSubPlatform().GetSubChairRest()));
             }
+        }
+
+        if(athleteSubbingIn != null) {
+            SubstituteChair subChair = Instantiate(substituteChair, spawnSpot, Quaternion.Euler(spawnAngle), substituteHolder).GetComponent<SubstituteChair>();
+            subChair.SetChair(home);
+            subChairsActive.Add(subChair);
+
+            athleteSubbingIn.PrepareSubstitute(spawnSpot, spawnAngle, subChair.transform);
+
+            StartCoroutine(MoveSubChairTo(subChair, endSpot));
         }
     }
 
-    public IEnumerator MoveSubChairTo(SubstituteChair subChair, Vector3 endPos) {
+    public IEnumerator MoveSubChairTo(SubstituteChair subChair, Vector2 endPos) {
         Vector3 startPos = subChair.transform.position;
 
         WaitForFixedUpdate waiter = new WaitForFixedUpdate();
@@ -1091,10 +1098,12 @@ public class MatchController : MonoBehaviour {
                 if(homeSubAvailable) {
                     homeGoal.CloseSubPlatform();
                 }
+                homeGoal.SetCollidersEnabled(true);
             } else {
                 if(awaySubAvailable) {
                     awayGoal.CloseSubPlatform();
                 }
+                awayGoal.SetCollidersEnabled(true);
             }
         }
 

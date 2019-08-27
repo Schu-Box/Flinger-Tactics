@@ -13,6 +13,8 @@ public class GoalController : MonoBehaviour {
 
 	private Bumper bumper;
 	private SubstitutePlatform subPlatform;
+	private BoxCollider2D collie;
+	private BoxCollider2D goalTrigger;
 
 	void Start() {
 		matchController = FindObjectOfType<MatchController>();
@@ -21,6 +23,9 @@ public class GoalController : MonoBehaviour {
 		bumper = GetComponent<Bumper>();
 
 		subPlatform = transform.GetChild(1).GetComponent<SubstitutePlatform>();
+
+		collie = GetComponent<BoxCollider2D>();
+		goalTrigger = transform.GetChild(0).GetComponent<BoxCollider2D>();
 
 		bumper.SetAsGoal(true);
 	}
@@ -48,6 +53,8 @@ public class GoalController : MonoBehaviour {
 		List<SubstituteChair> subChairList = matchController.GetSubChairsActive();
 		for(int i = 0; i < subChairList.Count; i++) {
 			subChairList[i].SetInteractable(false);
+
+			subChairList[i].GetCurrentSubstitute().transform.SetParent(matchController.athleteHolder);
 		}
 	}
 
@@ -82,6 +89,11 @@ public class GoalController : MonoBehaviour {
 		}
 	}
 	*/
+
+	public void SetCollidersEnabled(bool enabled) {
+		goalTrigger.enabled = enabled;
+		collie.enabled = enabled;
+	}
 
 	public void BallEnteredTrigger(BallController ball) {
 		matchController.ScoreGoal(goalAttacker, ball, transform);
