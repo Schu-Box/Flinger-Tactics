@@ -13,7 +13,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   channel: {fileID: 243131788183052316, guid: 3a3eb34410cfe4f509d1078770d5b44b, type: 2}
   clips:
-  - {fileID: 8300000, guid: cf8831450a15843e89eb85dd9affb674, type: 3}
+  - {fileID: 8300000, guid: be3fa87498e444123a1f29dc57d1f77b, type: 3}
+  - {fileID: 8300000, guid: 196fce88309514ea19cea626ad0878f2, type: 3}
+  - {fileID: 8300000, guid: 4ced3b0496ea54e16800134585f31d32, type: 3}
   pitchMode: 0
   pitchFixed: 1
   halftonesRandom: 1
