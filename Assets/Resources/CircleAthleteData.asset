@@ -3,8 +3,9 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -23,6 +24,10 @@ MonoBehaviour:
   - Sasha
   - Susan
   - Ballito
+  - Ballog
+  - Bernie
+  - Earn
+  - Dripper
   skinColorList:
   - {r: 0.9150943, g: 0.895966, b: 0.77265036, a: 1}
   - {r: 0.8207547, g: 0.7954825, b: 0.63879496, a: 1}
@@ -56,17 +61,21 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 62469e984c0b24c2abeb891b50bcddf4, type: 2}
   - {fileID: 11400000, guid: 2a67283b471ae425cade2140345fcdba, type: 2}
   - {fileID: 11400000, guid: 5c62b0849c903449b86f724a1c997e22, type: 2}
+  - {fileID: 11400000, guid: 2a67283b471ae425cade2140345fcdba, type: 2}
+  - {fileID: 11400000, guid: d7c6a5189bce746bbb210af361c3733f, type: 2}
   classString: Circle
+  abilityTutorialString: When bumping your own bumper, creates a shockwave.
   bumperModifier: 1
-  bodySprite: {fileID: 21300000, guid: 2be1292db46a243e2bc9c2add5baf04e, type: 3}
-  faceBaseSprite: {fileID: 21300000, guid: 2012a1f136be3499e8c6c369ad6a2411, type: 3}
-  legSprite: {fileID: 21300000, guid: 30d7bf6a9d9a44169843d55695e01de3, type: 3}
-  athleteJersey: {fileID: 21300000, guid: 149a6ef2c8e92404984365dc37e98a13, type: 3}
+  bodySprite: {fileID: 21300000, guid: 744fc405645014b829dda28a40bfba0e, type: 3}
+  faceBaseSprite: {fileID: 21300000, guid: 177f726cadd874256aaa59271d12eb8b, type: 3}
+  legSprite: {fileID: 21300000, guid: 48914da9268a34992a9c605517ee4916, type: 3}
+  athleteJersey: {fileID: 21300000, guid: 6eebff3a3327d4b1b838c32b6db50ab3, type: 3}
   athleteJerseyStripes: {fileID: 21300000, guid: 68f5d320abd13495c8a1a42f65d37ce1,
     type: 3}
-  frontLegRest: 0.8
-  frontLegMin: 0.9
-  frontLegMax: 1.2
-  backLegRest: 0.8
-  backLegMin: 0.9
-  backLegMax: 1.2
+  defaultFace: {fileID: 21300000, guid: fcb7ccd927ca141f693c60ab309110d1, type: 3}
+  frontLegRest: 1
+  frontLegMin: 1.2
+  frontLegMax: 1.55
+  backLegRest: 1
+  backLegMin: 1.2
+  backLegMax: 1.55

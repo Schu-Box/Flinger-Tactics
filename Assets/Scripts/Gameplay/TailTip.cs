@@ -10,9 +10,10 @@ public class TailTip : MonoBehaviour {
 
 	private float spriteMaskStartY;
 	private float restPoint = 0f;
+	private float minStretchPoint = 0f;
 	private float maxStretchPoint = 0f;
 
-	private float stretch = 7f;
+	private float stretch = 5.5f; //subjective value - determines the rate of tail extension
 
 	public void SetTailTip() {
 		athleteController = GetComponentInParent<AthleteController>();
@@ -55,16 +56,23 @@ public class TailTip : MonoBehaviour {
 
 	public void AdjustTailPosition(float dirMag) {
 		Athlete athlete = athleteController.GetAthlete();
-		float step = (dirMag - athlete.minPull) / (athlete.maxPull);
+		float step = (dirMag - athlete.minPull) / (athlete.maxPull - athlete.minPull);
 
+		//I shouldn't be setting maxStretch point here every time it's adjusted but SetTailTip() leads to errors
+		minStretchPoint = athlete.minPull * stretch;
 		maxStretchPoint = athlete.maxPull * stretch;
-
+		
 		Vector3 newPosition = Vector3.zero;
-		newPosition.y = Mathf.Lerp(restPoint, maxStretchPoint, step);
-		transform.localPosition = newPosition;
-
 		Vector3 newScale = new Vector3(1, spriteMaskStartY, 1);
-		newScale.y = Mathf.Lerp(spriteMaskStartY, maxStretchPoint + (athlete.minPull * stretch), step);
+
+		if(dirMag > athlete.minPull) {
+			newPosition.y = Mathf.Lerp(minStretchPoint, maxStretchPoint, step);
+			newScale.y = Mathf.Lerp(minStretchPoint + spriteMaskStartY, maxStretchPoint + spriteMaskStartY, step);
+		} else {
+			newPosition.y = restPoint;
+		}
+
+		transform.localPosition = newPosition;
 		spriteMask.transform.localScale = newScale;
 	}
 }

@@ -21,8 +21,11 @@ public class SubstitutePlatform : MonoBehaviour {
 
 	private Transform startBar;
 	private Transform attachmentBar;
+
+	private Team teamOwner;
+	private GoalController goalOwner;
 	
-	void Start() {
+	void Awake() {
 		matchController = FindObjectOfType<MatchController>();
 
 		startBar = transform.GetChild(2);
@@ -50,8 +53,14 @@ public class SubstitutePlatform : MonoBehaviour {
 	}
 
 	public void SetTeam(Team team) {
+		teamOwner = team;
+
 		startBar.GetComponent<SpriteRenderer>().color = team.secondaryColor;
 		attachmentBar.GetComponent<SpriteRenderer>().color = team.secondaryColor;
+	}
+
+	public void SetGoal(GoalController goal) {
+		goalOwner = goal;
 	}
 
 	public IEnumerator AnimateSubPlatformOpening() {
@@ -67,6 +76,8 @@ public class SubstitutePlatform : MonoBehaviour {
 		}
 
 		startBar.localScale = subPlatformFullSize;
+
+		goalOwner.SetSubstituteReadyForLaunch(true);
 	}
 
 	public IEnumerator AnimateSubPlatformClosing() {
@@ -83,9 +94,11 @@ public class SubstitutePlatform : MonoBehaviour {
 
 		startBar.localScale = subPlatformRestSize;
 
-		matchController.ClearSubChairsActive();
+		matchController.DisableSubChair(matchController.GetTeam(true) == teamOwner);
 
 		DisplayAttachmentBar(false);
+
+		goalOwner.SetSubstituteReadyForLaunch(false);
 	}
 
 	public Vector3 GetSubChairRest() {

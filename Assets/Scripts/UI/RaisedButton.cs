@@ -123,9 +123,6 @@ public class RaisedButton : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
 
 			LowerButton();
 			StopFlash();
-
-			//if it's the timeout raised button
-			canvasManager.TimeoutButtonClicked();
 		}
 	}
 	#endregion
@@ -144,11 +141,7 @@ public class RaisedButton : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
 	#region IPointerExitHandler implementation
 	public void OnPointerExit (PointerEventData eventData) {
 		if(interactable) {
-			if(matchController.IsTimeoutAcceptable()) {
-				ResumeFlash();
-			} else {
-				frontPlate.color = unhoveredColor;
-			}
+			frontPlate.color = unhoveredColor;
 		}
 	}
 	#endregion

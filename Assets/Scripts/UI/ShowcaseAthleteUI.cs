@@ -35,40 +35,13 @@ public class ShowcaseAthleteUI : MonoBehaviour, IPointerEnterHandler, IPointerEx
 		disabledStatColor = Color.Lerp(Color.grey, Color.clear, 0.5f);
 	}
 
-	public void SetAthlete(Athlete athlete) {
+	public void SetAthlete(Athlete athlete, AthleteMatchData athleteMatchData) {
 		showcasedAthlete = athlete;
 		Team team = athlete.GetTeam();
-
-		//namePlate.GetComponent<Image>().color = team.primaryColor;
-		//highlightsPanel.GetComponent<Image>().color = team.GetLightTint();
-		//statPanel.GetComponent<Image>().color = team.primaryColor;
 
 		nameText.text = athlete.name;
 
 		GetComponent<AthleteImage>().SetImages(athlete);
-		
-		/*
-		Stat firstStat = team.GetCurrentMatchData().GetTeamMatchData(team).GetAthleteMatchData(athlete).GetNthBestStat(1);
-		Stat secondStat = team.GetCurrentMatchData().GetTeamMatchData(team).GetAthleteMatchData(athlete).GetNthBestStat(2);
-
-		if(firstStat != null && firstStat.GetCount() > 0) {
-			stat1Num.text = firstStat.GetCount().ToString();
-			stat1Label.text = firstStat.GetStatName();
-		} else {
-			stat1Num.text = "";
-			stat1Label.text = "";
-		}
-
-		if(secondStat != null && secondStat.GetCount() > 0) {
-			stat2Num.text = secondStat.GetCount().ToString();
-			stat2Label.text = secondStat.GetStatName();
-		} else {
-			stat2Num.text = "";
-			stat2Label.text = "";
-		}
-		*/
-
-		AthleteMatchData athleteMatchData = team.GetCurrentMatchData().GetTeamMatchData(team).GetAthleteMatchData(athlete);
 
 		stat1Label.text = athleteMatchData.firstDescriptor;
 		stat2Label.text = athleteMatchData.secondDescriptor;
@@ -82,14 +55,6 @@ public class ShowcaseAthleteUI : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
 			statEndPos = statStartPos;
 			statEndPos.y = -53;
-
-			/*
-				for(int i = 0; i < statPanel.transform.childCount; i++) {
-				statPanel.transform.GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
-				statPanel.transform.GetChild(i).GetChild(1).GetComponent<TextMeshProUGUI>().text = "";
-			}
-			//int activeStatBoxes = 0;
-			*/
 
 			for(int i = 0; i < athleteMatchData.statList.Count; i++) {
 				Stat stat = athleteMatchData.statList[i];

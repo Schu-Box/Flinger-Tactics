@@ -118,14 +118,18 @@ public class Face : MonoBehaviour {
 					break;
 			}
 
-			if(athleteController.GetParalyzed()) { //Overrides any other face if the athlete is paralyzed.
-				newFace = face_Paralyzed;
+			if(athleteController != null) {
+				if(athleteController.GetParalyzed()) { //Overrides any other face if the athlete is paralyzed.
+					newFace = face_Paralyzed;
+				}
 			}
 
 			spriteRenderer.sprite = newFace;
 
-			if(athleteController.GetAthlete() != null) {
-				athleteController.GetAthlete().moodFace = newFace;
+			if(athleteController != null) {
+				if(athleteController.GetAthlete() != null) {
+					athleteController.GetAthlete().moodFace = newFace;
+				}
 			}
 		}
 	}
@@ -136,16 +140,20 @@ public class Face : MonoBehaviour {
 
 	public void ChangeExpression(string expression, float duration) {
 
-		if(!athleteController.GetParalyzed()) {
-			if(expressionCoroutine != null) { //Athlete is currently already expressing something
-				//expressionCoroutine = StartCoroutine(Express(expression, duration));
-			} else {
-				if(expression != "speaking") {
-					expressionCoroutine = StartCoroutine(Express(expression, duration));
+		if(athleteController != null) {
+			if(!athleteController.GetParalyzed()) {
+				if(expressionCoroutine != null) { //Athlete is currently already expressing something
+					//expressionCoroutine = StartCoroutine(Express(expression, duration));
 				} else {
-					expressionCoroutine = StartCoroutine(Speak(duration));
+					if(expression != "speaking") {
+						expressionCoroutine = StartCoroutine(Express(expression, duration));
+					} else {
+						expressionCoroutine = StartCoroutine(Speak(duration));
+					}
 				}
 			}
+		} else { //it's a spectator. Probably a better way of organizing this but you do you bruh
+			expressionCoroutine = StartCoroutine(Express(expression, duration));
 		}
 	}
 
@@ -208,7 +216,7 @@ public class Face : MonoBehaviour {
 	}
 
 	public void DetermineFaceState() {
-		if(athleteController.crowdAthlete) {
+		if(athleteController == null) { //They're a spectator
 			SetFaceSprite("watching");
 		} else {
 			if(athleteController.GetParalyzed()) {

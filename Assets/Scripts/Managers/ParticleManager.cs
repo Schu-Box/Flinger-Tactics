@@ -12,11 +12,14 @@ public class ParticleManager : MonoBehaviour {
 	public GameObject dischargeParticlePrefab;
 	public GameObject victoryParticlePrefab;
 	public GameObject victoryParticleFullScreenPrefab;
-	public GameObject shockwavePaticlePrefab;
+	public GameObject shockwaveParticlePrefab;
+	public GameObject ballSpawnExplosionParticlePrefab;
+
 
 	public Transform court; //necessary to adjust scale
 
 	private ParticleSystem activeVictoryParticles;
+	private ParticleSystem activeVictoryParticles2; //wow bad code nice bruh
 
 	public void PlayBump(Vector3 position, Color color) {
 		ParticleSystem.MainModule ps = Instantiate(defaultBumpParticlePrefab, position, Quaternion.identity, court).GetComponent<ParticleSystem>().main;
@@ -42,9 +45,15 @@ public class ParticleManager : MonoBehaviour {
 	}
 
 	public void PlayBumperRestoration(Bumper bumper) {
-		ParticleSystem.MainModule ps = Instantiate(bumperRestorationParticlePrefab, bumper.transform.position, bumper.transform.rotation, court).GetComponent<ParticleSystem>().main;
+		ParticleSystem ps = Instantiate(bumperRestorationParticlePrefab, bumper.transform.position, bumper.transform.rotation, court).GetComponent<ParticleSystem>();
+		ParticleSystem.MainModule psm = ps.main;
+		ParticleSystem.ShapeModule pss = ps.shape;
 
-		ps.startColor = bumper.GetTeam().GetDarkTint();
+		psm.startColor = bumper.GetTeam().GetDarkTint();
+
+		Vector3 newScale = pss.scale;
+		newScale.y = bumper.transform.localScale.y * pss.scale.y;
+		pss.scale = newScale;
 	}
 
 	public void PlayCharged(AthleteController ac) {
@@ -84,6 +93,8 @@ public class ParticleManager : MonoBehaviour {
 	public void PlayVictoryConfetti(Vector3 startPos, Team winner) {
 		ParticleSystem ps = Instantiate(victoryParticlePrefab, startPos, Quaternion.identity, court).GetComponent<ParticleSystem>();
 
+		activeVictoryParticles2 = ps;
+
 		ParticleSystem.MinMaxGradient test = new ParticleSystem.MinMaxGradient(winner.primaryColor, winner.secondaryColor);
 
 		ParticleSystem.MainModule psm = ps.main;
@@ -104,12 +115,26 @@ public class ParticleManager : MonoBehaviour {
 	}
 
 	public void StopVictoryParticles() {
-		activeVictoryParticles.Stop();
+		if(activeVictoryParticles != null) {
+			activeVictoryParticles.Stop();
+			Destroy(activeVictoryParticles.gameObject);
+			activeVictoryParticles = null;
+		}
+
+		if(activeVictoryParticles2 != null) {
+			activeVictoryParticles2.Stop();
+			Destroy(activeVictoryParticles2.gameObject);
+			activeVictoryParticles2 = null;
+		}
 	}
 
 	public void PlayShockwaveParticle(Shockwave shockwave, Vector3 shockPosition, Color color) {
-		ParticleSystem ps = Instantiate(shockwavePaticlePrefab, shockPosition, shockwave.transform.rotation, court).GetComponent<ParticleSystem>();
+		ParticleSystem ps = Instantiate(shockwaveParticlePrefab, shockPosition, shockwave.transform.rotation, court).GetComponent<ParticleSystem>();
 		ParticleSystem.MainModule psm = ps.main;
 		psm.startColor = color;
+	}
+
+	public void PlayBallSpawnExplosionParticlePrefab(Vector3 position) {
+		ParticleSystem ps = Instantiate(ballSpawnExplosionParticlePrefab, position, Quaternion.identity, court).GetComponent<ParticleSystem>();
 	}
 }

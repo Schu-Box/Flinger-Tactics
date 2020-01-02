@@ -23,6 +23,4 @@ public class BumperTrigger : MonoBehaviour {
 			collie.gameObject.GetComponent<AthleteController>().ExitedBumper(parentBumper);
 		}
 	}
-
-	
 }

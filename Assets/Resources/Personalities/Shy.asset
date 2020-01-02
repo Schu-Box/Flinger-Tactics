@@ -3,8 +3,9 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -28,20 +29,22 @@ MonoBehaviour:
   - '...'
   - Me? Flingy time? Alright...
   - You're gonna fling me, aren't you?
-  - Ummm I guess I can fling now.
-  - Do I have to fling?
+  - Uhhhmm I guess I can fling now.
+  - Do I really have to fling?
+  - Maybe somebody else can fling?
+  - You think I can do it?
   preFlingOpponentQuoteList:
   - '...'
   - Please ignore me...
   - It's your turn.
   - It's not my turn.
-  - We shouldn't talk...
+  - We shouldn't talk right now...
   goalQuoteList:
   - '...'
-  - A goal? Yes!
-  - Aha I did it!
+  - A goal? No way!!
+  - Yah! I actually did it!
   - Oh that was me? Yah!
-  - Did anyone see that?
+  - Did anyone see that??
   ownGoalQuoteList:
   - '...'
   - Oh no no no...
@@ -52,14 +55,20 @@ MonoBehaviour:
   - '...'
   - Oh hey we did it!
   - I hope I helped.
-  - I'm so glad it's over...
+  - Thank goodness we won...
   - Wow my teammates are so good!
+  - Good game...
+  - Woah we won!
+  - Nice game
   postMatchLoseQuoteList:
   - '...'
-  - I never should've became a flinger...
+  - '...'
   - I shouldn't be flinging...
   - We lost...
   - I'm sorry...
+  - Sorry I let you down...
+  - I'm glad it's over...
+  - I need practice...
   substituteQuoteList:
   - '...'
   - Huh? Me?

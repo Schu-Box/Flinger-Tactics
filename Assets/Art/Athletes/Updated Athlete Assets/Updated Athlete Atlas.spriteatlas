@@ -1,0 +1,135 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Updated Athlete Atlas
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 4096
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: -1
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 8
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 0
+    variantMultiplier: 1
+    packables:
+    - {fileID: 2800000, guid: a78583ad369c5445d85b83062b6f623c, type: 3}
+    - {fileID: 2800000, guid: 9ae046d191db041d6803b29ccdde0924, type: 3}
+    - {fileID: 2800000, guid: 3196a8d2a5cfc4023a31c47e1b6c5ac2, type: 3}
+    - {fileID: 2800000, guid: 70bf5d3d74514483295ba3b615afda61, type: 3}
+    - {fileID: 2800000, guid: 43f7e6a94ee1048bdb80daa21d7aea62, type: 3}
+    - {fileID: 2800000, guid: 744fc405645014b829dda28a40bfba0e, type: 3}
+    - {fileID: 2800000, guid: 177f726cadd874256aaa59271d12eb8b, type: 3}
+    - {fileID: 2800000, guid: 6eebff3a3327d4b1b838c32b6db50ab3, type: 3}
+    - {fileID: 2800000, guid: 0f49d293fd553494db91bbd6e5eac2d8, type: 3}
+    - {fileID: 2800000, guid: 25747e46de7624b3998bccc617d100a6, type: 3}
+    - {fileID: 2800000, guid: ce470fb560805467397effda81b7ae3f, type: 3}
+    - {fileID: 2800000, guid: 66a33336c0f8a43d6b89ba51ea73f55e, type: 3}
+    - {fileID: 2800000, guid: 529bb6f3821e64af581103ed9e66d8fb, type: 3}
+    - {fileID: 2800000, guid: 48cde56b4818a4dfa8fca8a1d3c3ff84, type: 3}
+    - {fileID: 2800000, guid: 92eae272b5a0b4c529e04a9b160916a9, type: 3}
+    - {fileID: 2800000, guid: 8e6c8b6ef88384d52b3ee8bfa0aa1dd4, type: 3}
+    - {fileID: 2800000, guid: fcb7ccd927ca141f693c60ab309110d1, type: 3}
+    - {fileID: 2800000, guid: a0369a3d9134a4f77b353d6c79e742f4, type: 3}
+    - {fileID: 2800000, guid: 45cce6358db63445b8c6c9738f9ceaf1, type: 3}
+    - {fileID: 2800000, guid: a612118c4086b4a649bc35caad210e8c, type: 3}
+    - {fileID: 2800000, guid: 4e7808bee9aad4dd4b5b523b6a687f35, type: 3}
+    - {fileID: 2800000, guid: 169ff2c1396c84b6b83aabdd54426b9e, type: 3}
+    - {fileID: 2800000, guid: 48632780fb9f94b759a5dccc42720747, type: 3}
+    - {fileID: 2800000, guid: 036bde07f2c224852b6c74052a45ce27, type: 3}
+    - {fileID: 2800000, guid: 827c3704bb8b04fdabe50b7baeac0bef, type: 3}
+    - {fileID: 2800000, guid: 2cd17fc75d94f42929e61b09d7cd0cff, type: 3}
+    - {fileID: 2800000, guid: 48914da9268a34992a9c605517ee4916, type: 3}
+    totalSpriteSurfaceArea: 12820000
+    bindAsDefault: 1
+    storedHash:
+      serializedVersion: 2
+      Hash: cebcc7ad0681c23ed82264a0d953bc4e
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 48632780fb9f94b759a5dccc42720747, type: 3}
+  - {fileID: 21300000, guid: 169ff2c1396c84b6b83aabdd54426b9e, type: 3}
+  - {fileID: 21300000, guid: 9ae046d191db041d6803b29ccdde0924, type: 3}
+  - {fileID: 21300000, guid: 92eae272b5a0b4c529e04a9b160916a9, type: 3}
+  - {fileID: 21300000, guid: 3196a8d2a5cfc4023a31c47e1b6c5ac2, type: 3}
+  - {fileID: 21300000, guid: 0f49d293fd553494db91bbd6e5eac2d8, type: 3}
+  - {fileID: 21300000, guid: 529bb6f3821e64af581103ed9e66d8fb, type: 3}
+  - {fileID: 21300000, guid: 827c3704bb8b04fdabe50b7baeac0bef, type: 3}
+  - {fileID: 21300000, guid: 744fc405645014b829dda28a40bfba0e, type: 3}
+  - {fileID: 21300000, guid: 45cce6358db63445b8c6c9738f9ceaf1, type: 3}
+  - {fileID: 21300000, guid: ce470fb560805467397effda81b7ae3f, type: 3}
+  - {fileID: 21300000, guid: 66a33336c0f8a43d6b89ba51ea73f55e, type: 3}
+  - {fileID: 21300000, guid: 25747e46de7624b3998bccc617d100a6, type: 3}
+  - {fileID: 21300000, guid: 036bde07f2c224852b6c74052a45ce27, type: 3}
+  - {fileID: 21300000, guid: 2cd17fc75d94f42929e61b09d7cd0cff, type: 3}
+  - {fileID: 21300000, guid: 43f7e6a94ee1048bdb80daa21d7aea62, type: 3}
+  - {fileID: 21300000, guid: 48914da9268a34992a9c605517ee4916, type: 3}
+  - {fileID: 21300000, guid: fcb7ccd927ca141f693c60ab309110d1, type: 3}
+  - {fileID: 21300000, guid: 6eebff3a3327d4b1b838c32b6db50ab3, type: 3}
+  - {fileID: 21300000, guid: 48cde56b4818a4dfa8fca8a1d3c3ff84, type: 3}
+  - {fileID: 21300000, guid: 177f726cadd874256aaa59271d12eb8b, type: 3}
+  - {fileID: 21300000, guid: a612118c4086b4a649bc35caad210e8c, type: 3}
+  - {fileID: 21300000, guid: a0369a3d9134a4f77b353d6c79e742f4, type: 3}
+  - {fileID: 21300000, guid: 70bf5d3d74514483295ba3b615afda61, type: 3}
+  - {fileID: 21300000, guid: a78583ad369c5445d85b83062b6f623c, type: 3}
+  - {fileID: 21300000, guid: 8e6c8b6ef88384d52b3ee8bfa0aa1dd4, type: 3}
+  - {fileID: 21300000, guid: 4e7808bee9aad4dd4b5b523b6a687f35, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - Speaking4
+  - Speaking3
+  - Athlete-Tail-Tip
+  - ExcitedFace
+  - Box-Athlete-Body
+  - Triangle-Athlete-Body
+  - AngryFace
+  - SurprisedFace
+  - Circle-Athlete-Body
+  - SadFace
+  - Triangle-Athlete-Jersey
+  - Tail Body
+  - Triangle-Athlete-Face-Base
+  - SpeakingFace
+  - WinkyFace
+  - Box-Athlete-Jersey
+  - Athlete-Leg
+  - HappyFace
+  - Circle-Athlete-Jersey
+  - DizzyFace
+  - Circle-Athlete-Face-Base
+  - Speaking1
+  - NeutralFace
+  - Box-Athlete-Face-Base
+  - WokenFace
+  - GladFace
+  - Speaking2
+  m_Tag: Updated Athlete Atlas
+  m_IsVariant: 0

@@ -48,11 +48,13 @@ public class Body : MonoBehaviour {
 	public void SetSprite(Sprite sprite) {
 		spriteRenderer.sprite = sprite;
 
-		if(athleteController.GetAthlete().athleteData.classString == "Circle") {
-			collie = GetComponent<CircleCollider2D>();
-		} else {
-			Destroy(gameObject.GetComponent<CircleCollider2D>()); //Call this to get rid of the prefab circle
-			collie = gameObject.AddComponent<PolygonCollider2D>();
+		if(!athleteController.crowdAthlete) {
+			if(athleteController.GetAthlete().athleteData.classString == "Circle") {
+				collie = GetComponent<CircleCollider2D>();
+			} else {
+				Destroy(gameObject.GetComponent<CircleCollider2D>()); //Call this to get rid of the prefab circle
+				collie = gameObject.AddComponent<PolygonCollider2D>();
+			}
 		}
 	}
 
@@ -90,4 +92,27 @@ public class Body : MonoBehaviour {
 	public void EnableDynamicBody() {
 		rb.bodyType = RigidbodyType2D.Dynamic;
 	}
+
+	/*
+	public void StartHitStop() {
+		StartCoroutine(HitStop());
+	}
+
+	private IEnumerator HitStop() {
+		athleteController.hitStopping = true;
+
+		Vector3 previousVelocity = rb.velocity;
+		rb.velocity = Vector3.zero;
+
+		rb.isKinematic = true;
+
+		yield return new WaitForSeconds(0.1f);
+
+		rb.isKinematic = false;
+
+		rb.velocity = previousVelocity;
+
+		athleteController.hitStopping = false;
+	}
+	*/
 }

@@ -169,6 +169,9 @@ public class TurnButton : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
 	#region IPointerClickHandler implementation
 	public void OnPointerClick (PointerEventData eventData) {
 		if(interactable) {
+
+			Debug.Log("Clicked turn button");
+
 			if(!matchController.GetMatchStarted()) {
 				matchController.StartMatch();
 			} else if(matchController.GetMatchEnded()) {

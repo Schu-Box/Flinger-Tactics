@@ -33,6 +33,19 @@ public class SoundSettings {
             return;
         }
 
+        if(!ambienceAudioSource.isPlaying) {
+            AudioClip lastClip = ambienceAudioSource.clip;
+            AudioClip newClip = lastClip;
+            if(sound.clips.Count > 1) {
+                while(newClip == lastClip) {
+                    newClip = sound.clips[Random.Range(0, sound.clips.Count)];
+                }
+            }
+            
+            ambienceAudioSource.clip = newClip;
+            ambienceAudioSource.Play();
+        }
+
         AdjustAmbientVolume();
     }
 
@@ -44,7 +57,9 @@ public class SoundSettings {
         newAudioSource.volume = sound.volumeFixed;
         newAudioSource.outputAudioMixerGroup = sound.channel;
         newAudioSource.clip = audioClip;
-        newAudioSource.loop = sound.isAmbientLoop;
+
+        newAudioSource.loop = false;
+        //newAudioSource.loop = sound.isAmbientLoop;
     }
 
 

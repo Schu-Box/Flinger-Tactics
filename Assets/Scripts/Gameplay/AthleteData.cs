@@ -12,6 +12,7 @@ public class AthleteData : ScriptableObject {
 	public List<Personality> personalityList = new List<Personality>();
 
 	public string classString;
+	public string abilityTutorialString;
 
 	public float bumperModifier = 1f;
 
@@ -20,6 +21,7 @@ public class AthleteData : ScriptableObject {
 	public Sprite legSprite;
 	public Sprite athleteJersey;
 	public Sprite athleteJerseyStripes;
+	public Sprite defaultFace;
 
 	public float frontLegRest = 0.8f;
 	public float frontLegMin = 0.9f;

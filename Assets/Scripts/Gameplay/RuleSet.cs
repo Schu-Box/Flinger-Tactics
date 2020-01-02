@@ -15,6 +15,17 @@ public class RuleSet {
 			new Rule(5, "Maximum Balls", "Increase the number of balls on the field to 5.")
 		}));
 
+		ruleSlotList.Add(new RuleSlot("bumperCount", "Bumper Count", new List<Rule> {
+			new Rule(1, "Bumper Wall", "this isn't used"),
+			new Rule(2, "Double Bumpers", ""),
+			new Rule(3, "", ""),
+			new Rule(4, "", ""),
+			new Rule(5, "", ""),
+			new Rule(6, "", ""),
+			new Rule(7, "", ""),
+			new Rule(8, "", "")
+		}));
+
 		//This one should never go down (in career play, otherwise I'd have to do hella extra stuff)
 		ruleSlotList.Add(new RuleSlot("athleteRosterCount", "Athlete Roster Count", new List<Rule> { 
 			new Rule(2, "Duo Roster", "Increase the number of athletes on each team's roster to 2."),
@@ -46,6 +57,12 @@ public class RuleSet {
 			//new Rule(40, "40 Turns", "Change the number of turns to 40."),
 			//new Rule(44, "44 Turns", "Change the number of turns to 44."),
 			//new Rule(48, "48 Turns", "Change the number of turns to 48.")
+		}));
+
+		ruleSlotList.Add(new RuleSlot("teamCount", "Team Count", new List<Rule> {
+			new Rule(4, "4 Teams", ""),
+			new Rule(8, "8 Teams", ""),
+			new Rule(16, "16 Teams", "")
 		}));
 
 		/*

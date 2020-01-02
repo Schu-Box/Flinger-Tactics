@@ -32,9 +32,11 @@ public class Tongue : MonoBehaviour {
 	}
 
 	private void OnTriggerEnter2D(Collider2D other) {
+		/*
 		if(!other.isTrigger) {
 			athlete.TongueGrabbed(other.gameObject);
 		}
+		*/
 	}
 
 	public void HideTongue() {

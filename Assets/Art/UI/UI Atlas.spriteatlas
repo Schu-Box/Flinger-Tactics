@@ -1,0 +1,126 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: UI Atlas
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 4096
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: -1
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 0
+    variantMultiplier: 1
+    packables:
+    - {fileID: 2800000, guid: f90987d93c0b049ba9c299baf5cacfa2, type: 3}
+    - {fileID: 2800000, guid: a059ddb8522b2494b833b666f060e0d1, type: 3}
+    - {fileID: 2800000, guid: 69994d5f7ab8143a68154a9e8ec25e3f, type: 3}
+    - {fileID: 2800000, guid: 406953248f54549719dd0c5e27b8fb2c, type: 3}
+    - {fileID: 2800000, guid: a8a857e63c5394f6aa9c3207caf925bf, type: 3}
+    - {fileID: 2800000, guid: 2dcfa622807c44fe2b1129b45546a64f, type: 3}
+    - {fileID: 2800000, guid: 1731bc88084874a429ae1bbbf3084db0, type: 3}
+    - {fileID: 2800000, guid: 43be12018c6434b62bfe837642dd2a64, type: 3}
+    - {fileID: 2800000, guid: 36d69aac2c96b4626b59851b631f37a9, type: 3}
+    - {fileID: 2800000, guid: 01a787f59060545c1871926a07dff66f, type: 3}
+    - {fileID: 2800000, guid: 96fe7dd35abcf4544a3b2d5a864c1d8c, type: 3}
+    - {fileID: 2800000, guid: 92a7fbc568f4e465182ee65ab381eb96, type: 3}
+    - {fileID: 2800000, guid: 0b964a4d511aa48c1be3bc761da7b42f, type: 3}
+    - {fileID: 2800000, guid: c896d0c09646e4d3f81659943060f8e5, type: 3}
+    - {fileID: 2800000, guid: 6460c1471e0404af5a42f336196ef115, type: 3}
+    - {fileID: 2800000, guid: 91d78f2ac87ad404a9ea7cd5be10c8aa, type: 3}
+    - {fileID: 2800000, guid: dd73c6afd80a2461d92962e485e01824, type: 3}
+    - {fileID: 2800000, guid: 85ba9f815fc4e461b89972b643aa2d63, type: 3}
+    - {fileID: 2800000, guid: 75b181b2944744704af879b2dd66a5e8, type: 3}
+    - {fileID: 2800000, guid: 73a5bce7534f64b80af5da82133ab87e, type: 3}
+    - {fileID: 2800000, guid: bc11b573c7ad74878aa2d714dc2f98c0, type: 3}
+    - {fileID: 2800000, guid: dd4a9414019bc46929334359cebb2546, type: 3}
+    - {fileID: 2800000, guid: adf237cda0ff94f07ad63f66e218bf20, type: 3}
+    - {fileID: 2800000, guid: 1c8bb5407b1584d62af60f59883fde22, type: 3}
+    totalSpriteSurfaceArea: 6464073
+    bindAsDefault: 1
+    storedHash:
+      serializedVersion: 2
+      Hash: 65563f63b304a25224c8ef1e2075300e
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 1c8bb5407b1584d62af60f59883fde22, type: 3}
+  - {fileID: 21300000, guid: c896d0c09646e4d3f81659943060f8e5, type: 3}
+  - {fileID: 21300000, guid: 43be12018c6434b62bfe837642dd2a64, type: 3}
+  - {fileID: 21300000, guid: 85ba9f815fc4e461b89972b643aa2d63, type: 3}
+  - {fileID: 21300000, guid: 2dcfa622807c44fe2b1129b45546a64f, type: 3}
+  - {fileID: 21300000, guid: 75b181b2944744704af879b2dd66a5e8, type: 3}
+  - {fileID: 21300000, guid: bc11b573c7ad74878aa2d714dc2f98c0, type: 3}
+  - {fileID: 21300000, guid: 96fe7dd35abcf4544a3b2d5a864c1d8c, type: 3}
+  - {fileID: 21300000, guid: dd4a9414019bc46929334359cebb2546, type: 3}
+  - {fileID: 21300000, guid: 406953248f54549719dd0c5e27b8fb2c, type: 3}
+  - {fileID: 21300000, guid: 92a7fbc568f4e465182ee65ab381eb96, type: 3}
+  - {fileID: 21300000, guid: 01a787f59060545c1871926a07dff66f, type: 3}
+  - {fileID: 21300000, guid: a8a857e63c5394f6aa9c3207caf925bf, type: 3}
+  - {fileID: 21300000, guid: 6460c1471e0404af5a42f336196ef115, type: 3}
+  - {fileID: 21300000, guid: 73a5bce7534f64b80af5da82133ab87e, type: 3}
+  - {fileID: 21300000, guid: 1731bc88084874a429ae1bbbf3084db0, type: 3}
+  - {fileID: 21300000, guid: a059ddb8522b2494b833b666f060e0d1, type: 3}
+  - {fileID: 21300000, guid: f90987d93c0b049ba9c299baf5cacfa2, type: 3}
+  - {fileID: 21300000, guid: 91d78f2ac87ad404a9ea7cd5be10c8aa, type: 3}
+  - {fileID: 21300000, guid: 36d69aac2c96b4626b59851b631f37a9, type: 3}
+  - {fileID: 21300000, guid: 0b964a4d511aa48c1be3bc761da7b42f, type: 3}
+  - {fileID: 21300000, guid: adf237cda0ff94f07ad63f66e218bf20, type: 3}
+  - {fileID: 21300000, guid: 69994d5f7ab8143a68154a9e8ec25e3f, type: 3}
+  - {fileID: 21300000, guid: dd73c6afd80a2461d92962e485e01824, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - SidewaysArrowThick
+  - Hand-Cursor-(Open)
+  - FlickyButtonOuter
+  - Quote
+  - Rule Change Button Front Panel
+  - Rule Change Button Title Panel
+  - Vine UI Gems
+  - Hand-Cursor
+  - Rule Change Button Arrow Insert
+  - box 1 complete
+  - Hand-Cursor-(Click)
+  - Vine UI Border
+  - Column UI
+  - Lauren-Side-Arrow
+  - Rounded-Rectangle-Side-Arrow
+  - FlickyButtonInner
+  - box 1 BG
+  - Base UI Panel
+  - ProgressionCircle
+  - Gear
+  - Hand-Cursor-(Closed)
+  - Rule Change Button Back Panel
+  - box 1 border
+  - ProgressionRing
+  m_Tag: UI Atlas
+  m_IsVariant: 0

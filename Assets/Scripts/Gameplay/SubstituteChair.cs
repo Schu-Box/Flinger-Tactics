@@ -58,8 +58,6 @@ public class SubstituteChair : MonoBehaviour {
 
 		startColor = sr.color;
 
-		StartCoroutine(GrowChair());
-
 		//SetSpriteMaskInteraction(true);
 	}
 
@@ -72,17 +70,19 @@ public class SubstituteChair : MonoBehaviour {
 	}	
 
 	public void OnMouseEnter() {
+		Debug.Log(interactable);
+
 		if(interactable) {
 			if(currentSubstitute != null) {
 
 				cursorController.SetHover(true);
 
-				if(titleMenuController == null) {
+				if(!matchController.GetUnbounded()) {
 					if(!currentSubstitute.GetSpokeThisTurn()) {
 						matchController.DisplayQuote(currentSubstitute, currentSubstitute.GetAthlete().GetQuote("substitute"));
 					}
 				} else {
-					matchController.DisplayQuote(currentSubstitute, titleMenuController.GetTutorialQuote());
+					//matchController.DisplayQuote(currentSubstitute, titleMenuController.GetTutorialQuote());
 				}
 			}
 		}
@@ -177,6 +177,8 @@ public class SubstituteChair : MonoBehaviour {
 	public IEnumerator LaunchChairOntoField() {
 		//SetSpriteMaskInteraction(false);
 
+		Debug.Log("Launching Chair onto Field");
+
 		float maxChairStretch;
 
         Vector2 chairStart = transform.position;
@@ -258,31 +260,6 @@ public class SubstituteChair : MonoBehaviour {
 
         ac.AddForce(new Vector2(xForce, 0));
     }
-
-	public IEnumerator GrowChair() {
-		
-		WaitForFixedUpdate waiter = new WaitForFixedUpdate();
-
-		yield return waiter;
-
-		/*
-		Vector3 fullSize = transform.localScale;
-		transform.localScale = Vector3.zero;
-		
-
-		float duration = 1.2f;
-		float timer = 0f;
-		while(timer < duration) {
-			timer += Time.deltaTime;
-
-			//transform.localScale = Vector3.Lerp(Vector3.zero, fullSize, timer/duration);
-
-			yield return waiter;
-		}
-		*/
-
-		StartCoroutine(AnimateChair());
-	}
 
 	public IEnumerator AnimateChair() {
 

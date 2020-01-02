@@ -18,7 +18,7 @@ public class Shockwave : MonoBehaviour {
 		sr = GetComponent<SpriteRenderer>();
 		sr.color = color;
 
-		Vector3 start = Vector3.zero;
+		Vector3 start = transform.position;
 		
 		WaitForFixedUpdate waiter = new WaitForFixedUpdate();
 		float duration = 0.5f;

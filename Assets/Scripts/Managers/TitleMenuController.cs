@@ -9,7 +9,12 @@ public class TitleMenuController : MonoBehaviour {
 
 	public GameObject titleScreen;
 	public GameObject careerScreen;
+	public GameObject titleLogo;
 	public CustomButton returnButton;
+
+	public GameObject escapePanel;
+	public Slider musicVolumeSlider;
+	public Slider soundEffectsVolumeSlider;
 
 	public Team practiceTeam_Home;
 	public Team practiceTeam_Away;	
@@ -21,15 +26,20 @@ public class TitleMenuController : MonoBehaviour {
 	private void Start() {
 		PlayerPrefs.SetString("mode", "");
 
+		Time.timeScale = 1f;
+
 		matchController = FindObjectOfType<MatchController>();
 		cameraController = FindObjectOfType<CameraController>();
 
 		titleScreen.SetActive(true);
 		careerScreen.SetActive(false);
 
-		ruleSet.ChangeRule(ruleSet.GetRuleSlot("athleteRosterCount").possibleRules[1]);
+		escapePanel.SetActive(false);
+
+		ruleSet.ChangeRule(ruleSet.GetRuleSlot("athleteRosterCount").possibleRules[4]);
 		ruleSet.ChangeRule(ruleSet.GetRuleSlot("athleteFieldCount").possibleRules[1]);
 		ruleSet.ChangeRule(ruleSet.GetRuleSlot("ballCount").possibleRules[2]);
+		ruleSet.ChangeRule(ruleSet.GetRuleSlot("bumperCount").possibleRules[3]);
 		ruleSet.GetRule("turnCount").value = 9999;
 
 		matchController.SetupCourt(ruleSet);
@@ -37,20 +47,44 @@ public class TitleMenuController : MonoBehaviour {
 		practiceTeam_Home.SetNewRoster(ruleSet.GetRule("athleteRosterCount").value);
 		practiceTeam_Away.SetNewRoster(ruleSet.GetRule("athleteRosterCount").value);
 
-		//matchController.SetUnbounded(true);
+		matchController.SetUnbounded(true);
 
 		matchController.SetSide(true, practiceTeam_Home);
 		matchController.SetSide(false, practiceTeam_Away);
 
-		StartCoroutine(IntroAnimation());
+		//StartCoroutine(IntroAnimation());
+
+		musicVolumeSlider.value = AudioManager.musicVolume;
+        soundEffectsVolumeSlider.value = AudioManager.soundEffectsVolume;
+	}
+
+	private void Update() {
+		if(Input.GetButtonDown("Cancel")) {
+            ToggleEscapeMenu();
+        } 
 	}
 
 	public IEnumerator IntroAnimation() {
 		WaitForFixedUpdate waiter = new WaitForFixedUpdate();
+		/*
 		float timer = 0f;
 		float duration = 0.5f;
 		while(timer < duration) {
 			timer++;
+
+			yield return waiter;
+		}
+		*/
+
+		Vector3 titleStart = titleLogo.transform.localScale;
+		Vector3 titleExpand = titleStart * 1.05f;
+
+		float timer = 0f;
+		float duration = 0.5f;
+		while(true) {
+			timer += Time.deltaTime;
+
+			titleLogo.transform.localScale = Vector3.Lerp(titleStart, titleExpand, timer % duration);
 
 			yield return waiter;
 		}
@@ -75,6 +109,11 @@ public class TitleMenuController : MonoBehaviour {
 		StartNewGame();
 	}
 
+	public void SelectTournamentMode() {
+		PlayerPrefs.SetString("mode", "tournament");
+		StartNewGame();
+	}
+
 	public void StartNewGame() {
 		Debug.Log("Entering Play Scene");
 		SceneManager.LoadScene(1);
@@ -92,6 +131,8 @@ public class TitleMenuController : MonoBehaviour {
 	public void DisplayPracticeMatch() {
         StartCoroutine(MoveObjectToPosition(Camera.main.gameObject, cameraController.startPosition));
 
+		matchController.ResetSides();
+
         matchController.StartMatch();
     }
 
@@ -106,9 +147,8 @@ public class TitleMenuController : MonoBehaviour {
 	public void UndisplayPracticeMatch() {
 		StartCoroutine(MoveObjectToPosition(Camera.main.gameObject, cameraController.upPosition));
 
-		matchController.PrematurelyEndTurn();
-		matchController.ClearField();
-		matchController.ResetSides();
+		//matchController.PrematurelyEndTurn();
+		matchController.EndMatch();
 	}
 
 	public string GetTutorialQuote() {
@@ -130,6 +170,28 @@ public class TitleMenuController : MonoBehaviour {
 		num = num % tutorialStrings.Count;
 
 		return tutorialStrings[num];
+	}
+
+	public void DisplayEmailList() {
+		StartCoroutine(MoveObjectToPosition(Camera.main.gameObject, cameraController.upRightPosition));
+	}
+
+	public void UndisplayEmailList() {
+		StartCoroutine(MoveObjectToPosition(Camera.main.gameObject, cameraController.upPosition));
+	}
+
+	public void ToggleEscapeMenu() {
+		if(escapePanel.activeSelf) {
+			escapePanel.SetActive(false);
+			Time.timeScale = 1f;
+		} else {
+			escapePanel.SetActive(true);
+			Time.timeScale = 0f;
+		}
+	}
+
+	public void QuitGame() {
+		Application.Quit();
 	}
 
 	//This is copied from canvasManager, bad programmer! -Should move this to camera controller since that's primarily what it's used for

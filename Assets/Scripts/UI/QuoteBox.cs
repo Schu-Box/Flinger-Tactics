@@ -13,8 +13,9 @@ public class QuoteBox : MonoBehaviour {
 
 	private Vector2 startOffsetMin = new Vector2(400f, 0);
 	private Vector2 startOffsetMax = new Vector2(-400f, 0);
-
 	private float baseOffset = 80f;
+
+	private float xOffset = 2f;
 
 	private Vector2 latestFullOffset = Vector2.zero;
 
@@ -41,23 +42,18 @@ public class QuoteBox : MonoBehaviour {
 			image.transform.localEulerAngles = new Vector3(0, 0, 0);
 			text.transform.localEulerAngles = new Vector3(0, 0, 0);
 
-			offset.x = 1.6f;
-
-			//text.alignment = TextAlignmentOptions.Left;
+			offset.x = xOffset;
 		} else {
 			goingRight = false;
 
 			image.transform.localEulerAngles = new Vector3(0, 180, 0);
 			text.transform.localEulerAngles = new Vector3(0, 180, 0);
 
-			offset.x = -1.6f;
-
-			//text.alignment = TextAlignmentOptions.Right;
+			offset.x = -xOffset;
 		}
+		transform.position = ac.transform.position + offset;
 
 		image.color = ac.GetAthlete().GetTeam().GetDarkTint();
-
-    	transform.position = ac.transform.position + offset;
 
 		latestQuote = quote;
 		latestAthleteController = ac;
@@ -85,11 +81,11 @@ public class QuoteBox : MonoBehaviour {
 			latestFullOffset.x = startOffsetMin.x - baseOffset - (latestQuote.Length * charIntervalIncrease);
 		}
 
-		WaitForFixedUpdate waiter = new WaitForFixedUpdate();
+		WaitForEndOfFrame waiter = new WaitForEndOfFrame();
 		float duration = 0.1f;
 		float timer = 0f;
 		while(timer < duration) {
-			timer += Time.deltaTime;
+			timer += Time.unscaledDeltaTime;
 
 			if(goingRight) {
 				rt.offsetMax = Vector2.Lerp(startOffsetMax, latestFullOffset, timer/duration);
@@ -137,6 +133,10 @@ public class QuoteBox : MonoBehaviour {
 
 	public IEnumerator CloseQuote() {
 
+		if(latestAthleteController != null) {
+			latestAthleteController.closingQuote = true;
+		}
+
 		text.text = "";
 
 		WaitForFixedUpdate waiter = new WaitForFixedUpdate();
@@ -163,6 +163,7 @@ public class QuoteBox : MonoBehaviour {
 		if(latestAthleteController != null) {
 			latestAthleteController.SetSpeaking(false);
 			latestAthleteController.GetFace().DetermineFaceState();
+			latestAthleteController.closingQuote = false;
 		}
 
 		currentCoroutine = null;

@@ -58,9 +58,6 @@ TagManager:
   - name: Seating
     uniqueID: 798997413
     locked: 0
-  - name: Crowd Athlete
-    uniqueID: 2908818261
-    locked: 0
   - name: Athletes
     uniqueID: 3853730747
     locked: 0
@@ -70,6 +67,12 @@ TagManager:
   - name: Goals
     uniqueID: 77692565
     locked: 0
+  - name: Crowd Athlete
+    uniqueID: 2908818261
+    locked: 0
+  - name: Canvas Dimmer
+    uniqueID: 3707851069
+    locked: 0
   - name: UI
     uniqueID: 2602950163
     locked: 0
@@ -78,4 +81,7 @@ TagManager:
     locked: 0
   - name: UI Overlay
     uniqueID: 2240973005
+    locked: 0
+  - name: UI Super Overlay
+    uniqueID: 632714657
     locked: 0

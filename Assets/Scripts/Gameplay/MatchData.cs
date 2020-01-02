@@ -2,15 +2,38 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public class SeasonData {
+	public List<MatchData> matches;
+
+	public SeasonData(List<MatchData> startMatches) {
+		matches = startMatches;
+	}
+
+	public void AddMatches(List<MatchData> additionalMatches) {
+		for(int i = 0; i < additionalMatches.Count; i++) {
+			matches.Add(additionalMatches[i]);
+		}
+	}
+
+	
+}
+
 public class MatchData {
 	public TeamMatchData homeTeamData;
 	public TeamMatchData awayTeamData;
 
-	public Team winner;
+	private Team winner;
 
-	public MatchData(Team homeTeam, Team awayTeam) {
+	private RuleSet ruleSet;
+
+	public MatchData(Team homeTeam, Team awayTeam, RuleSet rulesUsed) {
 		homeTeamData = new TeamMatchData(homeTeam);
 		awayTeamData = new TeamMatchData(awayTeam);
+
+		homeTeam.AssignNewMatchData(this);
+		awayTeam.AssignNewMatchData(this);
+
+		ruleSet = rulesUsed;
 	}
 
 	public TeamMatchData GetTeamMatchData(Team team) {
@@ -57,13 +80,15 @@ public class MatchData {
 		return GetBestAthlete(awayTeamData.athleteMatchData);
 	}
 
-	public void SetWinner(Team winningTeam) {
-		winner = winningTeam;
-
-		if(homeTeamData.team == winningTeam) {
+	public void FinalizeMatchData() {
+		if(homeTeamData.GetScore() > awayTeamData.GetScore()) {
+			winner = homeTeamData.team;
 			homeTeamData.SetWin(true);
 			awayTeamData.SetWin(false);
+		} else if (homeTeamData.GetScore() == awayTeamData.GetScore()) {
+			Debug.Log("Error: The game is tied at the end of the match");
 		} else {
+			winner = awayTeamData.team;
 			homeTeamData.SetWin(false);
 			awayTeamData.SetWin(true);
 		}
@@ -74,6 +99,84 @@ public class MatchData {
 
 	public Team GetWinner() {
 		return winner;
+	}
+
+	public void SimulateMatch() {
+
+		//Right now it's pretty much just random results - can also include impossible results (4 goals, 0 breaks)
+		for(int i = 0; i < ruleSet.GetRule("turnCount").value; i++) {
+			Athlete homeAthlete = homeTeamData.team.athletes[Random.Range(0, homeTeamData.team.athletes.Count)];
+			SimulateAthleteTurn(homeAthlete);
+			
+			Athlete awayAthlete = awayTeamData.team.athletes[Random.Range(0, awayTeamData.team.athletes.Count)];
+			SimulateAthleteTurn(awayAthlete);
+		}
+
+		if(homeTeamData.GetScore() == awayTeamData.GetScore()) {
+			Debug.Log("The teams are still tied in simulation, I'll fix it tho");
+			Athlete fakeScorer = homeTeamData.team.athletes[0];
+			fakeScorer.IncreaseStat(StatType.Goals);
+			homeTeamData.IncreaseScore(1);
+		}
+
+		FinalizeMatchData();
+	}
+
+	public void SimulateAthleteTurn(Athlete a) {
+		if(Random.value > 0.1f) { //else it was a sub
+			a.IncreaseStat(StatType.Flings);
+		}
+
+		float rando = Random.value;
+		if(rando > 0.8) { //goal 20%
+			a.IncreaseStat(StatType.Goals);
+			a.GetTeam().GetCurrentMatchData().GetTeamMatchData(a.GetTeam()).IncreaseScore(1);
+
+			Athlete randomTeammate = a;
+			while(randomTeammate == a) { //Should never cause a error cuz teams will always consist of at the very least 2 athletes
+				randomTeammate = a.GetTeam().athletes[Random.Range(0, a.GetTeam().athletes.Count)];
+			}
+			if(Random.value > 0.9) {
+				randomTeammate.IncreaseStat(StatType.Assists);
+			}
+		} else if (rando > 0.4) { // break 40%
+			a.IncreaseStat(StatType.Breaks);
+		} else if (rando > 0.15) { // clear 25%
+			a.IncreaseStat(StatType.Clears);
+		}
+
+		for(int r = 0; r < Random.Range(0, 3); r++) {
+			a.IncreaseStat(StatType.Touches);
+		}
+
+		for(int r = 0; r < Random.Range(0, 3); r++) {
+			a.IncreaseStat(StatType.Tackles);
+		}
+
+		for(int r = 0; r < Random.Range(0, 8); r++) {
+			a.IncreaseStat(StatType.Bumps);
+		}
+
+		switch(a.athleteData.classString) {
+			case "Circle":
+				if(Random.value > 0.65) { //35%
+					a.IncreaseStat(StatType.Shockwaves);
+				}
+				break;
+			case "Box":
+				if(Random.value > 0.8) { //20%
+					a.IncreaseStat(StatType.Repairs);
+				}
+				break;
+			case "Triangle":
+				if(Random.value > 0.6) { //40%
+					a.IncreaseStat(StatType.Knockouts);
+				}
+				break;
+			default:
+				Debug.Log("Class doesn't exist.");
+				break;
+		}
 	}
 }
 
@@ -90,6 +193,7 @@ public class TeamMatchData {
 
 	public TeamMatchData(Team t) {
 		team = t;
+
 		for(int i = 0; i < team.athletes.Count; i++) {
 			athleteMatchData.Add(new AthleteMatchData(team.athletes[i]));
 		}
@@ -169,8 +273,6 @@ public class TeamMatchData {
 	}
 
 	public void SetMatchDescriptors() {
-		Debug.Log("Setting descriptors");
-
 		for(int i = 0; i < statTypesList.Count; i++) {
 			List<AthleteMatchData> bestAtStat = GetBestAtStat(statTypesList[i]);
 			for(int a = 0; a < bestAtStat.Count; a++) {
@@ -281,11 +383,13 @@ public class TeamMatchData {
 					StatType firstStat = amd.topStats[0];
 					amd.AddNewDescriptor(firstStat);
 					
-					StatType secondStat = firstStat;
-					while(secondStat == firstStat) {
-						secondStat = amd.topStats[0];
+					StatType secondStat;
+					if(amd.topStats.Count > 1) {
+						secondStat = amd.topStats[1];
+						amd.AddNewDescriptor(secondStat);
+					} else {
+						Debug.Log("need to come up with a proper second stat?");
 					}
-					amd.AddNewDescriptor(secondStat);
 				}
 			}
 		}

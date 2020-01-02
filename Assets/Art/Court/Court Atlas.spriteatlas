@@ -1,0 +1,156 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Court Atlas
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+    variantMultiplier: 1
+    packables:
+    - {fileID: 2800000, guid: 9d8099b150ce845dc8c8125f3a2d1db7, type: 3}
+    - {fileID: 2800000, guid: 81cd2b497f895460eaba92f32ecd8328, type: 3}
+    - {fileID: 2800000, guid: b1f2fda646e624558aad20e17484d0d2, type: 3}
+    - {fileID: 2800000, guid: ed96fdb03ad07457da2974a1c2f2990a, type: 3}
+    - {fileID: 2800000, guid: 3de80cd18d4314597a65c3e09084a334, type: 3}
+    - {fileID: 2800000, guid: aa36f08e05acf4c95b435c0603290f50, type: 3}
+    - {fileID: 2800000, guid: b7b48d14746664f22a61197d93822f25, type: 3}
+    - {fileID: 2800000, guid: 2db36766ef252445fbc6206b05d7932b, type: 3}
+    - {fileID: 2800000, guid: 6a94d8a834a3349bc8fee46f93d3876c, type: 3}
+    - {fileID: 2800000, guid: b94aceb968dad4fe0908697e181f0085, type: 3}
+    - {fileID: 2800000, guid: 596ebdae9b3a3406f9516665ec440d3f, type: 3}
+    - {fileID: 2800000, guid: e2c27ca2765174893a83fea8ba84bc07, type: 3}
+    - {fileID: 2800000, guid: 2aa146669435844a99e2e20f29de3e7c, type: 3}
+    - {fileID: 2800000, guid: f89976cd0e685424b98c914e94227f5a, type: 3}
+    - {fileID: 2800000, guid: c5ec096cea70c471287a7f6d89934b8f, type: 3}
+    - {fileID: 2800000, guid: d9bbfc73e383c47c3a0abb3cf6513402, type: 3}
+    - {fileID: 2800000, guid: bb0ab7e3d635d45cdb9177e1ccb2f863, type: 3}
+    - {fileID: 2800000, guid: 7cec11be646f046ea89da6e7b9ecac56, type: 3}
+    - {fileID: 2800000, guid: 33d21a2a338b24e518f14b7a29981ace, type: 3}
+    - {fileID: 2800000, guid: 2593763e185b34348abe0f28c0834104, type: 3}
+    - {fileID: 2800000, guid: 8cff72f22a2014f9c9d22d691f7ea090, type: 3}
+    - {fileID: 2800000, guid: 4c4cf5f30bc37483e8cbfc202e616934, type: 3}
+    - {fileID: 2800000, guid: 139391754ad7d4461b899fddb28ef779, type: 3}
+    - {fileID: 2800000, guid: 76d6d63e3ee374e9ba3812e30e6979cc, type: 3}
+    - {fileID: 2800000, guid: 18ec70d9fcc754484b990d2fa4112b0f, type: 3}
+    - {fileID: 2800000, guid: 8920ce1cfe2014f5cae995c708469151, type: 3}
+    - {fileID: 2800000, guid: 409adc7dceb034e2db63e6878050bec5, type: 3}
+    - {fileID: 2800000, guid: a698b2a2259854746a7f5f3e3e7beab6, type: 3}
+    - {fileID: 2800000, guid: 33cb44977d2164a8fad926e618c9e53c, type: 3}
+    - {fileID: 2800000, guid: 5d05c5c1efca34cd38277e31a5cf329c, type: 3}
+    - {fileID: 2800000, guid: e177818fc67554f8985fd64a6fcbd6f2, type: 3}
+    - {fileID: 2800000, guid: 28c2b5a4164664fbdaa694bc15caf93f, type: 3}
+    - {fileID: 2800000, guid: 1a106ad05a52b4e598f069821389d2fc, type: 3}
+    - {fileID: 2800000, guid: 10d52d36cc560471eb1154523b913706, type: 3}
+    - {fileID: 2800000, guid: 8f219f22dfa66480d8007b6af920b368, type: 3}
+    - {fileID: 2800000, guid: 42c27a22577684773804c3cf88442a88, type: 3}
+    - {fileID: 2800000, guid: 8c332d5bb1f154babba15cf782a36690, type: 3}
+    - {fileID: 2800000, guid: 25f9eef59098242659f0c796ea557c4e, type: 3}
+    totalSpriteSurfaceArea: 60356010
+    bindAsDefault: 1
+    storedHash:
+      serializedVersion: 2
+      Hash: 96ac829022ec268d5f9bea5430d0d9fe
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: ed96fdb03ad07457da2974a1c2f2990a, type: 3}
+  - {fileID: 21300000, guid: 1a106ad05a52b4e598f069821389d2fc, type: 3}
+  - {fileID: 21300000, guid: 9d8099b150ce845dc8c8125f3a2d1db7, type: 3}
+  - {fileID: 21300000, guid: 5d05c5c1efca34cd38277e31a5cf329c, type: 3}
+  - {fileID: 21300000, guid: 3de80cd18d4314597a65c3e09084a334, type: 3}
+  - {fileID: 21300000, guid: 42c27a22577684773804c3cf88442a88, type: 3}
+  - {fileID: 21300000, guid: 8f219f22dfa66480d8007b6af920b368, type: 3}
+  - {fileID: 21300000, guid: a698b2a2259854746a7f5f3e3e7beab6, type: 3}
+  - {fileID: 21300000, guid: e2c27ca2765174893a83fea8ba84bc07, type: 3}
+  - {fileID: 21300000, guid: 8cff72f22a2014f9c9d22d691f7ea090, type: 3}
+  - {fileID: 21300000, guid: d9bbfc73e383c47c3a0abb3cf6513402, type: 3}
+  - {fileID: 21300000, guid: bb0ab7e3d635d45cdb9177e1ccb2f863, type: 3}
+  - {fileID: 21300000, guid: 4c4cf5f30bc37483e8cbfc202e616934, type: 3}
+  - {fileID: 21300000, guid: b7b48d14746664f22a61197d93822f25, type: 3}
+  - {fileID: 21300000, guid: 28c2b5a4164664fbdaa694bc15caf93f, type: 3}
+  - {fileID: 21300000, guid: 139391754ad7d4461b899fddb28ef779, type: 3}
+  - {fileID: 21300000, guid: 25f9eef59098242659f0c796ea557c4e, type: 3}
+  - {fileID: 21300000, guid: 10d52d36cc560471eb1154523b913706, type: 3}
+  - {fileID: 21300000, guid: 2aa146669435844a99e2e20f29de3e7c, type: 3}
+  - {fileID: 21300000, guid: 2db36766ef252445fbc6206b05d7932b, type: 3}
+  - {fileID: 21300000, guid: b1f2fda646e624558aad20e17484d0d2, type: 3}
+  - {fileID: 21300000, guid: 33cb44977d2164a8fad926e618c9e53c, type: 3}
+  - {fileID: 21300000, guid: 6a94d8a834a3349bc8fee46f93d3876c, type: 3}
+  - {fileID: 21300000, guid: 81cd2b497f895460eaba92f32ecd8328, type: 3}
+  - {fileID: 21300000, guid: b94aceb968dad4fe0908697e181f0085, type: 3}
+  - {fileID: 21300000, guid: 18ec70d9fcc754484b990d2fa4112b0f, type: 3}
+  - {fileID: 21300000, guid: 33d21a2a338b24e518f14b7a29981ace, type: 3}
+  - {fileID: 21300000, guid: 8c332d5bb1f154babba15cf782a36690, type: 3}
+  - {fileID: 21300000, guid: 8920ce1cfe2014f5cae995c708469151, type: 3}
+  - {fileID: 21300000, guid: c5ec096cea70c471287a7f6d89934b8f, type: 3}
+  - {fileID: 21300000, guid: 409adc7dceb034e2db63e6878050bec5, type: 3}
+  - {fileID: 21300000, guid: f89976cd0e685424b98c914e94227f5a, type: 3}
+  - {fileID: 21300000, guid: 2593763e185b34348abe0f28c0834104, type: 3}
+  - {fileID: 21300000, guid: 76d6d63e3ee374e9ba3812e30e6979cc, type: 3}
+  - {fileID: 21300000, guid: aa36f08e05acf4c95b435c0603290f50, type: 3}
+  - {fileID: 21300000, guid: 596ebdae9b3a3406f9516665ec440d3f, type: 3}
+  - {fileID: 21300000, guid: 7cec11be646f046ea89da6e7b9ecac56, type: 3}
+  - {fileID: 21300000, guid: e177818fc67554f8985fd64a6fcbd6f2, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - Diagonal-Step-3
+  - Flingy Ball
+  - Court
+  - Substitute Attachment Bar
+  - Diagonal-Step-4
+  - Flingy Ball Fill 3
+  - Flingy Ball Fill 2
+  - Shockwave
+  - Horizontal-Step-4
+  - Vertical-Step-3
+  - Seating-Lower-Angled
+  - Seating-Main
+  - Vertical-Step-4
+  - Diagonal-Step-6
+  - Substitute Bar (Cropped)
+  - Court Lines
+  - Flingy Ball Inner Fill
+  - Flingy Ball Fill 1
+  - Horizontal-Step-5
+  - Diagonal-Step-7
+  - Diagonal-Step-2
+  - Shockwave2
+  - Horizontal-Step-1
+  - Diagonal-Step-1
+  - Horizontal-Step-2
+  - Chair2
+  - Vertical-Step-1
+  - Flingy Ball Fill 4
+  - Goal Bumper
+  - Horizontal-Step-7
+  - Half Court
+  - Horizontal-Step-6
+  - Vertical-Step-2
+  - Bumper
+  - Diagonal-Step-5
+  - Horizontal-Step-3
+  - Seating-Upper-Angled
+  - Substitute Bar
+  m_Tag: Court Atlas
+  m_IsVariant: 0

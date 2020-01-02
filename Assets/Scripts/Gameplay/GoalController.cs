@@ -16,7 +16,9 @@ public class GoalController : MonoBehaviour {
 	private BoxCollider2D collie;
 	private BoxCollider2D goalTrigger;
 
-	void Start() {
+	private bool substituteReadyForLaunch = false;
+
+	void Awake() {
 		matchController = FindObjectOfType<MatchController>();
 		cameraController = FindObjectOfType<CameraController>();
 		spriteRenderer = GetComponent<SpriteRenderer>();
@@ -28,6 +30,19 @@ public class GoalController : MonoBehaviour {
 		goalTrigger = transform.GetChild(0).GetComponent<BoxCollider2D>();
 
 		bumper.SetAsGoal(true);
+	}
+
+	public void SetTeamRelations(Team owner, Team attacker) {
+		teamOwner = owner;
+		goalAttacker = attacker;
+
+		bumper.SetTeam(owner);
+		subPlatform.SetTeam(owner);
+		subPlatform.SetGoal(this);
+	}
+
+	public Team GetGoalAttacker() {
+		return goalAttacker;
 	}
 
 	void OnCollisionEnter2D(Collision2D collision) {
@@ -45,30 +60,33 @@ public class GoalController : MonoBehaviour {
 	}
 
 	public void OpenSubPlatform() {
-		StartCoroutine(subPlatform.AnimateSubPlatformOpening());
+		if(!substituteReadyForLaunch) {
+			StartCoroutine(subPlatform.AnimateSubPlatformOpening());
+		}
 	}
 	
 
 	public void CloseSubPlatform() {
-		StartCoroutine(subPlatform.AnimateSubPlatformClosing());
-
+		if(substituteReadyForLaunch) {
+			StartCoroutine(subPlatform.AnimateSubPlatformClosing());
+		}
+		
+		/*
 		List<SubstituteChair> subChairList = matchController.GetSubChairsActive();
 		for(int i = 0; i < subChairList.Count; i++) {
 			subChairList[i].SetInteractable(false);
 
 			subChairList[i].GetCurrentSubstitute().transform.SetParent(matchController.athleteHolder);
 		}
+		*/
 	}
 
-	public void SetTeamRelations(Team owner, Team attacker) {
-		teamOwner = owner;
-		goalAttacker = attacker;
-
-		subPlatform.SetTeam(owner);
+	public void SetSubstituteReadyForLaunch(bool ready) {
+		substituteReadyForLaunch = ready;
 	}
 
-	public Team GetGoalAttacker() {
-		return goalAttacker;
+	public bool GetSubstituteReadyForLaunch() {
+		return substituteReadyForLaunch;
 	}
 
 	/*
@@ -92,9 +110,9 @@ public class GoalController : MonoBehaviour {
 	}
 	*/
 
-	public void SetCollidersEnabled(bool enabled) {
-		goalTrigger.enabled = enabled;
-		collie.enabled = enabled;
+	public void SetCollidersEnabled(bool en) {
+		goalTrigger.enabled = en;
+		collie.enabled = en;
 	}
 
 	public void BallEnteredTrigger(BallController ball) {

@@ -7,7 +7,6 @@ using TMPro;
 public class TeamPostMatchPanel : MonoBehaviour {
 
 	public GameObject showcaseAthleteUI;
-	public Transform showcaseHolder;
 	public TextMeshProUGUI teamNameText;
 
 	public Vector3 homePosition;
@@ -48,10 +47,8 @@ public class TeamPostMatchPanel : MonoBehaviour {
 
 		showcaseAthleteList = new List<ShowcaseAthleteUI>();
 		for(int i = 0; i < team.athletes.Count; i++) {
-			Debug.Log("Spawning a athlete");
-
-			ShowcaseAthleteUI show = Instantiate(showcaseAthleteUI, Vector3.zero, Quaternion.identity, showcaseHolder).GetComponent<ShowcaseAthleteUI>();
-			show.SetAthlete(team.athletes[i]);
+			ShowcaseAthleteUI show = Instantiate(showcaseAthleteUI, Vector3.zero, Quaternion.identity, showcaseAthleteHolder).GetComponent<ShowcaseAthleteUI>();
+			show.SetAthlete(team.athletes[i], team.GetCurrentMatchData().GetTeamMatchData(team).GetAthleteMatchData(team.athletes[i])); //seems like really bad code here lol don't look
 			if(team.athletes[i] == mvp) {
 				show.haloText.gameObject.SetActive(true);
 				show.GetComponent<AthleteImage>().SetMVP();

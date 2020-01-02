@@ -3,8 +3,9 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -22,6 +23,11 @@ MonoBehaviour:
   - Dikembe
   - Howard
   - Helga
+  - Helga
+  - Gertrude
+  - Dwight
+  - Javale
+  - DeBrick
   skinColorList:
   - {r: 0.9150943, g: 0.895966, b: 0.77265036, a: 1}
   - {r: 0.8207547, g: 0.7954825, b: 0.63879496, a: 1}
@@ -55,17 +61,21 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 62469e984c0b24c2abeb891b50bcddf4, type: 2}
   - {fileID: 11400000, guid: 2a67283b471ae425cade2140345fcdba, type: 2}
   - {fileID: 11400000, guid: 5c62b0849c903449b86f724a1c997e22, type: 2}
+  - {fileID: 11400000, guid: 2a67283b471ae425cade2140345fcdba, type: 2}
+  - {fileID: 11400000, guid: d7c6a5189bce746bbb210af361c3733f, type: 2}
   classString: Box
+  abilityTutorialString: When bumping your own goal, repairs a broken bumper.
   bumperModifier: 1
-  bodySprite: {fileID: 21300000, guid: 98f095a32c9cd4ee4b475ae15ac6784e, type: 3}
-  faceBaseSprite: {fileID: 21300000, guid: 7463fb747a1114966bd4d9f366f59d82, type: 3}
-  legSprite: {fileID: 21300000, guid: 30d7bf6a9d9a44169843d55695e01de3, type: 3}
-  athleteJersey: {fileID: 21300000, guid: 0619381c42d4c40cab565d762bd09cbd, type: 3}
+  bodySprite: {fileID: 21300000, guid: 3196a8d2a5cfc4023a31c47e1b6c5ac2, type: 3}
+  faceBaseSprite: {fileID: 21300000, guid: 70bf5d3d74514483295ba3b615afda61, type: 3}
+  legSprite: {fileID: 21300000, guid: 48914da9268a34992a9c605517ee4916, type: 3}
+  athleteJersey: {fileID: 21300000, guid: 43f7e6a94ee1048bdb80daa21d7aea62, type: 3}
   athleteJerseyStripes: {fileID: 21300000, guid: dd8e3d9ccbb754b9c968431781b85b4a,
     type: 3}
-  frontLegRest: 0.9
-  frontLegMin: 1
-  frontLegMax: 1.2
-  backLegRest: 0.9
-  backLegMin: 1
-  backLegMax: 1.2
+  defaultFace: {fileID: 21300000, guid: fcb7ccd927ca141f693c60ab309110d1, type: 3}
+  frontLegRest: 1.25
+  frontLegMin: 1.4
+  frontLegMax: 1.7
+  backLegRest: 1.25
+  backLegMin: 1.4
+  backLegMax: 1.7

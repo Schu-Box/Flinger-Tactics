@@ -6,6 +6,8 @@ using TMPro;
 
 public class CustomButton : MonoBehaviour {
 
+	private AudioManager audioManager;
+
 	private Image basePlate;
 	private Button button;
 	private TextMeshProUGUI text;
@@ -16,6 +18,7 @@ public class CustomButton : MonoBehaviour {
 	private bool disabledInteraction;
 
 	private void Start() {
+		audioManager = FindObjectOfType<AudioManager>();
 		basePlate = GetComponent<Image>();
 		button = GetComponentInChildren<Button>();
 		text = button.GetComponentInChildren<TextMeshProUGUI>();
@@ -41,6 +44,12 @@ public class CustomButton : MonoBehaviour {
 	private void OnMouseUp() {
 		if(!disabledInteraction) {
 			button.transform.localPosition = buttonOffset;
+		}
+	}
+
+	public void OnMouseUpAsButton() {
+		if(!disabledInteraction) {
+			audioManager.Play("buttonClick");
 		}
 	}
 

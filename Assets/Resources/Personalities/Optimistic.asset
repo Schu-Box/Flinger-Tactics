@@ -3,8 +3,9 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -18,12 +19,16 @@ MonoBehaviour:
   - Let's get started!
   - Training pays off today!
   - Let's get this victory!
+  - Let's get it!
+  - I'm ready for fling off!
   preMatchOpponentQuoteList:
   - I like our chances!
   - Our team has what it takes!
   - My squad can't lose!
   - My team's been training for this!
   - I hope you're as ready as us!
+  - Good luck! We've been practicing!
+  - Let's fling off! We're ready!
   preFlingTeamQuoteList:
   - Ready to fling!
   - I think I can score here!
@@ -34,7 +39,9 @@ MonoBehaviour:
   - Let's do it!
   - Time to shine!
   - Fling fling!
-  - Flinger timer!
+  - Flinger time!
+  - Fling me!
+  - I can make a play!
   preFlingOpponentQuoteList:
   - I'm confident in our defense.
   - Think you can score on us?
@@ -43,7 +50,7 @@ MonoBehaviour:
   - Bring it on!
   - You can't beat us!
   - You can't outfling me!
-  - We're better!
+  - We're prepared for you!
   - I'm waiting on your team.
   - We're waiting for you.
   goalQuoteList:
@@ -51,8 +58,8 @@ MonoBehaviour:
   - Yah!! I did it!
   - Goooaaallll!!!
   - I just scored!!
-  - I knew I could score! Yah!
-  - Haha hey! Yah!
+  - Yah! I knew I could score!
+  - Yayah hey! GOAL!
   - I did a goal!!
   - Did you see that? Imdabes!
   - imdabes
@@ -69,12 +76,18 @@ MonoBehaviour:
   - Anything is possible!!!
   - Great victory, team!
   - I never doubted us!
+  - Great game!
+  - Good game!
+  - Nice work, everyone!
   postMatchLoseQuoteList:
   - Ah nah... We just need practice.
   - We were so close!!
   - Ah we'll get em next time!
   - Rematch!!
   - They played well today.
+  - Good game!
+  - Congrats, y'all played well.
+  - I can't wait for the rematch!
   substituteQuoteList:
   - I'm ready!
   - Lemme back in the action!

@@ -21,6 +21,9 @@ public class AudioManager : MonoBehaviour {
         get { return instance ?? (instance = new GameObject("AudioManager").AddComponent<AudioManager>()); }
     }
 
+	public static float musicVolume;
+	public static float soundEffectsVolume;
+
 	
 	
 	
@@ -33,7 +36,6 @@ public class AudioManager : MonoBehaviour {
 	public void PentatonicCounterReset(string key){ GetSoundSettings(key).PentatonicCounterReset(); }
 
 	void Awake() {
-		Debug.Log("Woken");
 		instance = this;
 		// load audio resources
 		sounds = LoadAudioResources();
@@ -43,6 +45,9 @@ public class AudioManager : MonoBehaviour {
 
 		// preload a number of audioPools from the start
 		PreloadAudioPool(minimumAudioPool);
+
+		ChangeMusicVolume(musicVolume);
+		ChangeSoundEffectsVolume(soundEffectsVolume);
 	}
 
 	void Update() {
@@ -160,5 +165,15 @@ public class AudioManager : MonoBehaviour {
 		newAudioSource.loop = false;
 
 		newAudioSource.Play();
+	}
+
+	public void ChangeMusicVolume(float volume) {
+		musicVolume = volume;
+		audioMixerGroup.audioMixer.SetFloat("musicVolume", volume);
+	}
+
+	public void ChangeSoundEffectsVolume(float volume) {
+		soundEffectsVolume = volume;
+		audioMixerGroup.audioMixer.SetFloat("soundEffectsVolume", volume);
 	}
 }

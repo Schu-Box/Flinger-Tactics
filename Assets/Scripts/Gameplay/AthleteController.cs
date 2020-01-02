@@ -12,7 +12,7 @@ public class AthleteController : MonoBehaviour{
 	public bool crowdAthlete = false;
 
 	//Variables
-	private float tongueForce = 600f;
+	//private float tongueForce = 600f;
 	
 	private float tailStretch = 15;
 
@@ -25,7 +25,7 @@ public class AthleteController : MonoBehaviour{
 	private TailBody tailBody;
 	private TailTip tailTip;
 	private Face face;
-	private Tongue tongue;
+	//private Tongue tongue;
 	private TextMeshPro jerseyText;
 
 	//private GravityField gravityField;
@@ -41,7 +41,7 @@ public class AthleteController : MonoBehaviour{
 
 	private Coroutine squishCoroutine;
 	private Coroutine runningCoroutine;
-	private Coroutine tongueCoroutine;
+	//private Coroutine tongueCoroutine;
 
 	private ParticleSystem activeParticles;
 
@@ -56,9 +56,13 @@ public class AthleteController : MonoBehaviour{
 	private bool spokeThisTurn = false;
 
 	private bool speaking = false;
+	public bool closingQuote = false;
 	private bool paralyzed = false;
 	private int turnPhasesTilUnparalyzed = 0;
 	private bool paralyzeChargeActive = false;
+	private bool clicked = false;
+	private bool hovered = false;
+	//public bool hitStopping = false;
 	
 
 	//Abilities?
@@ -83,7 +87,7 @@ public class AthleteController : MonoBehaviour{
 		tailBody = GetComponentInChildren<TailBody>();
 		tailTip = GetComponentInChildren<TailTip>();
 		face = GetComponentInChildren<Face>();
-		tongue = GetComponentInChildren<Tongue>();
+		//tongue = GetComponentInChildren<Tongue>();
 
 		jerseyText = GetComponentInChildren<TextMeshPro>();
 
@@ -96,7 +100,11 @@ public class AthleteController : MonoBehaviour{
 		SetTailBodyActive(false);
 		tailTip.SetTailTip();
 		face.SetFace();
-		tongue.SetTongue();
+		/*
+		if(tongue != null) {
+			tongue.SetTongue();
+		}
+		*/
 
 		//gravityField = GetComponentInChildren<GravityField>();
 		particleManager = FindObjectOfType<ParticleManager>();
@@ -104,21 +112,9 @@ public class AthleteController : MonoBehaviour{
 
 	public void SetAthlete(Athlete a) {
 		
-		if(a == null) { //Set the athlete as a spectator
-			athlete = new Athlete();
-			float rando = Random.value;
-			if(rando > 0.8) {
-				athlete.SetTeam(matchController.GetTeam(false));
-			} else {
-				athlete.SetTeam(matchController.GetTeam(true));
-			}
+		athlete = a;
 
-			jerseyText.text = "";
-		} else {
-			athlete = a;
-
-			jerseyText.text = a.jerseyNumber.ToString();
-		}
+		jerseyText.text = a.jerseyNumber.ToString();
 
 		body.SetSprite(athlete.athleteData.bodySprite);
 		face.SetFaceBase(athlete.athleteData.faceBaseSprite);
@@ -134,12 +130,6 @@ public class AthleteController : MonoBehaviour{
 		}
 
         for(int l = 0; l < legList.Count; l++) {
-			/* 
-			if(l < legList.Count / 2) { //If it's the first half of legs
-				legList[l].GetComponent<SpriteRenderer>().sprite = athlete.athleteData.frontLegSprite;
-			} else {
-				legList[l].GetComponent<SpriteRenderer>().sprite = athlete.athleteData.backLegSprite;
-			*/
 			legList[l].GetComponent<SpriteRenderer>().sprite = athlete.athleteData.legSprite;
         }
 
@@ -177,59 +167,71 @@ public class AthleteController : MonoBehaviour{
 	}
 
 	void FixedUpdate() {
+		if(!crowdAthlete) {
+			//if(!hitStopping) {
+				Vector2 newVelocity = body.GetVelocity();
+				if(lastVelocity.magnitude == 0) {
+					if(newVelocity.magnitude > 0) {
+						if(!moving) {
+							StartedMoving();
+						}
+					}
+				} else {
+					Vector2 acceleration = (newVelocity - lastVelocity) / Time.deltaTime;
 
-		Vector2 newVelocity = body.GetVelocity();
-		if(lastVelocity.magnitude == 0) {
-			if(newVelocity.magnitude > 0) {
-				if(!moving) {
-					StartedMoving();
-				}
-			}
-		} else {
-			Vector2 acceleration = (newVelocity - lastVelocity) / Time.deltaTime;
-
-			if(acceleration.magnitude < 0.1f) {
-				if(moving) {
-					if(!dizzy) {
-						StoppedMoving();
+					if(acceleration.magnitude < 0.25f) {
+						if(moving) {
+							if(!dizzy) {
+								StoppedMoving();
+							}
+						}
 					}
 				}
-			}
-		}
-		lastVelocity = newVelocity;
+				lastVelocity = newVelocity;
 
-		if(moving) {
-			float step = newVelocity.magnitude / 2;
-			float legWidth = legList[0].size.x;
-			float newlegLength;
+				if(moving) {
+					float step = newVelocity.magnitude / 2;
 
-			for(int i = 0; i < legList.Count; i++) {
-				if(i < legList.Count / 2) {
-					newlegLength = Mathf.Lerp(athlete.athleteData.frontLegMin * legWidth, athlete.athleteData.frontLegMax * legWidth, step);
+					SetLegLength(step);
+
+					if(paralyzeChargeActive) {
+						activeParticles.gameObject.GetComponent<ParticleScript>().AdjustedVelocity(body.GetVelocity());
+					}
+				}
+
+				if(expressionTimer > 0f) {
+					//Do nothing while the coroutine goes
 				} else {
-					newlegLength = Mathf.Lerp(athlete.athleteData.backLegMin * legWidth, athlete.athleteData.backLegMax * legWidth, step);
+					if(Mathf.Abs(body.GetAngularVelocity()) > 60f) {
+						if(!dizzy) {
+							StartedDizziness();
+						}
+					} else {
+						if(dizzy) {
+							StoppedDizziness();
+						}
+					}
 				}
 
-				legList[i].size = new Vector2(legList[i].size.x, newlegLength);
-			}
-
-			if(paralyzeChargeActive) {
-				activeParticles.gameObject.GetComponent<ParticleScript>().AdjustedVelocity(body.GetVelocity());
-			}
+				if(clicked && hovered) {
+					matchController.IncreaseTutorialTimer(this, Time.deltaTime);
+				}
+			//}
 		}
+	}
 
-		if(expressionTimer > 0f) {
-			//Do nothing while the coroutine goes
-		} else {
-			if(Mathf.Abs(body.GetAngularVelocity()) > 60f) {
-				if(!dizzy) {
-					StartedDizziness();
-				}
+	public void SetLegLength(float percentExtension) {
+		float legWidth = legList[0].size.x;
+		float newlegLength;
+
+		for(int i = 0; i < legList.Count; i++) {
+			if(i < legList.Count / 2) {
+				newlegLength = Mathf.Lerp(athlete.athleteData.frontLegMin * legWidth, athlete.athleteData.frontLegMax * legWidth, percentExtension);
 			} else {
-				if(dizzy) {
-					StoppedDizziness();
-				}
+				newlegLength = Mathf.Lerp(athlete.athleteData.backLegMin * legWidth, athlete.athleteData.backLegMax * legWidth, percentExtension);
 			}
+
+			legList[i].size = new Vector2(legList[i].size.x, newlegLength);
 		}
 	}
 
@@ -261,6 +263,8 @@ public class AthleteController : MonoBehaviour{
 		} else {
 			if(collision.gameObject.CompareTag("Ball")) {
 				IncreaseStat(StatType.Touches);
+
+				//matchController.CallFreezeFrame();
 
 				/*
 				if(gravityField.IsGravityFieldEnabled()) {
@@ -340,7 +344,7 @@ public class AthleteController : MonoBehaviour{
 			legList[i].GetComponent<SpriteRenderer>().color = Color.Lerp(skinColor, targetColor, lerpValue);
 		}
 
-		tongue.SetTongueColor(Color.Lerp(athlete.tongueColor, targetColor, lerpValue));
+		//tongue.SetTongueColor(Color.Lerp(athlete.tongueColor, targetColor, lerpValue));
 
 		if(jersey != null) {
 			jersey.color = Color.Lerp(teamColor, targetColor, lerpValue);
@@ -374,7 +378,11 @@ public class AthleteController : MonoBehaviour{
 			legList[i].GetComponent<SpriteRenderer>().color = skinColor;
 		}
 
-		tongue.SetTongueColor(athlete.tongueColor);
+		/*
+		if(tongue != null) {
+			tongue.SetTongueColor(athlete.tongueColor);
+		}
+		*/
 
 		if(jersey != null) {
 			jersey.color = teamColor;
@@ -393,19 +401,16 @@ public class AthleteController : MonoBehaviour{
 
 	public void MouseEnter() {
 		if(!crowdAthlete) {
-			/*
-			if(matchController.GetAthleteBeingHovered() != this) {
-				matchController.AthleteHovered(this);
-			} else {
-				Debug.Log("Athlete already hovered");
-			}
-			*/
+			hovered = true;
+
 			matchController.AthleteHovered(this);
 		}
 	}
 
 	public void MouseExit() {
 		if(!crowdAthlete) {
+			hovered = false;
+
 			if(matchController.GetAthleteBeingHovered() != null) {
 				matchController.AthleteUnhovered(this);
 				if(!matchController.GetAthleteBeingDragged() && !moving && !matchController.IsTurnActive() && !paralyzed && !speaking && !matchController.GetMatchEnded()) {
@@ -426,9 +431,10 @@ public class AthleteController : MonoBehaviour{
 	}
 
 	public void MouseClick() {
-		//face.SetFaceSprite("dragging");
 		if(!crowdAthlete) {
-			if(!disabledInteraction) {
+			clicked = true;
+
+			if(!disabledInteraction && !athlete.GetTeam().computerControlled) {
 				matchController.SetAthleteBeingDragged(this);
 
 				ExtendLegs();
@@ -438,6 +444,16 @@ public class AthleteController : MonoBehaviour{
 					StartParalyzeCharge();
 				}
 			}
+		}
+	}
+
+	public void ComputerClick() {
+		matchController.SetAthleteBeingDragged(this);
+
+		ExtendLegs();
+		
+		if(paralyzesOnTackle) {
+			StartParalyzeCharge();
 		}
 	}
 
@@ -460,9 +476,15 @@ public class AthleteController : MonoBehaviour{
 
 			face.SetFaceSprite("dragging");
 
+			if(speaking && !closingQuote) { //If the athlete is speaking, close the quote box prematurely
+                currentQuoteBox.PrematurelyClose();
+            }
+
 			if(activeParticles != null) {
 				activeParticles.GetComponent<ParticleScript>().AdjustTailStretch(direction.magnitude - athlete.minPull);
 			}
+
+			matchController.UndisplayTutorial();
 		} else {
 			direction = Vector3.zero;
 
@@ -474,46 +496,15 @@ public class AthleteController : MonoBehaviour{
 		directionDragged = direction;
 	}
 
-	/*
-	public void AdjustTailAndFling(Vector3 target, float percentFlingForce) {
-		matchController.SetAthleteBeingDragged(true);
-
-		ExtendLegs();
-		Vector2 direction = target - transform.position;
-
-		if(direction.magnitude > athlete.minPull) {
-			if(direction.magnitude >= athlete.maxPull) {
-				direction = Vector3.ClampMagnitude(direction, athlete.maxPull);
-			}
-
-			Vector3 normalizedDirection = direction.normalized;	//Rotate the athlete to face opposite of the mouse
-			float targetRotation = (Mathf.Atan2(normalizedDirection.y, normalizedDirection.x) * Mathf.Rad2Deg + 90);
-			//float startRotation = transform.rotation.eulerAngles.z;
-			transform.rotation = Quaternion.Euler(0, 0, targetRotation);
-
-			tailTip.AdjustTailPosition(direction.magnitude);
-
-			if(tongue.GetTongueOut()) {
-				tongue.HideTongue();
-			}
-
-			face.SetFaceSprite("dragging");
-		} else {
-			Debug.Log("Why are you even calling this function then with that weak ass tail force?");
-		}
-
-		directionDragged = direction;
-
-		StartAction();
-	}
-	*/
-
 	public void ResetTail() {
 		tailTip.AdjustTailPosition(0f);
 	}
 
 	public void Unclicked() {
 		if(!crowdAthlete) {
+			clicked = false;
+			//matchController.StartCoroutine(matchController.AutoHideTutorialText(2.5f));
+
 			if(!disabledInteraction) {
 				if(matchController.GetAthleteBeingDragged() == this) {
 					matchController.SetAthleteBeingDragged(null);
@@ -555,18 +546,6 @@ public class AthleteController : MonoBehaviour{
 		}
 	}
 
-	/*
-	public void CancelReady() {
-		RetractLegs();
-
-		if(!dizzy) {
-			StartCoroutine(ChangeExpression(1f, "sad"));
-		}
-
-		Unready();
-	}
-	*/
-
 	public void Unready() {
 		ready = false;
 
@@ -583,14 +562,18 @@ public class AthleteController : MonoBehaviour{
 	public void StartAction() {
 		Unready();
 
+		clicked = false;
+
 		matchController.BeginActiveTurnPhase(this);
 
 		if(directionDragged != Vector3.zero) {
 			FlingAthlete();
 		} else {
+			/*
 			if(tongue.GetTongueOut()) {
 				FlickTongue();
 			}
+			*/
 		}
 	}
 
@@ -605,9 +588,8 @@ public class AthleteController : MonoBehaviour{
 			adjustedDirection = Vector2.zero;
 		}
 
-		//Debug.Log(adjustedDirection);
+		Vector2 force = (adjustedDirection * (athlete.maxFlingForce - athlete.minFlingForce)) + (Vector2)(directionDragged.normalized * athlete.minFlingForce);
 
-		Vector2 force = adjustedDirection * athlete.flingForce;
 		body.AddForce(force);
 
 		directionDragged = Vector3.zero;
@@ -665,6 +647,7 @@ public class AthleteController : MonoBehaviour{
 		}
 	}
 
+	/*
 	public void FlickTongue() {
 		tongueCoroutine = StartCoroutine(tongue.ExtendTongue());
 	}
@@ -684,9 +667,9 @@ public class AthleteController : MonoBehaviour{
 
 		directionDragged = Vector3.zero;
 	}
+	*/
 
 	public void StartSquish() {
-		
 		if(squishCoroutine == null) {
 			squishCoroutine = StartCoroutine(Squish());
 		}

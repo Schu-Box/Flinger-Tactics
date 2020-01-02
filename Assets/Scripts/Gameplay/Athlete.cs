@@ -18,17 +18,29 @@ public class Team {
 
 	private int jerseyNum = -1;
 
+	public TeamMatchData careerTeamMatchData;
+
 	private List<MatchData> matchData = new List<MatchData>();
 
     public List<Athlete> athletes = new List<Athlete>();
+
+	public List<AthleteData> presetAthleteDataList = new List<AthleteData>();
 
 	public void SetNewRoster(int numAthletes) {
 		athletes = new List<Athlete>();
 		
 		for(int i = 0; i < numAthletes; i++) {
-			athletes.Add(new Athlete());
-			athletes[i].SetTeam(this);
+			Athlete a;
+			if(i < presetAthleteDataList.Count) {
+				a = new Athlete(presetAthleteDataList[i]);
+			} else {
+				a = new Athlete();
+			}
+			athletes.Add(a);
+			a.SetTeam(this);
 		}
+
+		careerTeamMatchData = new TeamMatchData(this);
 
 		lightTint = Color.Lerp(primaryColor, Color.white, 0.7f);
 		darkTint = Color.Lerp(primaryColor, Color.black, 0.2f);
@@ -44,7 +56,13 @@ public class Team {
 	}
 
 	public MatchData GetCurrentMatchData() {
-		return matchData[matchData.Count - 1];
+		if(matchData.Count > 0) {
+			return matchData[matchData.Count - 1];
+		} else {
+			Debug.Log("There ain't no matches and ain't no data");
+			return null;
+		}
+		
 	}
 
 	public Color GetLightTint() {
@@ -69,10 +87,13 @@ public class Athlete {
 
 	public int jerseyNumber;
 
-	public float flingForce = 800f;
+	//public AthleteMatchData careerMatchData;
 
-	public float minPull = 0.3f;
-	public float maxPull = 1.2f;
+	public float minFlingForce = 300f;
+	public float maxFlingForce = 900f;
+
+	public float minPull = 0.5f;
+	public float maxPull = 1.5f;
 
 	private Team team;
 
@@ -81,16 +102,23 @@ public class Athlete {
 	public Sprite moodFace;
 
 	public Athlete() {
-		AthleteData standardAthleteData = Resources.Load<AthleteData>("StandardAthleteData");
-
 		float rando = Random.value;
 		if(rando > 0.5f) {
-			athleteData = Resources.Load<AthleteData>("CircleAthleteData");
+			SetAthlete(Resources.Load<AthleteData>("CircleAthleteData"));
 		} else if(rando > 0.25) {
-			athleteData = Resources.Load<AthleteData>("TriangleAthleteData");
+			SetAthlete(Resources.Load<AthleteData>("TriangleAthleteData"));
 		} else {
-			athleteData = Resources.Load<AthleteData>("BoxAthleteData");
-		} 
+			SetAthlete(Resources.Load<AthleteData>("BoxAthleteData"));
+		}
+	}
+
+	public Athlete(AthleteData ad) {
+		SetAthlete(ad);
+	}
+
+	public void SetAthlete(AthleteData ad) {
+		athleteData = ad;
+		
 		//athleteData.AddSkinColors(standardAthleteData.skinColorList);
 
 		List<string> nameList = athleteData.nameList;
@@ -104,7 +132,9 @@ public class Athlete {
 
 		tongueColor = colorList[Random.Range(0, colorList.Count)];
 
-		rando = Random.value;
+		moodFace = athleteData.defaultFace;
+
+		float rando = Random.value;
 		if(rando == 1) {
 			jerseyNumber = 420;
 		} else if(rando > 0.6) {
@@ -114,6 +144,10 @@ public class Athlete {
 		} else {
 			jerseyNumber = Random.Range(36, 100);
 		}
+
+		List<Personality> personalityList = athleteData.personalityList;
+		//Currently excludes foreign language
+		personality = personalityList[Random.Range(1, personalityList.Count)];
 
 		//Stats
 		statList.Add(new Stat(StatType.Goals, 30));
@@ -132,11 +166,6 @@ public class Athlete {
 		} else if(athleteData.classString == "Triangle") {
 			statList.Add(new Stat(StatType.Knockouts, 5));
 		}
-
-		//statList.Add(new Stat("Bounces", 2));
-
-		List<Personality> personalityList = athleteData.personalityList;
-		personality = personalityList[Random.Range(0, personalityList.Count)];
 	}
 
 	public void SetTeam(Team t) {
@@ -180,6 +209,28 @@ public class Athlete {
 		} else {
 			Debug.Log("Match stat don't exist either.");
 		}
+
+		Stat careerMatchStat = null;
+		AthleteMatchData cmd = team.careerTeamMatchData.GetAthleteMatchData(this);
+		for(int i = 0; i < cmd.statList.Count; i++) {
+			if(cmd.statList[i].GetStatType() == statType) {
+				careerMatchStat = cmd.statList[i];
+				break;
+			}
+		}
+
+		if(careerMatchStat != null) {
+			careerMatchStat.IncreaseCount();
+		} else {
+			Debug.Log("Career match stat does not exist. (WHAT?)");
+		}
+	 	
+		//Do this elsewhere, so own goals can be counted too
+		/*
+		if(statType == StatType.Goals) {
+			team.GetCurrentMatchData().GetTeamMatchData(team).IncreaseScore(1);
+		}
+		*/
 	}
 
 	public int GetStatPointTotal() {

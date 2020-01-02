@@ -3,8 +3,9 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -18,30 +19,51 @@ MonoBehaviour:
   - Ha! They think they can beat us?!
   - This is gonna be too easy.
   - Let's play a flinger down to keep it fair.
+  - Hahahaha we're playing THEM? Too easy...
+  - gg 2 ez
   preMatchOpponentQuoteList:
   - You chumps have no chance!
   - Hah! You think you can beat us??
   - If we play you're gonna lose.
   - Ready to lose?
   - Prepare for defeat! Big defeat!
+  - You sure you wanna play us?
+  - You call yourselves flingers?
   preFlingTeamQuoteList:
   - Just fling me at that stoopy head!
   - They can't hope to contain me!
   - Yah! Time to destroy them!
   - Just fling me and I'll score.
   - Fling away and ruin their day!
+  - Let's crush them!
+  - Fling me at em!
+  - Y'all best back up!
+  - Easy opportunity here!
+  - I'm about to embarrass them!
+  - Fling me now!
+  - Let's make em look foolish!
   preFlingOpponentQuoteList:
   - Go back to your team, chump.
   - You're the coach? Ha good luck.
   - Good luck... You'll need it.
   - Don't even bother flinging, loser.
   - I'm not your friend!
+  - Back up!
+  - Go away!
+  - You don't know me!
+  - Back off, loser!
+  - Go back to your stupid side.
   goalQuoteList:
   - Hah! Told you losers!
   - It's too easy!
   - That's what I do, babbbbyyyy!
   - That's all day!
   - Can y'all play some defense?!
+  - Too easy!!
+  - Y'all might wanna forfeit!
+  - Game time!
+  - GG! Thanks for playing!
+  - Y'all are finished!
   ownGoalQuoteList:
   - Yogga!
   - Coach why'd you do that?!
@@ -54,12 +76,18 @@ MonoBehaviour:
   - Can we have some real competition next time?
   - Can we play for real now?
   - If I was them I'd be embarassed.
+  - Practice is harder than this!
+  - Were we playing the same sport??
+  - The fans deserve a refund for that performance!
   postMatchLoseQuoteList:
   - Yogga!!!
   - Coach you made us lose!
   - They got so lucky!!!
   - Rematch! That was pure luck!
   - What was my team even doing?!
+  - I need new teammates!!
+  - They were cheating! No way they beat us fair.
+  - This sport is stupid!
   substituteQuoteList:
   - I shoulda never been on the bench!
   - You can't win without me! Fling me on!

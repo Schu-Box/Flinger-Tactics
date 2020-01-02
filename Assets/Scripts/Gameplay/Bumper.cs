@@ -28,7 +28,7 @@ public class Bumper : MonoBehaviour {
 
 	private Team teamOwner;
 
-	private Vector3 restPosition;
+	private Vector3 restPosition = new Vector3(999,999,999);
 	private Vector3 offFieldPosition;
 
 	private bool indestructible = false;
@@ -47,9 +47,6 @@ public class Bumper : MonoBehaviour {
 		collie = GetComponent<Collider2D>();
 
 		bumperTrigger = GetComponentInChildren<BumperTrigger>();
-
-		originalSize = transform.localScale;
-		restPosition = transform.position;
 	}
 
 	public void SetAsGoal(bool isGoal) {
@@ -76,6 +73,11 @@ public class Bumper : MonoBehaviour {
 	public void SetPosition() {
 		offFieldPosition = transform.position;
 		offFieldPosition.x = parentGoal.transform.position.x;
+
+		originalSize = transform.localScale;
+		if(restPosition == new Vector3(999,999,999)) {
+			restPosition = transform.position;
+		}
 	}
 
 	public void SetColor(Color color) {
@@ -254,18 +256,18 @@ public class Bumper : MonoBehaviour {
 	}
 
 	public void SendShockwave() {
+		Vector3 startPosition = transform.position;
+		Vector3 endPosition = startPosition;
+		float xDistance = 3.5f;
 
-
-		Shockwave shocker = Instantiate(matchController.shockwavePrefab, Vector3.zero, Quaternion.identity, this.transform).GetComponent<Shockwave>();
-
-		float xDistance = 5f;
-		Vector3 endPosition = Vector3.zero;
+		Shockwave shocker = Instantiate(matchController.shockwavePrefab, startPosition, Quaternion.identity).GetComponent<Shockwave>();
+	
 		if(teamOwner == matchController.GetTeam(true)) { //if it's the home team
 			endPosition.x += xDistance;
 		} else {
-			shocker.transform.localEulerAngles = new Vector3(180, 0, 0);
+			shocker.transform.localEulerAngles = new Vector3(0, 0, 180);
 
-			endPosition.x += xDistance;
+			endPosition.x -= xDistance;
 		}
 
 		StartCoroutine(shocker.AnimateShockwave(endPosition, teamOwner.secondaryColor));

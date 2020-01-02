@@ -14,7 +14,7 @@ public class BallController : MonoBehaviour {
 	private SpriteRenderer spriteRenderer;
 	private AudioSource audioSource;
 	private FocalObject focalObject;
-
+	
 	private SpriteRenderer lightSlot;
 	private List<SpriteRenderer> outerLightSlots = new List<SpriteRenderer>();
 
@@ -27,6 +27,7 @@ public class BallController : MonoBehaviour {
 
 	private bool moving = false;
 	private bool scoreAnimationInProgress = false;
+	private bool hitStopping = false;
 
 	private Vector2 lastVelocity = Vector2.zero;
 
@@ -57,23 +58,25 @@ public class BallController : MonoBehaviour {
 	}
 
 	private void FixedUpdate() {
-		Vector2 newVelocity = rb.velocity;
-		if(lastVelocity.magnitude == 0) {
-			if(newVelocity.magnitude > 0) {
-				if(!moving) {
-					StartedMoving();
+		//if(!hitStopping) {
+			Vector2 newVelocity = rb.velocity;
+			if(lastVelocity.magnitude == 0) {
+				if(newVelocity.magnitude > 0) {
+					if(!moving) {
+						StartedMoving();
+					}
 				}
-			}
-		} else {
-			Vector2 acceleration = (newVelocity - lastVelocity) / Time.deltaTime;
+			} else {
+				Vector2 acceleration = (newVelocity - lastVelocity) / Time.deltaTime;
 
-			if(acceleration.magnitude < 0.1f) {
-				if(moving) {
-					StoppedMoving();
+				if(acceleration.magnitude < 0.2f) {
+					if(moving) {
+						StoppedMoving();
+					}
 				}
 			}
-		}
-		lastVelocity = newVelocity;
+			lastVelocity = newVelocity;
+		//}
 	}
 
 	private void OnCollisionEnter2D(Collision2D collision) {
@@ -96,6 +99,8 @@ public class BallController : MonoBehaviour {
 
 	private void TouchedByAthlete(AthleteController athlete) {
 		FlashColor(athlete.GetAthlete().GetTeam().primaryColor);
+
+		//StartHitStop();
 
 		athleteTouchOrder.Add(athlete);
 	}
@@ -159,7 +164,11 @@ public class BallController : MonoBehaviour {
 		if(mostRecentToucher != null && mostRecentToucher.GetAthlete().GetTeam() == scoringTeam) {
 			AwardGoal(mostRecentToucher, initiater);
 		} else if(!ownGoal) {
-			AwardGoal(initiater, initiater);
+			if(initiater.GetAthlete().GetTeam() == scoringTeam) {
+				AwardGoal(initiater, initiater);
+			} else {
+				matchController.AthleteOwnGoal(initiater);
+			}
 		} else {
 			//It's an own goal
 			Debug.Log("Own goal!");
@@ -278,6 +287,7 @@ public class BallController : MonoBehaviour {
 
 	public void RespawnBall(Vector3 spawnPosition) {
 		Debug.Log("Respawning ball");
+		scoredByTeam = null;
 
 		collie.enabled = true;
 		rb.simulated = true;
@@ -289,14 +299,20 @@ public class BallController : MonoBehaviour {
 
 		transform.localPosition = spawnPosition;
 
+		BallSpawnExplosion explo = Instantiate(matchController.ballSpawnExplosionPrefab, spawnPosition, Quaternion.identity, matchController.ballHolder).GetComponent<BallSpawnExplosion>();
+		explo.transform.localPosition = spawnPosition;
+
+		StartCoroutine(explo.ExpandAndExplode(this));
+
 		StartCoroutine(GrowBall(originalScale));
 	}
 
 	public IEnumerator GrowBall(Vector3 newScale) {
-		WaitForEndOfFrame waiter = new WaitForEndOfFrame();
+		yield return new WaitForSeconds(0.3f); //allow explosion to expand first
 
+		WaitForEndOfFrame waiter = new WaitForEndOfFrame();
 		float timer = 0f;
-		float duration = 0.4f;
+		float duration = 0.3f;
 		while(timer < duration) {
 			timer += Time.deltaTime;
 			transform.localScale = Vector3.Lerp(Vector3.zero, newScale, timer/duration);
@@ -363,4 +379,27 @@ public class BallController : MonoBehaviour {
 		moving = true;
 		rb.AddForce(forceAdded);
 	}
+
+	/*
+	public void StartHitStop() {
+		StartCoroutine(HitStop());
+	}
+
+	private IEnumerator HitStop() {
+		hitStopping = true;
+
+		Vector3 previousVelocity = rb.velocity;
+		rb.velocity = Vector3.zero;
+
+		rb.isKinematic = true;
+
+		yield return new WaitForSeconds(0.1f);
+
+		rb.isKinematic = false;
+
+		rb.velocity = previousVelocity;
+
+		hitStopping = false;
+	}
+	*/
 }

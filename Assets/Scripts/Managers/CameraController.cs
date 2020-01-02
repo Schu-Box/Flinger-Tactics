@@ -4,11 +4,16 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour {
 
+    public static bool disableScreenShake;
+
 	public Vector3 startPosition;
 	public Vector3 upPosition;
 	public Vector3 upLeftPosition;
 	public Vector3 upRightPosition;
 	public Vector3 downPosition;
+    public Vector3 downDownPosition;
+    public Vector3 downLeftPosition;
+    public Vector3 downLeftLeftPosition;
 
 	private GameObject objectToFollow;
 
@@ -42,7 +47,7 @@ public class CameraController : MonoBehaviour {
         trauma += traumaAdded;
         trauma = Mathf.Clamp01(trauma); //Clamps the trauma value between 0 and 1
 
-        if(screenShake == null) {
+        if(screenShake == null && !disableScreenShake) {
             screenShake = StartCoroutine(ShakeScreen());
         }
     }
@@ -76,5 +81,23 @@ public class CameraController : MonoBehaviour {
         transform.localPosition = originalPosition;
 
         screenShake = null;
+    }
+
+    public IEnumerator ZoomToSize(float endSize) {
+        float startSize = cam.orthographicSize;
+
+        WaitForFixedUpdate waiter = new WaitForFixedUpdate();
+        float timer = 0f;
+        float duration = 0.5f;
+        
+        while(timer <= duration) {
+            timer += Time.deltaTime;
+
+            cam.orthographicSize = Mathf.Lerp(startSize, endSize, timer/duration);
+
+            yield return waiter;
+        }
+
+        cam.orthographicSize = endSize;
     }
 }

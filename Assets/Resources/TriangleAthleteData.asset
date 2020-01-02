@@ -3,8 +3,9 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -22,6 +23,11 @@ MonoBehaviour:
   - Ruva
   - Riva
   - Cleves
+  - Leon
+  - Augustus
+  - Claudius
+  - Cadillac
+  - Speedy
   skinColorList:
   - {r: 0.9150943, g: 0.895966, b: 0.77265036, a: 1}
   - {r: 0.8207547, g: 0.7954825, b: 0.63879496, a: 1}
@@ -55,17 +61,21 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 62469e984c0b24c2abeb891b50bcddf4, type: 2}
   - {fileID: 11400000, guid: 2a67283b471ae425cade2140345fcdba, type: 2}
   - {fileID: 11400000, guid: 5c62b0849c903449b86f724a1c997e22, type: 2}
+  - {fileID: 11400000, guid: 2a67283b471ae425cade2140345fcdba, type: 2}
+  - {fileID: 11400000, guid: d7c6a5189bce746bbb210af361c3733f, type: 2}
   classString: Triangle
+  abilityTutorialString: When flung, paralyzes the first athlete it hits for one turn.
   bumperModifier: 1
-  bodySprite: {fileID: 21300000, guid: c33f9c2a34e514db59c2b1daa369d107, type: 3}
-  faceBaseSprite: {fileID: 21300000, guid: dd0c38f46d60043febdae4f8e69c6065, type: 3}
-  legSprite: {fileID: 21300000, guid: 30d7bf6a9d9a44169843d55695e01de3, type: 3}
-  athleteJersey: {fileID: 21300000, guid: 355666a03d3b14256864ae844a0d5a94, type: 3}
+  bodySprite: {fileID: 21300000, guid: 0f49d293fd553494db91bbd6e5eac2d8, type: 3}
+  faceBaseSprite: {fileID: 21300000, guid: 25747e46de7624b3998bccc617d100a6, type: 3}
+  legSprite: {fileID: 21300000, guid: 48914da9268a34992a9c605517ee4916, type: 3}
+  athleteJersey: {fileID: 21300000, guid: ce470fb560805467397effda81b7ae3f, type: 3}
   athleteJerseyStripes: {fileID: 21300000, guid: 1f9ccb1b030ad4b2b9cfb00fbb7b4bec,
     type: 3}
-  frontLegRest: 0.65
-  frontLegMin: 0.8
-  frontLegMax: 1
-  backLegRest: 0.9
-  backLegMin: 1
-  backLegMax: 1.2
+  defaultFace: {fileID: 21300000, guid: fcb7ccd927ca141f693c60ab309110d1, type: 3}
+  frontLegRest: 0.75
+  frontLegMin: 0.95
+  frontLegMax: 1.4
+  backLegRest: 1.2
+  backLegMin: 1.4
+  backLegMax: 1.7

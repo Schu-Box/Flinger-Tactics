@@ -1,32 +1,44 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CursorController : MonoBehaviour {
 
-	public Texture2D baseSprite;
-	public Texture2D clickSprite;
-	public Texture2D openHandSprite;
-	public Texture2D closedHandSprite;
+	public Sprite baseSprite;
+	public Sprite clickSprite;
+	public Sprite openHandSprite;
+	public Sprite closedHandSprite;
 	
 
-	private Vector2 hotspot;
-
-	private Vector3 clickSpot;
+	//private Vector2 hotspot;
 
 	private bool hovering = false;
 	private bool clicked = false;
 	private bool dragging = false;
 
 	private Coroutine releaseCoroutine;
+
+	private RectTransform rectTransform;
+	private Image image;
 	
 
 	void Start() {
-		hotspot = new Vector2(5, 8);
+		//hotspot = new Vector2(5, 8);
+		UnityEngine.Cursor.SetCursor(null, Vector2.zero, CursorMode.ForceSoftware); 
+    	UnityEngine.Cursor.visible = false;
+
+    	rectTransform = GetComponent<RectTransform>();
+		image = GetComponentInChildren<Image>();
+
+		SetCursor(baseSprite);
 	}
 
-	void Update () {
-		//if cursor down
+	void LateUpdate () {
+		Vector3 screenPoint = Input.mousePosition;
+		screenPoint.z = 10f;
+		rectTransform.position = Camera.main.ScreenToWorldPoint(screenPoint);
+
 		if(!clicked) {
 			if(Input.GetMouseButtonDown(0)) {
 				Click();
@@ -34,22 +46,26 @@ public class CursorController : MonoBehaviour {
 		} else {
 			if(Input.GetMouseButtonUp(0)) {
 				Unclick();
-			} else {
-				//Cursor.
 			}
+		}
+	}
+
+	void OnApplicationFocus(bool hasFocus) {
+		if(hasFocus) {
+			UnityEngine.Cursor.SetCursor(null, Vector2.zero, CursorMode.ForceSoftware);
+			UnityEngine.Cursor.visible = false;
 		}
 	}
 
 	public void Click() {
 		clicked = true;
-		clickSpot = Input.mousePosition;
 
 		if(releaseCoroutine != null) {
 			StopReleaseCoroutine();
 		}
 
 		if(!dragging) {
-			Cursor.SetCursor(clickSprite, hotspot, CursorMode.Auto);
+			SetCursor(clickSprite);
 		}
 	}
 
@@ -58,9 +74,9 @@ public class CursorController : MonoBehaviour {
 
 		if(releaseCoroutine == null) {
 			if(hovering) {
-				Cursor.SetCursor(openHandSprite, hotspot, CursorMode.Auto);
+				SetCursor(openHandSprite);
 			} else {
-				Cursor.SetCursor(baseSprite, hotspot, CursorMode.Auto);
+				SetCursor(baseSprite);
 			}
 		}
 	}
@@ -74,11 +90,11 @@ public class CursorController : MonoBehaviour {
 					StopReleaseCoroutine();
 				}
 				
-				Cursor.SetCursor(openHandSprite, hotspot, CursorMode.Auto);
+				SetCursor(openHandSprite);
 			}
 		} else {
 			if(!clicked && !dragging) {
-				Cursor.SetCursor(baseSprite, hotspot, CursorMode.Auto);
+				SetCursor(baseSprite);
 			}
 		}
 	}
@@ -87,7 +103,7 @@ public class CursorController : MonoBehaviour {
 		dragging = drag;
 
 		if(dragging) {
-			Cursor.SetCursor(closedHandSprite, hotspot, CursorMode.Auto);
+			SetCursor(closedHandSprite);
 		} else {
 			ReleaseFromDrag();
 		}
@@ -96,16 +112,16 @@ public class CursorController : MonoBehaviour {
 	public void ReleaseFromDrag() {
 		releaseCoroutine = StartCoroutine(WaitThenDetermineState());
 
-		Cursor.SetCursor(openHandSprite, hotspot, CursorMode.Auto);
+		SetCursor(openHandSprite);
 	}
 
 	public IEnumerator WaitThenDetermineState() {
 		yield return new WaitForSeconds(0.5f);
 
 		if(hovering) {
-			Cursor.SetCursor(openHandSprite, hotspot, CursorMode.Auto);
+			SetCursor(openHandSprite);
 		} else {
-			Cursor.SetCursor(baseSprite, hotspot, CursorMode.Auto);
+			SetCursor(baseSprite);
 		}
 
 		releaseCoroutine = null;
@@ -115,5 +131,10 @@ public class CursorController : MonoBehaviour {
 		StopCoroutine(releaseCoroutine);
 
 		releaseCoroutine = null;
+	}
+
+	public void SetCursor(Sprite sprite) {
+		//Cursor.SetCursor(sprite, hotspot, CursorMode.ForceSoftware);
+		image.sprite = sprite;
 	}
 }

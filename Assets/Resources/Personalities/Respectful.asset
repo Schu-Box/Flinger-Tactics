@@ -3,8 +3,9 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -18,30 +19,51 @@ MonoBehaviour:
   - Great day to play!
   - Let's have a good clean match, y'all!
   - Oh they're pretty good. We can beat them tho!
+  - Hey we're ready for fling off, coach!
+  - Ready for fling off, coach!
   preMatchOpponentQuoteList:
   - Hey other coach. You ready?
   - Y'all ready? We are!
   - Good luck today!
   - I hope it's a good match today!
   - Best of luck out there!
+  - Good luck, other coach!
+  - We can talk after. I need to focus!
   preFlingTeamQuoteList:
   - You can believe in me, coach!
   - I'm ready to fling, coach!
-  - Coach we can score here!
+  - Coach I think we can score here!
   - I trust your aim, coach!
   - Ready to fling, coach!
+  - You've got this, coach!
+  - Fling carefully, coach!
+  - Hey coach!
+  - Where should I fling?
+  - You can count on me, coach!
+  - I trust you, coach!
+  - Believe in me, coach!
   preFlingOpponentQuoteList:
   - It's your turn now.
   - Please allow me my focus.
   - Good luck on this one!
   - Y'all are pretty good!
   - This is a good match!
+  - This is fun!
+  - Great game so far!
+  - Please let me focus.
+  - I need to concentrate, other coach.
+  - Careful I'm a pretty good defender!
   goalQuoteList:
   - Yah! We did it, team!
   - Coach I did it!
   - 'You did it, coach! '
-  - Thanks to you we scored, coach!
+  - Perfect fling, coach!!
   - Great fling, coach!
+  - That's what I call teamwork!
+  - You're doing great, coach!
+  - Nice fling!
+  - Yah! We scored!
+  - There we go! Great fling!
   ownGoalQuoteList:
   - Aggghhh I messed up, coach.
   - Dango! Wrong goal...
@@ -54,12 +76,18 @@ MonoBehaviour:
   - Thanks for playing!!
   - Great work, team!
   - Coach you did great!
+  - Thanks for playing, everyone!
+  - Great team victory!
+  - We're unstoppable! Yah!!
   postMatchLoseQuoteList:
   - Good game!
   - That was close. Nice match!
   - Great game, y'all.
   - At least we had fun!
   - Good game. Bumps up!
+  - Good game, other coach.
+  - Looking forward to our next match!
+  - We can learn from this!
   substituteQuoteList:
   - Let's level the playing field, coach!
   - You can count on me, coach!
