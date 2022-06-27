@@ -27,7 +27,8 @@ public class RuleSet {
 		}));
 
 		//This one should never go down (in career play, otherwise I'd have to do hella extra stuff)
-		ruleSlotList.Add(new RuleSlot("athleteRosterCount", "Athlete Roster Count", new List<Rule> { 
+		ruleSlotList.Add(new RuleSlot("athleteRosterCount", "Athlete Roster Count", new List<Rule> {
+			new Rule(1, "Solo Roster", "Decrease the number of athletes on each team's roster to 1."),
 			new Rule(2, "Duo Roster", "Increase the number of athletes on each team's roster to 2."),
 			new Rule(3, "Trio Roster", "Increase the number of athletes on each team's roster to 3."),
 			new Rule(4, "Four-Athlete Roster", "Increase the number of athletes on each team's roster to 4."),

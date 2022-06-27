@@ -62,8 +62,8 @@ public class CameraController : MonoBehaviour {
         while(trauma > 0) {
             float shake = Mathf.Pow(trauma, 2);
 
-            float maxAngleOffset = 3.5f;
-            float maxOffset = 0.2f;
+            float maxAngleOffset = 2f;
+            float maxOffset = 0.1f;
 
             float angle = maxAngleOffset * shake * ((Random.value * 2) - 1f);
             float x = maxOffset * shake * ((Random.value * 2) - 1f);

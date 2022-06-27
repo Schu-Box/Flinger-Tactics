@@ -555,6 +555,8 @@ public class CanvasManager : MonoBehaviour {
             CustomRuleChanger ruleChanger = customRulesHolder.GetChild(i).GetComponent<CustomRuleChanger>();
             ruleChanger.SetCustomRuleChanger(modeController.GetRuleSet(), modeController.GetRuleSet().ruleSlotList[i]);
         }
+
+        UpdateCustomRuleChangers();
     }
 
     public void UpdateCustomRuleChangers() {
@@ -570,7 +572,7 @@ public class CanvasManager : MonoBehaviour {
                 if(rule.value <= modeController.GetRuleSet().GetRule("athleteFieldCount").value) {
                     ruleChanger.DisableArrow(false);
                 } else {
-                    if(modeController.GetRuleSet().GetRuleSlot("athleteFieldCount").GetPreviousRule() != null) {
+                    if(modeController.GetRuleSet().GetRuleSlot("athleteRosterCount").GetPreviousRule() != null) {
                         ruleChanger.EnableArrow(false);
                     }
                 }
