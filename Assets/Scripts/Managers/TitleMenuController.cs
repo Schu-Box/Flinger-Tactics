@@ -181,14 +181,14 @@ public class TitleMenuController : MonoBehaviour {
 	}
 
 	public void ToggleEscapeMenu() {
-		if(escapePanel.activeSelf) {
-			escapePanel.SetActive(false);
-			Time.timeScale = 1f;
-		} else {
-			escapePanel.SetActive(true);
-			Time.timeScale = 0f;
-		}
-	}
+        if(escapePanel.activeSelf) {
+            escapePanel.SetActive(false);
+            Time.timeScale = 1f;
+        } else {
+            escapePanel.SetActive(true);
+            Time.timeScale = 0f;
+        }
+    }
 
 	public void QuitGame() {
 		Application.Quit();
